@@ -1,8 +1,13 @@
+from flask import Flask,jsonify
 import time
-from flask import Flask
 
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
-@app.route('/time')
-def get_current_time():
-    return {'time': time.time()}
+@app.route('/problems')
+def getAllProblems():
+    return jsonify([
+        {"title" : "p1", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
+        {"title" : "p3", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
+        {"title" : "p2", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
+    ])
