@@ -9,5 +9,5 @@ def getAllProblems():
     return jsonify([
         {"title" : "p1", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
         {"title" : "p3", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
-        {"title" : "p2", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
+        {"title" : "p", "related_topics" : "dp, greedy", "difficulty" : "easy", "status" : "solved"},
     ])
