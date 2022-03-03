@@ -1,12 +1,15 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
+import requests
 
 
 class CodeforcesSpider(scrapy.Spider):
     name = "codeforces"
-    start_urls = [
-        'https://codeforces.com/problemset/problem/1625/C'
-    ]
+    
+    def __init__(self, name=None, **kwargs):
+        super().__init__(name, **kwargs)
+        self.start_urls = self.urls
+
     def parse(self, response):
         page = response.url
         title = response.css('.title::text').get()
@@ -19,6 +22,16 @@ class CodeforcesSpider(scrapy.Spider):
         notes = response.css('.note').get()
         source = response.css('.rtable a').get()
 
+
+def getUrls():
+    r = requests.get('https://codeforces.com/api/problemset.problems')
+    problems = r.json()["result"]["problems"]
+    urls = []
+    for problem in problems:
+        url = "https://codeforces.com/problemset/problem/%s/%s" % (problem["contestId"],problem["index"])
+        urls.append(url)
+    return urls
+
 process = CrawlerProcess()
-process.crawl(CodeforcesSpider)
+process.crawl(CodeforcesSpider, urls=getUrls())
 process.start()
