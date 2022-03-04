@@ -71,11 +71,11 @@ class Codeforces:
         if 'verdict-waiting' in result.text:
             return {"verdict":"Running ..."}
         elif 'verdict-accepted' in result.text:
-            return {"veredict":"AC"}
+            return {"verdict":"AC"}
         elif 'verdict-rejected' in result.text:
-            return {"veredict":"WA"}
+            return {"verdict":"WA"}
         else:
-            return {"veredict":"CE"}
+            return {"verdict":"CE"}
 
 #if __name__ == '__main__':
 #    codeforces = Codeforces()
