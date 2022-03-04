@@ -64,7 +64,6 @@ class Codeforces:
 
         submission_id_pattern = r'href="\/problemset\/submission\/(.*?)"'
         submissionUrl = "https://codeforces.com/problemset/submission/"+re.findall(submission_id_pattern,result2.text)[0]
-        print(submissionUrl)
         return submissionUrl
 
     def getSubmissionStatus(self, submissionUrl):
