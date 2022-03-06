@@ -68,8 +68,8 @@ def getSubmissionStatus():
 
 @app.route('/token', methods=["POST"])
 def create_token():
-    email = request.args.get("email", default='',type=str)
-    password = request.args.get("password", default='',type=str)
+    email = request.form.get("email", default='',type=str)
+    password = request.form.get("password", default='',type=str)
     if email != "hugo" or password != "hugo":
         return {"msg": "Wrong email or password"}, 401
 
