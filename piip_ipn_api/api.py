@@ -70,12 +70,15 @@ def getSubmissionStatus():
 def create_token():
     email = request.form.get("email", default='',type=str)
     password = request.form.get("password", default='',type=str)
-    if email != "hugo" or password != "hugo":
-        return {"msg": "Wrong email or password"}, 401
-
-    access_token = create_access_token(identity=email)
-    response = {"access_token":access_token}
-    return response
+    if email == "hugo" and password == "hugo":
+        access_token = create_access_token(identity=email)
+        response = {"access_token":access_token, "role": "mentor"}
+        return response
+    if email == "alvaro" and password == "alvaro":
+        access_token = create_access_token(identity=email)
+        response = {"access_token":access_token, "role": "usuario"}
+        return response
+    return {"msg": "Wrong email or password"}, 401
 
 @app.route("/logout", methods=["POST"])
 def logout():
