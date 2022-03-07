@@ -2,7 +2,6 @@ from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, uns
 from email.policy import default
 from flask import request, Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from piip.models.administrator import Administrator
 from providers.codeforces.codeforces import Codeforces
 from datetime import datetime, timedelta, timezone
 import json
@@ -20,7 +19,7 @@ HOST = "127.0.0.1"
 DATABASE = "PIIP_pruebas"
 
 CF_USERNAME = "Barbosa1998"
-CF_PASSWORD = "Barbosa20111910";
+CF_PASSWORD = "Barbosa20111910"
 
 database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
 app.config["SQLALCHEMY_DATABASE_URI"] = database_route
@@ -31,8 +30,6 @@ session = db.session
 
 @app.route("/")
 def index():
-    dict_school = session.query(Administrator).get(1)
-    print(f"Administrator name: {dict_school.first_name}")
     return ""
 
 

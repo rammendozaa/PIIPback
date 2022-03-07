@@ -9,6 +9,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 
+
 class Administrator(PIIPModel):
     __tablename__ = "ADMINISTRATOR"
 
@@ -18,22 +19,6 @@ class Administrator(PIIPModel):
     dob = Column(DateTime)
     first_name = Column(String(255))
     last_name = Column(String(255))
+    is_super = Column(Boolean, DefaultClause("0"), nullable=False)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
-
-"""
-class AdministratorBehavioralQuestion(PIIPModel):
-    __tablename__ = "ADMINISTRATOR_BEHAVIORAL_QUESTION"
-
-
-class AdministratorProblem(PIIPModel):
-    __tablename__ = "ADMINISTRATOR_PROBLEM"
-
-
-class AdministratorProgrammingTopic(PIIPModel):
-    __tablename__ = "ADMINISTRATOR_PROGRAMMING_TOPIC"
-
-
-class AdministratorSoftSkillTopic(PIIPModel):
-    __tablename__ = "ADMINISTRATOR_SOFT_SKILL_TOPIC"
-"""
