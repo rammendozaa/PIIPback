@@ -76,7 +76,7 @@ def create_token():
         return response
     if email == "alvaro" and password == "alvaro":
         access_token = create_access_token(identity=email)
-        response = {"access_token":access_token, "role": "usuario"}
+        response = {"access_token":access_token, "role": "user"}
         return response
     return {"msg": "Wrong email or password"}, 401
 
