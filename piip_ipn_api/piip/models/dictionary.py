@@ -1,21 +1,34 @@
+from sqlalchemy.orm import relationship
 from piip.database_setup import PIIPModel
 
 from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, Integer, String
 
-class DictSchool(PIIPModel):
-    __tablename__ = "DICT_SCHOOL"
+
+class DictActivityStatus(PIIPModel):
+    __tablename__ = "DICT_ACTIVITY_STATUS"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
-class DictAssignmentStatus(PIIPModel):
-    __tablename__ = "DICT_ASSIGNMENT_STATUS"
+class DictActivityType(PIIPModel):
+    __tablename__ = "DICT_ACTIVITY_TYPE"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+
+
+class DictInterviewType(PIIPModel):
+    __tablename__ = "DICT_INTERVIEW_TYPE"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
 class DictCategory(PIIPModel):
@@ -24,6 +37,7 @@ class DictCategory(PIIPModel):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
 class DictCompany(PIIPModel):
@@ -31,7 +45,7 @@ class DictCompany(PIIPModel):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
-    description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
 class DictDifficulty(PIIPModel):
@@ -39,15 +53,7 @@ class DictDifficulty(PIIPModel):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
-    description = Column(String(255))
-
-
-class DictInterviewStatus(PIIPModel):
-    __tablename__ = "DICT_INTERVIEW_STATUS"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
 class DictLanguage(PIIPModel):
@@ -55,7 +61,16 @@ class DictLanguage(PIIPModel):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+
+
+class DictSchool(PIIPModel):
+    __tablename__ = "DICT_SCHOOL"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
     description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
 class DictTrackingStatus(PIIPModel):
@@ -64,3 +79,4 @@ class DictTrackingStatus(PIIPModel):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
