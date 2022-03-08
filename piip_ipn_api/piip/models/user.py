@@ -1,16 +1,4 @@
-from piip.database_setup import PIIPModel
-from piip.models import (
-    Template, 
-    TemplateActivity, 
-    SoftSkillTopic, 
-    ProgrammingTopic, 
-    SoftSkillQuestion, 
-    DictSchool, 
-    Problem, 
-    Administrator, 
-    DictActivityStatus, 
-    DictLanguage,
-)
+from piip.models.database_setup import PIIPModel
 
 from sqlalchemy import (
     Boolean, 
@@ -24,17 +12,19 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from piip.models.constants import DATABASE
 
 
 class User(PIIPModel):
     __tablename__ = "USER"
+
     id = Column(Integer, primary_key=True)
     email = Column(String(255))
     password = Column(String(128))
     dob = Column(DateTime)
     first_name = Column(String(255))
     last_name = Column(String(255))
-    school_id = Column(Integer, ForeignKey(DictSchool.id))
+    school_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_SCHOOL.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
@@ -44,8 +34,8 @@ class UserAdministrator(PIIPModel):
     __tablename__ = "USER_ADMINISTRATOR"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id))
-    administrator_id = Column(Integer, ForeignKey(Administrator.id))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    administrator_id = Column(Integer, ForeignKey(f"{DATABASE}.ADMINISTRATOR.id"))
     is_graduate = Column(Boolean, DefaultClause("0"), nullable=False)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
@@ -58,11 +48,12 @@ class UserProblem(PIIPModel):
     __tablename__ = "USER_PROBLEM"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id))
-    problem_id = Column(Integer, ForeignKey(Problem.id))
-    status_id = Column(Integer, ForeignKey(DictActivityStatus.id))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    problem_id = Column(Integer, ForeignKey(f"{DATABASE}.PROBLEM.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     code = Column(Text)
-    language_id = Column(Integer, ForeignKey(DictLanguage.id))
+    submission_url = Column(Text)
+    language_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_LANGUAGE.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
@@ -76,9 +67,9 @@ class UserProgrammingTopic(PIIPModel):
     __tablename__ = "USER_PROGRAMMING_TOPIC"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id))
-    programming_topic_id = Column(Integer, ForeignKey(ProgrammingTopic.id))
-    status_id = Column(Integer, ForeignKey(DictActivityStatus.id))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    programming_topic_id = Column(Integer, ForeignKey(f"{DATABASE}.PROGRAMMING_TOPIC.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
@@ -91,9 +82,9 @@ class UserSoftSkillQuestion(PIIPModel):
     __tablename__ = "USER_SOFT_SKILL_QUESTION"
 
     id = Column(Integer, primary_key=True)
-    question_id = Column(Integer, ForeignKey(SoftSkillQuestion.id))
-    user_id = Column(Integer, ForeignKey(User.id))
-    status_id = Column(Integer, ForeignKey(DictActivityStatus.id))
+    question_id = Column(Integer, ForeignKey(f"{DATABASE}.SOFT_SKILL_QUESTION.id"))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     answer = Column(Text)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
@@ -107,13 +98,13 @@ class UserSoftSkillTopic(PIIPModel):
     __tablename__ = "USER_SOFT_SKILL_TOPIC"
 
     id = Column(Integer, primary_key=True)
-    soft_skill_topic_id = Column(Integer, ForeignKey(SoftSkillTopic.id))
-    user_id = Column(Integer, ForeignKey(User.id))
-    status_id = Column(Integer, ForeignKey(DictActivityStatus.id))
+    soft_skill_topic_id = Column(Integer, ForeignKey(f"{DATABASE}.SOFT_SKILL_TOPIC.id"))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
-    soft_skill_topic = relationship("SoftSkillTopic", foreign_keys=True)
+    soft_skill_topic = relationship("SoftSkillTopic", foreign_keys=[soft_skill_topic_id])
     user = relationship("User", foreign_keys=[user_id])
     status = relationship("DictActivityStatus", foreign_keys=[status_id])
 
@@ -122,9 +113,9 @@ class UserTemplate(PIIPModel):
     __tablename__ = "USER_TEMPLATE"
 
     id = Column(Integer, primary_key=True)
-    template_id = Column(Integer, ForeignKey(Template.id))
-    user_id = Column(Integer, ForeignKey(User.id))
-    status_id = Column(Integer, ForeignKey(DictActivityStatus.id))
+    template_id = Column(Integer, ForeignKey(f"{DATABASE}.TEMPLATE.id"))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
@@ -137,8 +128,8 @@ class UserTemplateActivity(PIIPModel):
     __tablename__ = "USER_TEMPLATE_ACTIVITY"
 
     id = Column(Integer, primary_key=True)
-    template_activity_id = Column(Integer, ForeignKey(TemplateActivity.id))
-    status_id = Column(Integer, ForeignKey(DictActivityStatus.id))
+    template_activity_id = Column(Integer, ForeignKey(f"{DATABASE}.TEMPLATE_ACTIVITY.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     external_reference = Column(Integer)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))

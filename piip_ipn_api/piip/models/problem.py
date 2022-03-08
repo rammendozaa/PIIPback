@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey
-from piip.database_setup import PIIPModel
+from piip.models.database_setup import PIIPModel
 from sqlalchemy import (
     Boolean,
     Column,
@@ -10,7 +10,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from piip.models import DictCategory, DictDifficulty
+from piip.models.constants import DATABASE
 
 
 class Problem(PIIPModel):
@@ -20,8 +20,8 @@ class Problem(PIIPModel):
     title = Column(Text)
     description = Column(Text)
     test_cases = Column(Text)
-    category_id = Column(Integer, ForeignKey(DictCategory.id))
-    difficulty_id = Column(Integer, ForeignKey(DictDifficulty.id))
+    category_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_CATEGORY.id"))
+    difficulty_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_DIFFICULTY.id"))
     url = Column(Text)
     time_limit = Column(Text)
     memory_limit = Column(Text)

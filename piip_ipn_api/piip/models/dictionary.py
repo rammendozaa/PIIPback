@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship
-from piip.database_setup import PIIPModel
+from piip.models.database_setup import PIIPModel
 
 from sqlalchemy import Boolean, Column, DateTime, DefaultClause, ForeignKey, Integer, String
 

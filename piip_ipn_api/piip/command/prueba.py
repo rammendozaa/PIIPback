@@ -1,10 +1,11 @@
-from piip.database_setup import DictSchool, User
-from api import session
+from piip.services.database.setup import session
 from datetime import date
+from piip.models import DictSchool, User
+
 
 def prueba():
-    dict_school = session.query(DictSchool).get(1)
-    print(f"School name: {dict_school.name}")
+    school = session.query(DictSchool).get(1)
+    print(f"School name: {school.name}")
     some_user = User(email="email", password="unsafe", dob=date.today(), first_name="Prueba", last_name="Prueba Apellido", school_id=1)
     session.add(some_user)
     session.commit()
@@ -13,3 +14,4 @@ def prueba():
     print(f"User school: {some_user.school.id}")
     print(f"User school: {some_user.school.name}")
     print(f"User school: {some_user.school.description}")
+    return some_user
