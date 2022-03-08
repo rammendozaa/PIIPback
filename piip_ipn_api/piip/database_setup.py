@@ -1,24 +1,26 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import (
-    Boolean, 
-    Column, 
-    DateTime, 
-    DefaultClause, 
-    ForeignKey, 
-    Integer, 
-    String,
-    Text,
-)
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from api import db
 
-base = declarative_base()
+class DictSchool(db.Model):
+    __tablename__ = "DICT_SCHOOL"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    description = db.Column(db.String(255))
+    is_active = db.Column(db.Boolean, db.DefaultClause("1"), nullable=False)
 
-class PIIPModel(base):  # type: ignore
-    __abstract__ = True
-    __table_args__ = {"schema": "PIIP_pruebas"}
+class User(db.Model):
+    __tablename__ = "USER"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255))
+    password = db.Column(db.String(128))
+    dob = db.Column(db.DateTime)
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+    school_id = db.Column(db.Integer, db.ForeignKey(DictSchool.id))
+    is_active = db.Column(db.Boolean, db.DefaultClause("1"), nullable=False)
+    created_date = db.Column(db.DateTime, db.DefaultClause(db.func.now()))
+    school = db.relationship("DictSchool", foreign_keys=[school_id])
 
-
+"""
 class DictActivityStatus(PIIPModel):
     __tablename__ = "DICT_ACTIVITY_STATUS"
 
@@ -78,16 +80,6 @@ class DictLanguage(PIIPModel):
     name = Column(String(255))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
-
-class DictSchool(PIIPModel):
-    __tablename__ = "DICT_SCHOOL"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    description = Column(String(255))
-    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
-
-
 class DictTrackingStatus(PIIPModel):
     __tablename__ = "DICT_TRACKING_STATUS"
 
@@ -95,21 +87,6 @@ class DictTrackingStatus(PIIPModel):
     name = Column(String(255))
     description = Column(String(255))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
-
-class User(PIIPModel):
-    __tablename__ = "USER"
-    id = Column(Integer, primary_key=True)
-    email = Column(String(255))
-    password = Column(String(128))
-    dob = Column(DateTime)
-    first_name = Column(String(255))
-    last_name = Column(String(255))
-    school_id = Column(Integer, ForeignKey(DictSchool.id))
-    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
-    created_date = Column(DateTime, DefaultClause(func.now()))
-
-    school = relationship("DictSchool", foreign_keys=[school_id])
-
 
 class Administrator(PIIPModel):
     __tablename__ = "ADMINISTRATOR"
@@ -357,3 +334,4 @@ class UserTemplateActivity(PIIPModel):
 
     template_activity = relationship("TemplateActivity", foreign_keys=[template_activity_id])
     status = relationship("DictActivityStatus", foreign_keys=[status_id])
+"""

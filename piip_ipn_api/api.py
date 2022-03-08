@@ -1,25 +1,33 @@
-from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
-from email.policy import default
-from flask import request, Flask, jsonify
+#from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+#from email.policy import default
+#from flask import request, Flask, jsonify
+#from providers.codeforces.codeforces import Codeforces
+#from datetime import datetime, timedelta, timezone
+#import json
+#import random
+#from piip.command.prueba import prueba
+
+
+# Hacerlo asi https://www.section.io/engineering-education/flask-database-integration-with-sqlalchemy/
 from flask_sqlalchemy import SQLAlchemy
-from providers.codeforces.codeforces import Codeforces
-from datetime import datetime, timedelta, timezone
-import json
-import random
+from flask import Flask
 
 app = Flask(__name__)
+
+"""
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
-
 jwt = JWTManager(app)
+"""
+"""
+CF_USERNAME = "Barbosa1998"
+CF_PASSWORD = "Barbosa20111910"
+"""
 
 USERNAME = "root"
 PASSWORD = "root"
 HOST = "127.0.0.1"
 DATABASE = "PIIP_pruebas"
-
-CF_USERNAME = "Barbosa1998"
-CF_PASSWORD = "Barbosa20111910"
 
 database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
 app.config["SQLALCHEMY_DATABASE_URI"] = database_route
@@ -27,12 +35,19 @@ app.config['JSON_SORT_KEYS'] = False
 db = SQLAlchemy(app)
 session = db.session
 
+from piip.database_setup import DictSchool,User
 
 @app.route("/")
 def index():
+    dict_school = session.query(DictSchool).get(1)
+    print(f"School name: {dict_school.name}")
+    some_user = User(email="email", password="unsafe", dob=date.today(), first_name="Prueba", last_name="Prueba Apellido", school_id=1)
+    session.add(some_user)
+    session.commit()
+
     return ""
 
-
+"""
 @app.route('/problems')
 @jwt_required()
 def getAllProblems():
@@ -99,3 +114,4 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
+"""
