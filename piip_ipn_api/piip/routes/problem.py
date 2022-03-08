@@ -2,7 +2,7 @@ from piip.services.providers.codeforces.codeforces import Codeforces
 from flask_restful import Resource
 from flask import request, jsonify
 import random
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from piip.command.problem import get_all_problems
 from piip.schema.problem import ProblemSchema
 
@@ -11,8 +11,9 @@ CF_USERNAME = ""
 CF_PASSWORD = ""
 
 class Problems(Resource):
-    # @jwt_required()
+    @jwt_required()
     def get(self):
+        print("ASDASDASD", get_jwt_identity())
         return jsonify(ProblemSchema(many=True).dump(get_all_problems()))
         """
             [

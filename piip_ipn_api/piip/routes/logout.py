@@ -4,6 +4,7 @@ from flask import request, Flask, jsonify
 from flask_restful import Resource
 
 class LogOut(Resource):
+    @jwt_required()
     def post(self):
         response = jsonify({"msg": "logout successful"})
         unset_jwt_cookies(response)
