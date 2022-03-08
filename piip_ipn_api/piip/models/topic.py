@@ -1,4 +1,4 @@
-from piip.database_setup import PIIPModel
+from piip.models.database_setup import PIIPModel
 from sqlalchemy import (
     Column,
     Integer,

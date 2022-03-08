@@ -1,4 +1,4 @@
-from piip.database_setup import PIIPModel
+from piip.models.database_setup import PIIPModel
 
 from sqlalchemy import (
     Column,
@@ -8,15 +8,16 @@ from sqlalchemy import (
     DateTime,
 )
 from sqlalchemy.orm import relationship
-from piip.models import User, DictCompany, DictTrackingStatus
+from piip.models.constants import DATABASE
+
 
 class CompanyTracking(PIIPModel):
     __tablename__ = "COMPANY_TRACKING"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    company_id = Column(Integer, ForeignKey(DictCompany.id), nullable=False)
-    status_id = Column(Integer,  ForeignKey(DictTrackingStatus.id), nullable=False)
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"), nullable=False)
+    company_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_COMPANY.id"), nullable=False)
+    status_id = Column(Integer,  ForeignKey(f"{DATABASE}.DICT_TRACKING_STATUS.id"), nullable=False)
     application_url = Column(String(255))
     interview_date = Column(DateTime)
 
@@ -29,7 +30,7 @@ class CompanyTrackingLinks(PIIPModel):
     __tablename__ = "COMPANY_TRACKING_LINKS"
 
     id = Column(Integer, primary_key=True)
-    company_tracking_id = Column(Integer, ForeignKey(CompanyTracking.id), nullable=False)
+    company_tracking_id = Column(Integer, ForeignKey(f"{DATABASE}.COMPANY_TRACKING.id"), nullable=False)
     description = Column(String(255), nullable=False)
     url = Column(String(1000), nullable=False)
 

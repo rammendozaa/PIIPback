@@ -1,4 +1,3 @@
-"""
 from piip.models.administrator import Administrator
 from piip.models.interview import Interview
 from piip.models.company_tracking import CompanyTracking, CompanyTrackingLinks
@@ -30,7 +29,7 @@ from piip.models.question import SoftSkillQuestion
 from piip.models.template import Template, TemplateActivity
 
 __all__ = [
-    "Administrator"
+    "Administrator",
     "User",
     "CompanyTracking",
     "CompanyTrackingLinks",
@@ -59,4 +58,3 @@ __all__ = [
     "TemplateActivity",
     "Problem",
 ]
-"""
