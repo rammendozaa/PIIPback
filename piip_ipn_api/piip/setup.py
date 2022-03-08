@@ -27,11 +27,11 @@ def create_application(name):
 
     app.config['JSON_SORT_KEYS'] = False
 
-
+    """
     process = CrawlerProcess()
     process.crawl(CodeforcesSpider, urls=getUrls())
     process.start()
-
+    """
 
     USERNAME = "root"
     PASSWORD = "root"

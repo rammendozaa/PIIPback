@@ -46,3 +46,7 @@ def add_problem_to_database(parse_response):
         )
         session.add(problem)
         session.commit()
+
+
+def get_all_problems():
+    return session.query(Problem).all()
