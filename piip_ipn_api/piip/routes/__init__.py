@@ -3,7 +3,8 @@ from piip.routes.problem import Problems, Submission, SubmitProblem
 from piip.routes.schools import Schools
 from piip.routes.token import Token
 from piip.routes.logout import LogOut
-from piip.routes.user import User,GetAdministratorGivenUser
+from piip.routes.user import User,GetAdministratorGivenUser, GetUnassignedUsers,MyStudents
+from piip.routes.administrator import AssignStudent
 __all__ = [
     "LogOut",
     "Token",
@@ -14,4 +15,7 @@ __all__ = [
     "Schools",
     "User",
     "GetAdministratorGivenUser",
+    "AssignStudent",
+    "GetUnassignedUsers",
+    "MyStudents"
 ]

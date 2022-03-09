@@ -1,3 +1,4 @@
+from ast import Assign
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 from flask import Flask
 from datetime import datetime, timedelta, timezone
@@ -14,6 +15,9 @@ from piip.routes import (
     Schools,
     User,
     GetAdministratorGivenUser,
+    AssignStudent,
+    GetUnassignedUsers,
+    MyStudents,
 )
 
 from scrapy.crawler import CrawlerProcess
@@ -72,6 +76,10 @@ def create_application(name):
     api.add_resource(LogOut, "/logout")
     api.add_resource(User, "/sign-up")
     api.add_resource(GetAdministratorGivenUser,"/get-admin")
+    api.add_resource(GetUnassignedUsers,"/pendingStudents")
+    api.add_resource(MyStudents,"/myStudents")
+
+    api.add_resource(AssignStudent,"/assign-student")
 
     api.add_resource(Schools, "/schools")
     return app
