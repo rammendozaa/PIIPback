@@ -28,3 +28,15 @@ def getAdministratorGivenUser(_email):
     if not administrator:
         return -1
     return administrator.id
+
+def getUnassignedUsers():
+    users = session.query(UserAdministrator).filter_by(administrator_id=None).all()
+    return users
+
+def getMyStudents(_administrator_id):
+    users = session.query(UserAdministrator).filter_by(administrator_id=_administrator_id).all()
+    return users
+
+def getUser(user_id):
+    user = session.query(User).filter_by(id=user_id).first()
+    return user
