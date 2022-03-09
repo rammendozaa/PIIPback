@@ -1,7 +1,9 @@
+from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_restful import Resource
 from flask import request
-from piip.command.user import insertUser
+from piip.command.user import insertUser, getAdministratorGivenUser
 from flask_jwt_extended import create_access_token
+
 
 class User(Resource):
     def post(self):
@@ -17,3 +19,9 @@ class User(Resource):
         access_token = create_access_token(identity=email)
         response = {"access_token":access_token, "role": "user"}
         return response
+
+class GetAdministratorGivenUser(Resource):
+    @jwt_required()
+    def get(self):
+        administrator_id = getAdministratorGivenUser(get_jwt_identity())
+        return {"administrator_id": administrator_id}
