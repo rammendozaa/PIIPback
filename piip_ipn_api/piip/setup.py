@@ -13,6 +13,7 @@ from piip.routes import (
     Submission,
     Schools,
     User,
+    GetAdministratorGivenUser,
 )
 
 from scrapy.crawler import CrawlerProcess
@@ -68,10 +69,9 @@ def create_application(name):
     api.add_resource(Submission, "/submission/")
 
     api.add_resource(Token, "/token")
-    api.add_resource(Schools, "/schools")
-
     api.add_resource(LogOut, "/logout")
-
     api.add_resource(User, "/sign-up")
+    api.add_resource(GetAdministratorGivenUser,"/get-admin")
 
+    api.add_resource(Schools, "/schools")
     return app
