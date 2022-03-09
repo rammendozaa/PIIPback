@@ -25,7 +25,7 @@ def getAdministratorGivenUser(_email):
     user = session.query(User).filter_by(email=_email).first()
     _user_id = user.id
     administrator = session.query(UserAdministrator).filter_by(user_id=_user_id).first()
-    if not administrator:
+    if administrator.administrator_id == None:
         return -1
     return administrator.id
 
