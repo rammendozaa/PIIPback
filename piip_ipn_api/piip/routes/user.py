@@ -35,7 +35,7 @@ class GetUnassignedUsers(Resource):
         user_ids = getUnassignedUsers()
         users = []
         for user in user_ids:
-            users.append(getUser(user.user_id));
+            users.append(user.user)
         return jsonify(UserSchema(many=True).dump(users))
 
 class MyStudents(Resource):
@@ -45,5 +45,5 @@ class MyStudents(Resource):
         user_ids = getMyStudents(administrator.id)
         users = []
         for user in user_ids:
-            users.append(getUser(user.user_id))
+            users.append(user.user)
         return jsonify(UserSchema(many=True).dump(users))
