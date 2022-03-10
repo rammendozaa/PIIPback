@@ -40,8 +40,8 @@ def create_application(name):
     process.start()
     """
 
-    USERNAME = "admin"
-    PASSWORD = "*&WcgpYU4-.{mt.-"
+    USERNAME = "root"
+    PASSWORD = "root"
     HOST = "127.0.0.1"
     DATABASE = "PIIP_pruebas"
 
