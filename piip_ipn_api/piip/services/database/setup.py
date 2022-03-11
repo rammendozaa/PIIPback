@@ -2,8 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 
-USERNAME = "root"
-PASSWORD = "root"
+USERNAME = "admin"
+PASSWORD = "*&WcgpYU4-.{mt.-"
 HOST = "127.0.0.1"
 DATABASE = "PIIP_pruebas"
 

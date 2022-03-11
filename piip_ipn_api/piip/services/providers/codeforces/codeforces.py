@@ -61,7 +61,8 @@ class Codeforces:
         }
         url = 'https://codeforces.com/problemset/submit?csrf_token=' + re.findall(csrf_token_pattern, result.text)[0]
         result2 = self.session.post(url, data=data, headers=self.headers)
-
+        with open('hola.html', 'w') as f:
+            f.write(result2.text)
         submission_id_pattern = r'href="\/problemset\/submission\/(.*?)"'
         submissionUrl = "https://codeforces.com/problemset/submission/"+re.findall(submission_id_pattern,result2.text)[0]
         return submissionUrl

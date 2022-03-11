@@ -10,7 +10,10 @@ class ProblemSchema(BaseSchema):
     class Meta:
         unknown = EXCLUDE
 
+    id = fields.String(data_key='id')
     title = fields.String()
+    description = fields.String(data_key="description")
     time_limit = fields.String(data_key="related_topics")
     memory_limit = fields.String(data_key="difficulty")
     category_id = fields.String(data_key="status")
+    url = fields.String(data_key="url")
