@@ -19,11 +19,8 @@ from piip.routes import (
     GetUnassignedUsers,
     MyStudents,
     GetProblem,
+    InsertProblemToDB,
 )
-
-from scrapy.crawler import CrawlerProcess
-from piip.services.providers.codeforces.codeforcesCrawler import CodeforcesSpider, getUrls
-
 #piipipn2021@gmail.com
 #piip_ipn
 #*&WcgpYU4-.{mt.-
@@ -37,12 +34,6 @@ def create_application(name):
     jwt = JWTManager(app)
 
     app.config['JSON_SORT_KEYS'] = False
-
-    """
-    process = CrawlerProcess()
-    process.crawl(CodeforcesSpider, urls=getUrls())
-    process.start()
-    """
 
     USERNAME = "admin"
     PASSWORD = "*&WcgpYU4-.{mt.-"
@@ -76,6 +67,7 @@ def create_application(name):
     api.add_resource(GetProblem,"/problem")
     api.add_resource(SubmitProblem, "/problem/submit")    
     api.add_resource(Submission, "/submission/")
+    api.add_resource(InsertProblemToDB,"/insertProblemsToDB")
 
     api.add_resource(Token, "/token")
     api.add_resource(LogOut, "/logout")
