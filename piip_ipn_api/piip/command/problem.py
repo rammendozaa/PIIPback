@@ -1,10 +1,14 @@
 from sqlalchemy import null
 from piip.models import Problem
 from piip.services.database.setup import session
+from piip.query.problem import get_problem_by_url
+
 
 def is_valid_problem(parse_response):
+    problem = get_problem_by_url(parse_response.url)
     return (
-        parse_response.url is not None
+        not problem
+        and parse_response.url is not None
         and parse_response.css('.title::text').get() is not None
         and parse_response.css('.time-limit::text').get() is not None
         and parse_response.css('.memory-limit::text').get() is not None

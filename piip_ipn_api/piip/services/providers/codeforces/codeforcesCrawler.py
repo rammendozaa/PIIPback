@@ -10,7 +10,10 @@ class CodeforcesSpider(scrapy.Spider):
         self.start_urls = self.urls
 
     def parse(self, response):
-        add_problem_to_database(response)
+        try:
+            add_problem_to_database(response)
+        except Exception as e:
+            pass
 
 def getUrls():
     r = requests.get('https://codeforces.com/api/problemset.problems')
