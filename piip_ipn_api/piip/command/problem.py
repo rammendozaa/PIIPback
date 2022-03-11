@@ -1,3 +1,4 @@
+from sqlalchemy import null
 from piip.models import Problem
 from piip.services.database.setup import session
 
@@ -50,3 +51,21 @@ def add_problem_to_database(parse_response):
 
 def get_all_problems():
     return session.query(Problem).all()
+
+def getProblem(_problem_id):
+    problem = session.query(Problem).filter_by(id=_problem_id).first()
+    if not problem:
+        return null
+    return problem
+
+def getProblemCode(problem_url):
+    cnt = 0
+    problem_code = ""
+    for c in problem_url[::-1]:
+        if cnt == 2:
+            break
+        if c == '/':
+            cnt += 1
+        else:
+            problem_code += c
+    return problem_code[::-1]

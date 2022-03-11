@@ -1,5 +1,5 @@
 from piip.routes.healthcheck import HealthCheck
-from piip.routes.problem import Problems, Submission, SubmitProblem
+from piip.routes.problem import Problems, Submission, SubmitProblem, GetProblem
 from piip.routes.schools import Schools
 from piip.routes.token import Token
 from piip.routes.logout import LogOut
@@ -17,5 +17,6 @@ __all__ = [
     "GetAdministratorGivenUser",
     "AssignStudent",
     "GetUnassignedUsers",
-    "MyStudents"
+    "MyStudents",
+    "GetProblem",
 ]

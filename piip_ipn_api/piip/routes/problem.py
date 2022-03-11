@@ -3,12 +3,12 @@ from flask_restful import Resource
 from flask import request, jsonify
 import random
 from flask_jwt_extended import jwt_required
-from piip.command.problem import get_all_problems
+from piip.command.problem import get_all_problems, getProblem, getProblemCode
 from piip.schema.problem import ProblemSchema
 
 
-CF_USERNAME = ""
-CF_PASSWORD = ""
+CF_USERNAME = "piip_ipn"
+CF_PASSWORD = "*&WcgpYU4-.{mt.-"
 
 class Problems(Resource):
     # @jwt_required()
@@ -23,15 +23,17 @@ class Problems(Resource):
         """
 
 class SubmitProblem(Resource):
-    def post(self, problem_id: int):
+    def post(self):
+        problem_url = request.form.get("problem_url", default='',type=str)
+        code = request.form.get("code", default='',type=str)
+        problem_code = getProblemCode(problem_url)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
-            submissionUrl = codeforces.submit('1254A', 'qwer' + str(random.random()) )
+            submissionUrl = codeforces.submit(problem_code, code+'\n' )
             return {"submissionUrl": submissionUrl}
         else:
             return {"submissionUrl": "failed"}
-
 
 class Submission(Resource):
     def post(self):
@@ -44,3 +46,10 @@ class Submission(Resource):
         else:
             return {"status": "failed to login"}
 
+
+class GetProblem(Resource):
+    def post(self):
+        problem_id = request.form.get("problem_id", default='',type=str)
+        problem = getProblem(problem_id)
+        print(problem_id)
+        return jsonify(ProblemSchema().dump(problem))

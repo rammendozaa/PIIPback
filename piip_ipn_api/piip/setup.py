@@ -18,11 +18,15 @@ from piip.routes import (
     AssignStudent,
     GetUnassignedUsers,
     MyStudents,
+    GetProblem,
 )
 
 from scrapy.crawler import CrawlerProcess
 from piip.services.providers.codeforces.codeforcesCrawler import CodeforcesSpider, getUrls
 
+#piipipn2021@gmail.com
+#piip_ipn
+#*&WcgpYU4-.{mt.-
 
 def create_application(name):
 
@@ -40,8 +44,8 @@ def create_application(name):
     process.start()
     """
 
-    USERNAME = "root"
-    PASSWORD = "root"
+    USERNAME = "admin"
+    PASSWORD = "*&WcgpYU4-.{mt.-"
     HOST = "127.0.0.1"
     DATABASE = "PIIP_pruebas"
 
@@ -69,7 +73,8 @@ def create_application(name):
     api.add_resource(HealthCheck, "/")
 
     api.add_resource(Problems, "/problems")
-    api.add_resource(SubmitProblem, "/problem/submit/<int:problem_id>")    
+    api.add_resource(GetProblem,"/problem")
+    api.add_resource(SubmitProblem, "/problem/submit")    
     api.add_resource(Submission, "/submission/")
 
     api.add_resource(Token, "/token")
