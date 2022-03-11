@@ -5,6 +5,7 @@ import random
 from flask_jwt_extended import jwt_required
 from piip.command.problem import get_all_problems, getProblem, getProblemCode
 from piip.schema.problem import ProblemSchema
+from piip.services.providers.codeforces.codeforcesCrawler import CodeforcesSpider
 
 
 CF_USERNAME = "piip_ipn"
@@ -53,3 +54,9 @@ class GetProblem(Resource):
         problem = getProblem(problem_id)
         print(problem_id)
         return jsonify(ProblemSchema().dump(problem))
+
+class InsertProblemToDB(Resource):
+    def get(self):
+        codeforcesSpider = CodeforcesSpider()
+        codeforcesSpider.start()
+        return {"msg": "success"}
