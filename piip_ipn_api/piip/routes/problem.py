@@ -12,7 +12,7 @@ CF_USERNAME = "piip_ipn"
 CF_PASSWORD = "*&WcgpYU4-.{mt.-"
 
 class Problems(Resource):
-    # @jwt_required()
+    @jwt_required()
     def get(self):
         return jsonify(ProblemSchema(many=True).dump(get_all_problems()))
         """
