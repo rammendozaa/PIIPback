@@ -21,6 +21,8 @@ from piip.routes import (
     GetProblem,
     InsertProblemToDB,
 )
+from piip.services.database.setup import session
+from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
 #piipipn2021@gmail.com
 #piip_ipn
 #*&WcgpYU4-.{mt.-
@@ -34,11 +36,6 @@ def create_application(name):
     jwt = JWTManager(app)
 
     app.config['JSON_SORT_KEYS'] = False
-
-    USERNAME = "admin"
-    PASSWORD = "*&WcgpYU4-.{mt.-"
-    HOST = "127.0.0.1"
-    DATABASE = "PIIP_pruebas"
 
     database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
     app.config["SQLALCHEMY_DATABASE_URI"] = database_route
@@ -59,6 +56,10 @@ def create_application(name):
         except (RuntimeError, KeyError):
             # Case where there is not a valid JWT. Just return the original respone
             return response
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        session.remove()
 
     api = Api(app)
     api.add_resource(HealthCheck, "/")

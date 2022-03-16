@@ -1,12 +1,7 @@
+from flask import current_app as app
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-
-USERNAME = "admin"
-PASSWORD = "*&WcgpYU4-.{mt.-"
-HOST = "127.0.0.1"
-DATABASE = "PIIP_pruebas"
-
+from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
 
 database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
 
