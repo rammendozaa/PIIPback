@@ -124,15 +124,32 @@ class UserTemplate(PIIPModel):
     status = relationship("DictActivityStatus", foreign_keys=[status_id])
 
 
+class UserTemplateSection(PIIPModel):
+    __tablename__ = "USER_TEMPLATE_SECTION"
+
+    id = Column(Integer, primary_key=True)
+    template_section_id = Column(Integer, ForeignKey(f"{DATABASE}.TEMPLATE_SECTION.id"))
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_date = Column(DateTime, DefaultClause(func.now()))
+
+    template_section = relationship("TemplateSection", foreign_keys=[template_section_id])
+    user = relationship("User", foreign_keys=[user_id])
+    status = relationship("DictActivityStatus", foreign_keys=[status_id])
+
+
 class UserTemplateActivity(PIIPModel):
     __tablename__ = "USER_TEMPLATE_ACTIVITY"
 
     id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
     template_activity_id = Column(Integer, ForeignKey(f"{DATABASE}.TEMPLATE_ACTIVITY.id"))
     status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     external_reference = Column(Integer)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
+    user = relationship("User", foreign_keys=[user_id])
     template_activity = relationship("TemplateActivity", foreign_keys=[template_activity_id])
     status = relationship("DictActivityStatus", foreign_keys=[status_id])
