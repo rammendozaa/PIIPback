@@ -67,7 +67,7 @@ def create_application(name):
     api.add_resource(Problems, "/problems")
     api.add_resource(GetProblem,"/problem")
     api.add_resource(SubmitProblem, "/problem/submit")    
-    api.add_resource(Submission, "/submission/")
+    api.add_resource(Submission, "/submission")
     api.add_resource(InsertProblemToDB,"/insertProblemsToDB")
 
     api.add_resource(Token, "/token")

@@ -24,21 +24,29 @@ class Problems(Resource):
         """
 
 class SubmitProblem(Resource):
+    @jwt_required()
     def post(self):
         problem_url = request.form.get("problem_url", default='',type=str)
         code = request.form.get("code", default='',type=str)
         problem_code = getProblemCode(problem_url)
+        print(problem_url)
+        print(problem_code)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
-            submissionUrl = codeforces.submit(problem_code, code+'\n' )
-            return {"submissionUrl": submissionUrl}
+            res = codeforces.submit(problem_code, code+'\n')
+            if res["status"] == "error":
+                return {"error": res["msg"]}
+            else:
+                return {"submissionUrl": res["msg"]}
         else:
-            return {"submissionUrl": "failed"}
+            return {"error": "failed to submit code"}
 
 class Submission(Resource):
+    @jwt_required()
     def post(self):
-        submissionUrl = request.args.get('submissionUrl',default='',type=str)
+        submissionUrl = request.form.get('submissionUrl',default='',type=str)
+        print(submissionUrl)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
@@ -46,7 +54,6 @@ class Submission(Resource):
             return {"status": status}
         else:
             return {"status": "failed to login"}
-
 
 class GetProblem(Resource):
     def post(self):

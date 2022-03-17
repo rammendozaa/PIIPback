@@ -61,11 +61,21 @@ class Codeforces:
         }
         url = 'https://codeforces.com/problemset/submit?csrf_token=' + re.findall(csrf_token_pattern, result.text)[0]
         result2 = self.session.post(url, data=data, headers=self.headers)
+
         with open('hola.html', 'w') as f:
             f.write(result2.text)
+
+        if "You have submitted exactly the same code before" in result2.text:
+            return {
+                "status": "error", 
+                "msg": "You have submitted exactly the same code before"
+            }
         submission_id_pattern = r'href="\/problemset\/submission\/(.*?)"'
         submissionUrl = "https://codeforces.com/problemset/submission/"+re.findall(submission_id_pattern,result2.text)[0]
-        return submissionUrl
+        return {
+            "status": "success",
+            "msg": submissionUrl
+        }
 
     def getSubmissionStatus(self, submissionUrl):
         result = self.session.get(submissionUrl, headers=self.headers)
