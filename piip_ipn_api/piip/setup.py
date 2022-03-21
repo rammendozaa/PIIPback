@@ -20,6 +20,7 @@ from piip.routes import (
     MyStudents,
     GetProblem,
     InsertProblemToDB,
+    GetUser,
 )
 from piip.services.database.setup import session
 from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
@@ -73,6 +74,7 @@ def create_application(name):
     api.add_resource(Token, "/token")
     api.add_resource(LogOut, "/logout")
     api.add_resource(User, "/sign-up")
+    api.add_resource(GetUser, "/user")
     api.add_resource(GetAdministratorGivenUser,"/get-admin")
     api.add_resource(GetUnassignedUsers,"/pendingStudents")
     api.add_resource(MyStudents,"/myStudents")

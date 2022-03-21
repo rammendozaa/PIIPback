@@ -47,3 +47,9 @@ class MyStudents(Resource):
         for user in user_ids:
             users.append(user.user)
         return jsonify(UserSchema(many=True).dump(users))
+
+class GetUser(Resource):
+    @jwt_required()
+    def get(self):
+        user = getUser(get_jwt_identity())
+        return jsonify(UserSchema().dump(user))

@@ -37,6 +37,6 @@ def getMyStudents(_administrator_id):
     users = session.query(UserAdministrator).filter_by(administrator_id=_administrator_id).all()
     return users
 
-def getUser(user_id):
-    user = session.query(User).filter_by(id=user_id).first()
+def getUser(_email):
+    user = session.query(User).filter_by(email=_email).first()
     return user
