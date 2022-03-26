@@ -21,6 +21,7 @@ from piip.routes import (
     GetProblem,
     InsertProblemToDB,
     GetUser,
+    Template,
 )
 from piip.services.database.setup import session
 from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
@@ -82,4 +83,6 @@ def create_application(name):
     api.add_resource(AssignStudent,"/assign-student")
 
     api.add_resource(Schools, "/schools")
+
+    api.add_resource(Template, "/template/<int:template_id>")
     return app

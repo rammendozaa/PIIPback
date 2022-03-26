@@ -26,7 +26,7 @@ from piip.models.dictionary import (
 from piip.models.problem import Problem
 from piip.models.topic import SoftSkillTopic, ProgrammingTopic
 from piip.models.question import SoftSkillQuestion
-from piip.models.template import Template, TemplateActivity
+from piip.models.template import Template, TemplateActivity, TemplateSection
 
 __all__ = [
     "Administrator",
@@ -55,6 +55,7 @@ __all__ = [
     "SoftSkillTopic",
     "SoftSkillQuestion",
     "Template",
+    "TemplateSection",
     "TemplateActivity",
     "Problem",
 ]

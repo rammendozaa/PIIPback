@@ -1,4 +1,3 @@
-from attr import fields
 from piip.models import Problem
 from piip.schema.base_schema import BaseSchema
 from marshmallow import fields
