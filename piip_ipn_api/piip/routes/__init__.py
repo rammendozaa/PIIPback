@@ -5,7 +5,7 @@ from piip.routes.token import Token
 from piip.routes.logout import LogOut
 from piip.routes.user import User,GetAdministratorGivenUser, GetUnassignedUsers,MyStudents, GetUser
 from piip.routes.administrator import AssignStudent
-from piip.routes.template import Template
+from piip.routes.template import Template, AddTemplate
 
 __all__ = [
     "LogOut",
@@ -24,4 +24,5 @@ __all__ = [
     "InsertProblemToDB",
     "GetUser",
     "Template",
+    "AddTemplate",
 ]

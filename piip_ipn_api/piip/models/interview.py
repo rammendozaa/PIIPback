@@ -1,5 +1,7 @@
 from piip.models.database_setup import PIIPModel
 from sqlalchemy import (
+    Boolean,
+    DefaultClause,
     Column, 
     DateTime, 
     ForeignKey, 
@@ -20,6 +22,7 @@ class Interview(PIIPModel):
     interview_url = Column(Text)
     interview_code = Column(Text)
     feedback = Column(Text)
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
     user = relationship("User", foreign_keys=[user_id])
     administrator = relationship("Administrator", foreign_keys=[administrator_id])
