@@ -10,6 +10,7 @@ from piip.models.user import (
     UserSoftSkillTopic,
     UserTemplate,
     UserTemplateActivity,
+    UserQuestionnaire,
 )
 from piip.models.interview import Interview
 from piip.models.dictionary import (
@@ -26,6 +27,7 @@ from piip.models.dictionary import (
 from piip.models.problem import Problem
 from piip.models.topic import SoftSkillTopic, ProgrammingTopic
 from piip.models.question import SoftSkillQuestion
+from piip.models.questionnaire import Questionnaire
 from piip.models.template import Template, TemplateActivity, TemplateSection
 
 __all__ = [
@@ -39,6 +41,7 @@ __all__ = [
     "UserProgrammingTopic",
     "UserSoftSkillQuestion",
     "UserSoftSkillTopic",
+    "UserQuestionnaire",
     "UserTemplate",
     "UserTemplateActivity",
     "DictActivityStatus",
@@ -58,4 +61,5 @@ __all__ = [
     "TemplateSection",
     "TemplateActivity",
     "Problem",
+    "Questionnaire",
 ]
