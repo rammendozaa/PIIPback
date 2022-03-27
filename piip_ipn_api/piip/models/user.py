@@ -9,6 +9,7 @@ from sqlalchemy import (
     Integer, 
     String,
     Text,
+    Numeric,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -107,6 +108,19 @@ class UserSoftSkillTopic(PIIPModel):
     soft_skill_topic = relationship("SoftSkillTopic", foreign_keys=[soft_skill_topic_id])
     user = relationship("User", foreign_keys=[user_id])
     status = relationship("DictActivityStatus", foreign_keys=[status_id])
+
+
+class UserQuestionnaire(PIIPModel):
+    __tablename__ = "USER_QUESTIONNAIRE"
+
+    id = Column(Integer, primary_key=True)
+    questionnaire_id = Column(Integer, ForeignKey(f"{DATABASE}.QUESTIONNAIRE.id"))
+    correct_answers = Column(Integer)
+    percentage_score = Numeric(5, 2)
+    answers = Column(Text)
+    status_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_date = Column(DateTime, DefaultClause(func.now()))
 
 
 class UserTemplate(PIIPModel):
