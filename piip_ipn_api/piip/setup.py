@@ -22,6 +22,7 @@ from piip.routes import (
     InsertProblemToDB,
     GetUser,
     Template,
+    AddTemplate,
 )
 from piip.services.database.setup import session
 from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
@@ -85,4 +86,13 @@ def create_application(name):
     api.add_resource(Schools, "/schools")
 
     api.add_resource(Template, "/template/<int:template_id>")
+    api.add_resource(AddTemplate, "/template")
+
+    """
+    api.add_resource(Section, "/section/<int:section_id>")
+    api.add_resource(AddSection, "/section")
+
+    api.add_resource(Activity, "/activity/<int:activity_id>")
+    api.add_resource(AddActivity, "/activity")
+    """
     return app

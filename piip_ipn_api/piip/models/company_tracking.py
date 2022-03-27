@@ -6,6 +6,8 @@ from sqlalchemy import (
     ForeignKey, 
     String,
     DateTime,
+    DefaultClause,
+    Boolean,
 )
 from sqlalchemy.orm import relationship
 from piip.models.constants import DATABASE
@@ -20,6 +22,7 @@ class CompanyTracking(PIIPModel):
     status_id = Column(Integer,  ForeignKey(f"{DATABASE}.DICT_TRACKING_STATUS.id"), nullable=False)
     application_url = Column(String(255))
     interview_date = Column(DateTime)
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
     user = relationship("User", foreign_keys=[user_id])
     company = relationship("DictCompany", foreign_keys=[company_id])
@@ -33,5 +36,6 @@ class CompanyTrackingLinks(PIIPModel):
     company_tracking_id = Column(Integer, ForeignKey(f"{DATABASE}.COMPANY_TRACKING.id"), nullable=False)
     description = Column(String(255), nullable=False)
     url = Column(String(1000), nullable=False)
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
     company_tracking = relationship("CompanyTracking", foreign_keys=[company_tracking_id])

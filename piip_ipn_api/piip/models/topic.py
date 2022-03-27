@@ -1,5 +1,6 @@
 from piip.models.database_setup import PIIPModel
 from sqlalchemy import (
+    Boolean,
     Column,
     Integer,
     DefaultClause,
@@ -19,6 +20,7 @@ class ProgrammingTopic(PIIPModel):
     file_route = Column(Text)
     information = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
 class SoftSkillTopic(PIIPModel):
@@ -30,3 +32,4 @@ class SoftSkillTopic(PIIPModel):
     file_route = Column(Text)
     information = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)

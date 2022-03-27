@@ -12,8 +12,9 @@ class TemplateActivitySchema(BaseSchema):
     id = fields.Integer(dump_only=True)
     name = fields.String()
     description = fields.String()
-    position = fields.String()
-    external_reference = fields.Integer()
+    position = fields.Integer()
+    activity_type_id = fields.Integer(data_key="activityType")
+    external_reference = fields.Integer(data_key="externalReference")
 
 
 class TemplateSectionSchema(BaseSchema):
