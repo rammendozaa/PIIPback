@@ -1,6 +1,10 @@
-from piip.query.template import get_template_by_id
 from piip.models import TemplateActivity, TemplateSection, Template
 from piip.services.database.setup import session
+from piip.query.template import (
+    get_template_activity_by_id,
+    get_template_section_by_id,
+    get_template_by_id,
+)
 
 
 def disable_template_by_id(template_id):
@@ -10,6 +14,27 @@ def disable_template_by_id(template_id):
     template.is_active = False
     session.add(template)
     session.commit()
+    return template
+
+
+def disable_template_section_by_id(section_id):
+    section = get_template_section_by_id(section_id)
+    if not section:
+        raise "Template section not found"
+    section.is_active = False
+    session.add(section)
+    session.commit()
+    return section
+
+
+def disable_template_activity_by_id(activity_id):
+    activity = get_template_activity_by_id(activity_id)
+    if not activity:
+        raise "Template activity not found"
+    activity.is_active = False
+    session.add(activity)
+    session.commit()
+    return activity
 
 
 def add_section_activity(section_id, activity_to_add):

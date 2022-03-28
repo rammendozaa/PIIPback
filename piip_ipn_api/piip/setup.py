@@ -24,9 +24,17 @@ from piip.routes import (
     Template,
     AddTemplate,
     TemplateSection,
+    AddTemplateSection,
+    SectionActivity,
+    AddSectionActivity,
 )
 from piip.services.database.setup import session
-from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
+from piip.constants import (
+    USERNAME,
+    PASSWORD,
+    HOST,
+    DATABASE
+)
 #piipipn2021@gmail.com
 #piip_ipn
 #*&WcgpYU4-.{mt.-
@@ -87,15 +95,11 @@ def create_application(name):
     api.add_resource(Schools, "/schools")
 
     api.add_resource(Template, "/template/<int:template_id>")
-    api.add_resource(AddTemplate, "/template")
-    api.add_resource(TemplateSection, "/template/<int:template_id>/section")
+    api.add_resource(TemplateSection, "/template/section/<int:section_id>")
+    api.add_resource(SectionActivity, "/template/section/activity/<int:activity_id>")
 
+    api.add_resource(AddTemplate, "/template/add")
+    api.add_resource(AddTemplateSection, "/template/<int:template_id>/section/add")
+    api.add_resource(AddSectionActivity, "/activity/section/<int:section_id>/activity/add")
 
-    """
-    api.add_resource(Section, "/section/<int:section_id>")
-    api.add_resource(AddSection, "/section")
-
-    api.add_resource(Activity, "/activity/<int:activity_id>")
-    api.add_resource(AddActivity, "/activity")
-    """
     return app
