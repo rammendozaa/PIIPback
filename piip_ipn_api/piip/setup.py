@@ -23,6 +23,7 @@ from piip.routes import (
     GetUser,
     Template,
     AddTemplate,
+    TemplateSection,
 )
 from piip.services.database.setup import session
 from piip.constants import USERNAME, PASSWORD, HOST, DATABASE
@@ -87,6 +88,8 @@ def create_application(name):
 
     api.add_resource(Template, "/template/<int:template_id>")
     api.add_resource(AddTemplate, "/template")
+    api.add_resource(TemplateSection, "/template/<int:template_id>/section")
+
 
     """
     api.add_resource(Section, "/section/<int:section_id>")

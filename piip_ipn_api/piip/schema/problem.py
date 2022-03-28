@@ -6,10 +6,7 @@ from marshmallow.utils import EXCLUDE
 class ProblemSchema(BaseSchema):
     __model__ = Problem
 
-    class Meta:
-        unknown = EXCLUDE
-
-    id = fields.String(data_key='id')
+    id = fields.Integer(data_key='id')
     title = fields.String()
     description = fields.String(data_key="description")
     time_limit = fields.String(data_key="time_limit")
