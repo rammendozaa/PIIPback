@@ -1,11 +1,28 @@
 from piip.routes.healthcheck import HealthCheck
-from piip.routes.problem import Problems, Submission, SubmitProblem, GetProblem, InsertProblemToDB
+from piip.routes.problem import (
+    Problems,
+    Submission,
+    SubmitProblem,
+    GetProblem,
+    InsertProblemToDB
+)
 from piip.routes.schools import Schools
 from piip.routes.token import Token
 from piip.routes.logout import LogOut
-from piip.routes.user import User,GetAdministratorGivenUser, GetUnassignedUsers,MyStudents, GetUser
+from piip.routes.user import (
+    User,GetAdministratorGivenUser,
+    GetUnassignedUsers,MyStudents,
+    GetUser
+)
 from piip.routes.administrator import AssignStudent
-from piip.routes.template import Template, AddTemplate, TemplateSection
+from piip.routes.template import (
+    Template,
+    AddTemplate,
+    TemplateSection,
+    AddTemplateSection,
+    SectionActivity,
+    AddSectionActivity,
+)
 
 __all__ = [
     "LogOut",
@@ -26,4 +43,7 @@ __all__ = [
     "Template",
     "AddTemplate",
     "TemplateSection",
+    "SectionActivity",
+    "AddTemplateSection",
+    "AddSectionActivity",
 ]
