@@ -3,8 +3,41 @@ from piip.models import TemplateActivity, TemplateSection, Template
 from piip.services.database.setup import session
 
 
-def update_template_by_id(template_id, updates):
-    return get_template_by_id(template_id)
+def disable_template_by_id(template_id):
+    template = get_template_by_id(template_id)
+    if not template:
+        raise "Template not found"
+    template.is_active = False
+    session.add(template)
+    session.commit()
+
+
+def add_section_activity(section_id, activity_to_add):
+    new_activity = TemplateActivity(
+        name=activity_to_add.name,
+        description=activity_to_add.description,
+        template_section_id=section_id,
+        position=activity_to_add.position,
+        activity_type_id=activity_to_add.activity_type_id,
+        external_reference=activity_to_add.external_reference,
+    )
+    session.add(new_activity)
+    session.commit()
+    return new_activity
+
+
+def add_template_section(template_id, section_to_add):
+    new_section = TemplateSection(
+        name=section_to_add.name,
+        description=section_to_add.description,
+        position=section_to_add.position,
+        template_id=template_id,
+    )
+    session.add(new_section)
+    session.commit()
+    for activity in section_to_add.activities:
+        add_section_activity(new_section.id, activity)
+    return new_section
 
 
 def add_template(template_to_add):
@@ -15,23 +48,5 @@ def add_template(template_to_add):
     session.add(template)
     session.commit()
     for section in template_to_add.sections:
-        new_section = TemplateSection(
-            name=section.name,
-            description=section.description,
-            position=section.position,
-            template=template,
-        )
-        session.add(new_section)
-        session.commit()
-        for activity in section.activities:
-            new_activity = TemplateActivity(
-                name=activity.name,
-                description=activity.description,
-                template_section=new_section,
-                position=activity.position,
-                activity_type_id=activity.activity_type_id,
-                external_reference=activity.external_reference,
-            )
-            session.add(new_activity)
-            session.commit()
+        add_template_section(template.id, section)
     return template
