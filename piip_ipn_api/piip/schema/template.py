@@ -12,7 +12,7 @@ from piip.schema.constants import ACTIVITY_TYPE_TO_MODEL, ACTIVITY_TYPE_TO_SCHEM
 class TemplateActivitySchema(BaseSchema):
     __model__ = TemplateActivity
 
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     name = fields.String()
     description = fields.String()
     position = fields.Integer()
@@ -36,7 +36,7 @@ class TemplateSectionSchema(BaseSchema):
     class Meta:
         unknown = EXCLUDE
 
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     name = fields.String()
     description = fields.String()
     position = fields.Integer()
@@ -50,7 +50,7 @@ class TemplateSchema(BaseSchema):
     class Meta:
         unknown = EXCLUDE
     
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     name = fields.String()
     description = fields.String()
     position = fields.Integer()

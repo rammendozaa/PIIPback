@@ -12,7 +12,13 @@ from piip.routes.logout import LogOut
 from piip.routes.user import (
     User,GetAdministratorGivenUser,
     GetUnassignedUsers,MyStudents,
-    GetUser
+    GetUser,
+    AssignTemplates,
+    AddSectionToUserTemplateSection,
+    AddActivityToUserTemplateActivity,
+    RemoveUserTemplate,
+    RemoveUserTemplateSection,
+    RemoveUserTemplateActivity,
 )
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
@@ -46,4 +52,10 @@ __all__ = [
     "SectionActivity",
     "AddTemplateSection",
     "AddSectionActivity",
+    "AssignTemplates",
+    "AddSectionToUserTemplateSection",
+    "AddActivityToUserTemplateActivity",
+    "RemoveUserTemplate",
+    "RemoveUserTemplateSection",
+    "RemoveUserTemplateActivity",
 ]

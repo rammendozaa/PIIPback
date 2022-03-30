@@ -58,4 +58,3 @@ class Template(PIIPModel):
     sections : "RelationshipProperty[List[TemplateSection]]" = relationship(
         "TemplateSection", back_populates="template", lazy="dynamic"
     ) 
-

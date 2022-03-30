@@ -1,12 +1,30 @@
+from piip.services.database.setup import session
+from piip.schema.constants import ACTIVITY_TYPE_TO_MODEL
+from piip.schema.template import TemplateSectionSchema
+from piip.command.template import (
+    add_template_section,
+)
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_restful import Resource
 from flask import request,jsonify
-from matplotlib.pyplot import get
 from piip.command.user import getMyStudents, insertUser, getAdministratorGivenUser, getUnassignedUsers, getUser
 from piip.command.administrator import getAdministrator
 from flask_jwt_extended import create_access_token
-
 from piip.schema.user import UserSchema
+from piip.command.user import (
+    assign_template_to_user_id,
+    assign_template_section_to_user_id,
+    assign_template_activity_to_user_id,
+    get_active_user_templates,
+    disable_user_template_by_id,
+    disable_user_template_section_by_id,
+    disable_user_template_activity_by_id,
+)
+from piip.schema.user import (
+    UserTemplateSchema,
+    UserTemplateSectionSchema,
+    UserTemplateActivitySchema,
+)
 
 class User(Resource):
     def post(self):
@@ -53,3 +71,61 @@ class GetUser(Resource):
     def get(self):
         user = getUser(get_jwt_identity())
         return jsonify(UserSchema().dump(user))
+
+
+class UserTemplates(Resource):
+    def post(self, user_id: int):
+        template_ids = request.get_json() or {}
+        assign_template_to_user_id(user_id, template_ids)
+        return UserTemplateSchema(many=True).dump(get_active_user_templates(user_id))
+
+    def get(self, user_id: int):
+        return UserTemplateSchema(many=True).dump(get_active_user_templates(user_id))
+
+
+class AddSectionToUserTemplateSection(Resource):
+    def post(self, user_id: int, user_template_id: int):
+        create_section = TemplateSectionSchema().load(
+            request.get_json(silent=True) or {}
+            )
+        template_section = add_template_section(None, create_section)
+        return (
+            UserTemplateSectionSchema().dump(
+                assign_template_section_to_user_id(user_id, template_section, user_template_id)
+            )
+        )
+
+
+class AddActivityToUserTemplateActivity(Resource):
+    def post(self, user_id: int, user_template_section_id: int):
+        activity_dict = request.get_json(silent=True) or {}
+        activity_type = activity_dict["activityType"]
+        external_reference = activity_dict["externalReference"]
+        activity_class = ACTIVITY_TYPE_TO_MODEL.get(activity_type)
+        activity = session.query(activity_class).get(external_reference)
+        return (
+            UserTemplateActivitySchema().dump(
+                assign_template_activity_to_user_id(user_id, activity, user_template_section_id)
+            )
+        )
+
+
+class RemoveUserTemplate(Resource):
+    def delete(self, user_template_id: int):
+        return UserTemplateSchema().dump(
+            disable_user_template_by_id(user_template_id)
+        )
+
+
+class RemoveUserTemplateSection(Resource):
+    def delete(self, user_template_section_id: int):
+        return UserTemplateSectionSchema().dump(
+            disable_user_template_section_by_id(user_template_section_id)
+        )
+
+
+class RemoveUserTemplateActivity(Resource):
+    def delete(self, user_template_activity_id: int):
+        return UserTemplateActivitySchema().dump(
+            disable_user_template_activity_by_id(user_template_activity_id)
+        )
