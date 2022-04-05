@@ -27,6 +27,12 @@ from piip.routes import (
     AddTemplateSection,
     SectionActivity,
     AddSectionActivity,
+    UserTemplates,
+    AddSectionToUserTemplateSection,
+    AddActivityToUserTemplateActivity,
+    RemoveUserTemplate,
+    RemoveUserTemplateSection,
+    RemoveUserTemplateActivity,
 )
 from piip.services.database.setup import session
 from piip.constants import (
@@ -102,4 +108,10 @@ def create_application(name):
     api.add_resource(AddTemplateSection, "/template/<int:template_id>/section/add")
     api.add_resource(AddSectionActivity, "/activity/section/<int:section_id>/activity/add")
 
+    api.add_resource(UserTemplates, "/user/<int:user_id>/template")
+    api.add_resource(AddSectionToUserTemplateSection, "/user/<int:user_id>/section/<int:user_template_id>")
+    api.add_resource(AddActivityToUserTemplateActivity, "/user/<int:user_id>/activity/<int:user_template_section_id>")
+    api.add_resource(RemoveUserTemplate, "/user/template/<int:user_template_id>/delete")
+    api.add_resource(RemoveUserTemplateSection, "/user/section/<int:user_template_section_id>/delete")
+    api.add_resource(RemoveUserTemplateActivity, "/user/activity/<int:user_template_activity_id>/delete")
     return app

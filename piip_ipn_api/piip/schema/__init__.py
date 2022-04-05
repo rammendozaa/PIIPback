@@ -1,7 +1,7 @@
 from piip.schema.template import (
     TemplateActivitySchema,
     TemplateSectionSchema,
-    Template,
+    TemplateSchema,
 )
 from piip.schema.problem import ProblemSchema
 from piip.schema.school import SchoolSchema
@@ -13,12 +13,17 @@ from piip.schema.topic import (
     ProgrammingTopicSchema,
     SoftSkillTopicSchema,
 )
+from piip.schema.user import (
+    UserTemplateSchema,
+    UserTemplateSectionSchema,
+    UserTemplateActivitySchema,
+)
 
 
 __all__ = [
     "TemplateActivitySchema",
     "TemplateSectionSchema",
-    "Template",
+    "TemplateSchema",
     "ProblemSchema",
     "SchoolSchema",
     "UserSchema",
@@ -27,4 +32,7 @@ __all__ = [
     "SoftSkillQuestionSchema",
     "ProgrammingTopicSchema",
     "SoftSkillTopicSchema",
+    "UserTemplateSchema",
+    "UserTemplateSectionSchema",
+    "UserTemplateActivitySchema",
 ]
