@@ -124,7 +124,7 @@ def assign_template_section_to_user_id(user_id, section, user_template_id):
     )
     session.add(user_template_section)
     session.commit()
-    for activity in section.activites:
+    for activity in section.activities:
         assign_template_activity_to_user_id(user_id, activity, user_template_section.id)
     return user_template_section
 
@@ -166,6 +166,7 @@ def disable_user_template_section_by_id(user_template_section_id):
     template_section = get_user_template_section_by_id(user_template_section_id)
     if not template_section:
         raise "User template section not found"
+    template_section.user_template_id = None 
     template_section.is_active = False
     session.add(template_section)
     session.commit()
@@ -176,6 +177,7 @@ def disable_user_template_activity_by_id(user_template_activity_id):
     template_activity = get_user_template_activity_by_id(user_template_activity_id)
     if not template_activity:
         raise "User template activity not found"
+    template_activity.user_template_section_id = None
     template_activity.is_active = False
     session.add(template_activity)
     session.commit()
