@@ -1,8 +1,10 @@
-from piip.services.database.setup import session
-from piip.schema.constants import ACTIVITY_TYPE_TO_MODEL
-from piip.schema.template import TemplateSectionSchema
+from piip.schema.template import (
+    TemplateSectionSchema,
+    TemplateActivitySchema,
+)
 from piip.command.template import (
     add_template_section,
+    add_section_activity,
 )
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_restful import Resource
@@ -25,6 +27,8 @@ from piip.schema.user import (
     UserTemplateSectionSchema,
     UserTemplateActivitySchema,
 )
+from piip.query.user import get_user_template_section_by_id
+
 
 class User(Resource):
     def post(self):
@@ -75,7 +79,8 @@ class GetUser(Resource):
 
 class UserTemplates(Resource):
     def post(self, user_id: int):
-        template_ids = request.get_json() or {}
+        template_dict = request.get_json() or {}
+        template_ids = template_dict["templateIds"]
         assign_template_to_user_id(user_id, template_ids)
         return UserTemplateSchema(many=True).dump(get_active_user_templates(user_id))
 
@@ -98,14 +103,14 @@ class AddSectionToUserTemplateSection(Resource):
 
 class AddActivityToUserTemplateActivity(Resource):
     def post(self, user_id: int, user_template_section_id: int):
-        activity_dict = request.get_json(silent=True) or {}
-        activity_type = activity_dict["activityType"]
-        external_reference = activity_dict["externalReference"]
-        activity_class = ACTIVITY_TYPE_TO_MODEL.get(activity_type)
-        activity = session.query(activity_class).get(external_reference)
+        create_activity = TemplateActivitySchema().load(
+            request.get_json(silent=True) or {}
+        )
+        user_template_section = get_user_template_section_by_id(user_template_section_id)
+        template_activity = add_section_activity(user_template_section.template_section_id, create_activity)
         return (
             UserTemplateActivitySchema().dump(
-                assign_template_activity_to_user_id(user_id, activity, user_template_section_id)
+                assign_template_activity_to_user_id(user_id, template_activity, user_template_section_id)
             )
         )
 
