@@ -1,6 +1,7 @@
 from ast import Assign
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 from flask import Flask
+from flask import Response
 from datetime import datetime, timedelta, timezone
 import json
 from flask_restful import Api
@@ -47,7 +48,13 @@ from piip.constants import (
 
 def create_application(name):
 
-    app = Flask(name)
+    class localFlask(Flask):
+        def process_response(self, response):
+            response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+            response.headers['Access-Control-Allow-Credentials'] = True
+            return (response)
+
+    app = localFlask(name)
     app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
