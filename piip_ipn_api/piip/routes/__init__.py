@@ -6,6 +6,10 @@ from piip.routes.problem import (
     GetProblem,
     InsertProblemToDB
 )
+from piip.routes.topics import (
+    GetAlgorithmsTopics,
+    GetSoftSkillsTopics
+)
 from piip.routes.schools import Schools
 from piip.routes.token import Token
 from piip.routes.logout import LogOut
@@ -58,4 +62,6 @@ __all__ = [
     "RemoveUserTemplate",
     "RemoveUserTemplateSection",
     "RemoveUserTemplateActivity",
+    "GetAlgorithmsTopics",
+    "GetSoftSkillsTopics"
 ]
