@@ -33,6 +33,8 @@ from piip.routes import (
     RemoveUserTemplate,
     RemoveUserTemplateSection,
     RemoveUserTemplateActivity,
+    GetAlgorithmsTopics,
+    GetSoftSkillsTopics
 )
 from piip.services.database.setup import session
 from piip.constants import (
@@ -87,6 +89,9 @@ def create_application(name):
     api.add_resource(SubmitProblem, "/problem/submit")    
     api.add_resource(Submission, "/submission")
     api.add_resource(InsertProblemToDB,"/insertProblemsToDB")
+
+    api.add_resource(GetAlgorithmsTopics,"/algorithmTopics")
+    api.add_resource(GetSoftSkillsTopics,"/softSkillsTopics")
 
     api.add_resource(Token, "/token")
     api.add_resource(LogOut, "/logout")
