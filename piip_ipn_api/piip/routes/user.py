@@ -85,7 +85,7 @@ class UserTemplates(Resource):
         return UserTemplateSchema(many=True).dump(get_active_user_templates(user_id))
 
     def get(self, user_id: int):
-        return UserTemplateSchema(many=True).dump(get_active_user_templates(user_id))
+        return UserTemplateSchema().dump(get_active_user_templates(user_id))
 
 
 class AddSectionToUserTemplateSection(Resource):

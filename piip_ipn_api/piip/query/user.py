@@ -47,11 +47,12 @@ def get_active_templates_by_user_id(user_id):
         .filter(
             UserTemplate.is_active == True,
             UserTemplate.user_id == user_id,
+            UserTemplate.status_id == 1,
         )
         .order_by(
             UserTemplate.position.desc(),
             UserTemplateSection.position.desc(),
             UserTemplateActivity.position.desc(),
         )
-        .all()
+        .first()
     )
