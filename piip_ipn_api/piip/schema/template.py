@@ -23,10 +23,11 @@ class TemplateActivitySchema(BaseSchema):
     def after_serialize(self, data, many, **kwargs):
         activity_type = data["activityType"]
         external_reference = data["externalReference"]
-        activity_schema = ACTIVITY_TYPE_TO_SCHEMA.get(activity_type)
-        activity_class = ACTIVITY_TYPE_TO_MODEL.get(activity_type)
-        activity = session.query(activity_class).get(external_reference)
-        data["activity"] = activity_schema().dump(activity)
+        if (activity_type and external_reference):
+            activity_schema = ACTIVITY_TYPE_TO_SCHEMA.get(activity_type)
+            activity_class = ACTIVITY_TYPE_TO_MODEL.get(activity_type)
+            activity = session.query(activity_class).get(external_reference)
+            data["activity"] = activity_schema().dump(activity)
         return data
 
 
