@@ -36,23 +36,14 @@ def get_user_template_activity_by_id(user_template_activity_id):
     )
 
 def get_active_templates_by_user_id(user_id):
-    return (
-        session.query(UserTemplate)
-        .join(
-            UserTemplateSection, UserTemplateSection.user_template_id == UserTemplate.id
-        )
-        .join(
-            UserTemplateActivity, UserTemplateActivity.user_template_section_id == UserTemplateSection.id
-        )
+    return (session.query(UserTemplate)
         .filter(
             UserTemplate.is_active == True,
             UserTemplate.user_id == user_id,
             UserTemplate.status_id == 1,
         )
         .order_by(
-            UserTemplate.position.desc(),
-            UserTemplateSection.position.desc(),
-            UserTemplateActivity.position.desc(),
+            UserTemplate.position.asc(),
         )
         .first()
     )
