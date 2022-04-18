@@ -46,10 +46,11 @@ class UserTemplateSectionSchema(BaseSchema):
     user_activities = fields.List(fields.Nested(
         UserTemplateActivitySchema
     ))
-
     @post_dump
     def after_serialize(self, data, many, **kwargs):
-        del data["template_section"]["activities"]
+        template_section = data.get("template_section", None)
+        if (template_section):
+            del data["template_section"]["activities"]
         return data
 
 
@@ -64,8 +65,9 @@ class UserTemplateSchema(BaseSchema):
     user_sections = fields.List(fields.Nested(
         UserTemplateSectionSchema
     ))
-
     @post_dump
     def after_serialize(self, data, many, **kwargs):
-        del data["template"]["sections"]
+        template = data.get("template", None)
+        if (template):
+            del data["template"]["sections"]
         return data

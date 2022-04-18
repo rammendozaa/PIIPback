@@ -21,8 +21,8 @@ class TemplateActivitySchema(BaseSchema):
 
     @post_dump
     def after_serialize(self, data, many, **kwargs):
-        activity_type = data["activityType"]
-        external_reference = data["externalReference"]
+        activity_type = data.get("activityType", None)
+        external_reference = data.get("externalReference", None)
         if (activity_type and external_reference):
             activity_schema = ACTIVITY_TYPE_TO_SCHEMA.get(activity_type)
             activity_class = ACTIVITY_TYPE_TO_MODEL.get(activity_type)
