@@ -28,6 +28,7 @@ from piip.schema.user import (
     UserTemplateActivitySchema,
 )
 from piip.query.user import get_user_template_section_by_id
+from piip.command.constants import ACTIVITY_TYPES
 
 
 class User(Resource):
@@ -82,7 +83,7 @@ class UserTemplates(Resource):
         template_dict = request.get_json() or {}
         template_ids = template_dict["templateIds"]
         assign_template_to_user_id(user_id, template_ids)
-        return UserTemplateSchema(many=True).dump(get_active_user_templates(user_id))
+        return UserTemplateSchema().dump(get_active_user_templates(user_id))
 
     def get(self, user_id: int):
         return UserTemplateSchema().dump(get_active_user_templates(user_id))
@@ -103,14 +104,23 @@ class AddSectionToUserTemplateSection(Resource):
 
 class AddActivityToUserTemplateActivity(Resource):
     def post(self, user_id: int, user_template_section_id: int):
+        request_json = request.get_json(silent=True) or {}
         create_activity = TemplateActivitySchema().load(
-            request.get_json(silent=True) or {}
+            request_json
         )
+        user_admin_id = None
         user_template_section = get_user_template_section_by_id(user_template_section_id)
         template_activity = add_section_activity(user_template_section.template_section_id, create_activity)
+        if (create_activity.activity_type_id == ACTIVITY_TYPES["INTERVIEW"]):
+            user_admin_id = request_json.get("userAdminId", None)
         return (
             UserTemplateActivitySchema().dump(
-                assign_template_activity_to_user_id(user_id, template_activity, user_template_section_id)
+                assign_template_activity_to_user_id(
+                    user_id,
+                    template_activity,
+                    user_template_section_id,
+                    user_admin_id
+                )
             )
         )
 
