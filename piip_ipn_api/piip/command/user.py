@@ -12,7 +12,7 @@ from piip.query.user import (
     get_user_template_section_by_id,
     get_user_template_activity_by_id,
 )
-
+from piip.command.constants import ACTIVITY_TYPES
 
 def insertUser(_firstname, _lastname, _email, _school_id, _password):
     # Check if user already exits
@@ -76,8 +76,11 @@ def create_user_soft_skill_topic(user_id, external_reference):
     session.commit()
 
 
-def create_user_interview(user_id):
-    user_interview = Interview(user_id=user_id)
+def create_user_interview(user_id, user_admin_id):
+    user_interview = Interview(
+        user_id=user_id,
+        administrator_id=user_admin_id,
+    )
     session.add(user_interview)
     session.commit()
 
@@ -88,7 +91,7 @@ def create_user_questionnaire(user_id, external_reference):
     session.commit()
 
 
-def assign_template_activity_to_user_id(user_id, activity, user_template_section_id):
+def assign_template_activity_to_user_id(user_id, activity, user_template_section_id, user_admin_id):
     activity_type = activity.activity_type_id
     user_template_activity = UserTemplateActivity(
         user_id=user_id,
@@ -99,17 +102,17 @@ def assign_template_activity_to_user_id(user_id, activity, user_template_section
     )
     session.add(user_template_activity)
     session.commit()
-    if activity_type == 1:
+    if activity_type == ACTIVITY_TYPES["PROBLEM"]:
         create_user_problem(user_id, activity.external_reference)
-    if activity_type == 2:
+    if activity_type == ACTIVITY_TYPES["PROGRAMMING_TOPIC"]:
         create_user_programming_topic(user_id, activity.external_reference)
-    if activity_type == 3:
+    if activity_type == ACTIVITY_TYPES["SOFT_SKILL_QUESTION"]:
         create_user_soft_skill_question(user_id, activity.external_reference)
-    if activity_type == 4:
+    if activity_type == ACTIVITY_TYPES["SOFT_SKILL_TOPIC"]:
         create_user_soft_skill_topic(user_id, activity.external_reference)
-    if activity_type == 5:
-        create_user_interview(user_id)
-    if activity_type == 6:
+    if activity_type == ACTIVITY_TYPES["INTERVIEW"]:
+        create_user_interview(user_id, user_admin_id)
+    if activity_type == ACTIVITY_TYPES["QUESTIONNAIRE"]:
         create_user_questionnaire(user_id, activity.external_reference)
 
     return user_template_activity
@@ -125,7 +128,7 @@ def assign_template_section_to_user_id(user_id, section, user_template_id):
     session.add(user_template_section)
     session.commit()
     for activity in section.activities:
-        assign_template_activity_to_user_id(user_id, activity, user_template_section.id)
+        assign_template_activity_to_user_id(user_id, activity, user_template_section.id, None)
     return user_template_section
 
 
