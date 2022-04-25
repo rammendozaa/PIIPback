@@ -1,3 +1,4 @@
+from calendar import c
 from piip.schema.template import (
     TemplateSectionSchema,
     TemplateActivitySchema,
@@ -6,6 +7,7 @@ from piip.command.template import (
     add_template_section,
     add_section_activity,
 )
+from piip.command.user import create_user_interview
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_restful import Resource
 from flask import request,jsonify
@@ -119,7 +121,6 @@ class AddActivityToUserTemplateActivity(Resource):
                     user_id,
                     template_activity,
                     user_template_section_id,
-                    user_admin_id
                 )
             )
         )
@@ -143,4 +144,26 @@ class RemoveUserTemplateActivity(Resource):
     def delete(self, user_template_activity_id: int):
         return UserTemplateActivitySchema().dump(
             disable_user_template_activity_by_id(user_template_activity_id)
+        )
+
+
+class CreateUserInterview(Resource):
+    def post(self, user_id: int, user_template_section_id: int):
+        request_json = request.get_json(silent=True) or {}
+        user_interview = create_user_interview(user_id, request_json.get("userAdminId"))
+        request_json["externalReference"] = user_interview.id
+        del request_json["userAdminId"]
+        create_activity = TemplateActivitySchema().load(
+            request_json
+        )
+        user_template_section = get_user_template_section_by_id(user_template_section_id)
+        template_activity = add_section_activity(user_template_section.template_section_id, create_activity)
+        return (
+            UserTemplateActivitySchema().dump(
+                assign_template_activity_to_user_id(
+                    user_id,
+                    template_activity,
+                    user_template_section_id,
+                )
+            )
         )
