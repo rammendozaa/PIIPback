@@ -83,6 +83,7 @@ def create_user_interview(user_id, user_admin_id):
     )
     session.add(user_interview)
     session.commit()
+    return user_interview
 
 
 def create_user_questionnaire(user_id, external_reference):
@@ -91,7 +92,7 @@ def create_user_questionnaire(user_id, external_reference):
     session.commit()
 
 
-def assign_template_activity_to_user_id(user_id, activity, user_template_section_id, user_admin_id):
+def assign_template_activity_to_user_id(user_id, activity, user_template_section_id):
     activity_type = activity.activity_type_id
     user_template_activity = UserTemplateActivity(
         user_id=user_id,
@@ -110,8 +111,6 @@ def assign_template_activity_to_user_id(user_id, activity, user_template_section
         create_user_soft_skill_question(user_id, activity.external_reference)
     if activity_type == ACTIVITY_TYPES["SOFT_SKILL_TOPIC"]:
         create_user_soft_skill_topic(user_id, activity.external_reference)
-    if activity_type == ACTIVITY_TYPES["INTERVIEW"]:
-        create_user_interview(user_id, user_admin_id)
     if activity_type == ACTIVITY_TYPES["QUESTIONNAIRE"]:
         create_user_questionnaire(user_id, activity.external_reference)
 
@@ -128,7 +127,7 @@ def assign_template_section_to_user_id(user_id, section, user_template_id):
     session.add(user_template_section)
     session.commit()
     for activity in section.activities:
-        assign_template_activity_to_user_id(user_id, activity, user_template_section.id, None)
+        assign_template_activity_to_user_id(user_id, activity, user_template_section.id)
     return user_template_section
 
 
