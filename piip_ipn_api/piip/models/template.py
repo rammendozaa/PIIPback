@@ -41,7 +41,7 @@ class TemplateSection(PIIPModel):
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
     template = relationship("Template", foreign_keys=[template_id], back_populates="sections")
-    activities : "RelationshipProperty[List[TemplateActivity]]" = relationship(
+    activities: "RelationshipProperty[List[TemplateActivity]]" = relationship(
         "TemplateActivity", back_populates="template_section", lazy="dynamic"
     ) 
 

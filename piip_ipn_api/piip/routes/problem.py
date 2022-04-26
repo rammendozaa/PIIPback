@@ -1,7 +1,6 @@
 from piip.services.providers.codeforces.codeforces import Codeforces
 from flask_restful import Resource
 from flask import request, jsonify
-import random
 from flask_jwt_extended import jwt_required
 from piip.command.problem import get_all_problems, getProblem, getProblemCode
 from piip.schema.problem import ProblemSchema
