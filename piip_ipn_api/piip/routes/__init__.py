@@ -34,6 +34,7 @@ from piip.routes.template import (
     SectionActivity,
     AddSectionActivity,
 )
+from piip.routes.questionnaire import Questionnaire
 
 __all__ = [
     "LogOut",
@@ -66,4 +67,5 @@ __all__ = [
     "GetAlgorithmsTopics",
     "GetSoftSkillsTopics",
     "CreateUserInterview",
+    "Questionnaire",
 ]

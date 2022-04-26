@@ -8,3 +8,9 @@ class BaseSchema(Schema):
     @post_load
     def make_object(self, data, **kwargs):
         return self.__model__(**data)
+
+
+class DataclassSchema(Schema):
+    @post_load
+    def make_object(self, data, **kwargs):
+        return self.__model__(**data)
