@@ -37,7 +37,7 @@ def getAdministratorGivenUser(_email):
     administrator = session.query(UserAdministrator).filter_by(user_id=_user_id).first()
     if administrator.administrator_id == None:
         return -1
-    return administrator.id
+    return administrator.administrator_id
 
 def getUnassignedUsers():
     users = session.query(UserAdministrator).filter_by(administrator_id=None).all()

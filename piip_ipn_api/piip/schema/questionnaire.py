@@ -10,6 +10,7 @@ from piip.models.questionnaire import (
 class QuestionnaireQuestionSchema(BaseSchema):
     __model__ = QuestionnaireQuestion
 
+    id = fields.Integer()
     question = fields.String(data_key="questionText")
     answer = fields.String()
     option_1 = fields.String()
