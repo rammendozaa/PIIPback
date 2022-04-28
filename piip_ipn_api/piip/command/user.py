@@ -12,7 +12,11 @@ from piip.query.user import (
     get_user_template_section_by_id,
     get_user_template_activity_by_id,
 )
-from piip.command.constants import ACTIVITY_TYPES, DEFAULT_QUESTIONNAIRE_ID
+from piip.command.constants import (
+    ACTIVITY_TYPES,
+    DEFAULT_QUESTIONNAIRE_ID,
+    ACTIVITY_STATUS
+)
 
 def insertUser(_firstname, _lastname, _email, _school_id, _password):
     # Check if user already exits
@@ -201,7 +205,7 @@ def register_user_questionnaire(user_id, questionnaire_id, correct_answers):
     if not user_questionnaire:
         return None
     user_questionnaire.correct_answers = correct_answers
-    user_questionnaire.status_id = 4
+    user_questionnaire.status_id = ACTIVITY_STATUS["finished"]
     user_questionnaire.percentage_score = float(correct_answers)/float(user_questionnaire.questionnaire.total_questions) * 100
     session.add(user_questionnaire)
     session.commit()
