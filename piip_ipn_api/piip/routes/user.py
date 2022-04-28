@@ -23,6 +23,8 @@ from piip.command.user import (
     disable_user_template_by_id,
     disable_user_template_section_by_id,
     disable_user_template_activity_by_id,
+    register_user_questionnaire,
+    create_initial_user_questionnaire,
 )
 from piip.schema.user import (
     UserTemplateSchema,
@@ -41,10 +43,11 @@ class User(Resource):
         school_id = request.form.get("school_id", default='',type=str)
         password = request.form.get("password", default='',type=str)
                 
-        status = insertUser(firstname,lastname, email,school_id, password)
-        if status == 0:
+        user_id = insertUser(firstname,lastname, email,school_id, password)
+        if user_id == -1:
             return {"error": "user already exists"}
         access_token = create_access_token(identity=email)
+        create_initial_user_questionnaire(user_id)
         response = {"access_token":access_token, "role": "user"}
         return response
 
@@ -167,3 +170,10 @@ class CreateUserInterview(Resource):
                 )
             )
         )
+
+
+class RegisterUserQuestionnaire(Resource):
+    def post(self, user_id: int, questionnaire_id: int):
+        request_json = request.get_json(silent=True) or {}
+        questionnaire = register_user_questionnaire(user_id, questionnaire_id, request_json["correctAnswers"])
+        return {"registered": (questionnaire is not None)}

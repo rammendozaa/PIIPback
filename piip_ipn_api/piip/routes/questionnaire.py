@@ -1,5 +1,8 @@
 from flask import request
-from piip.query.questionnaire import get_questionnaires
+from piip.query.questionnaire import (
+    get_questionnaires,
+    get_questionnaire_by_id,
+)
 from flask_restful import Resource
 from piip.schema.questionnaire import QuestionnaireSchema
 from piip.schema.questionnaire import CreateQuestionnaireSchema
@@ -7,6 +10,9 @@ from piip.command.questionnaire import insert_questionnaire
 
 class Questionnaire(Resource):
     def get(self):
+        questionnaire_id = request.args.get("questionnaireId", None)
+        if questionnaire_id:
+            return QuestionnaireSchema().dump(get_questionnaire_by_id(questionnaire_id))
         return QuestionnaireSchema(many=True).dump(get_questionnaires())
 
     def post(self):

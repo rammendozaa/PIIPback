@@ -27,17 +27,17 @@ class QuestionnaireQuestionSchema(BaseSchema):
         answer_options.append(answer)
         answer = {
             "answerText": data["option_1"],
-            "isCorrect": True,
+            "isCorrect": False,
         }
         answer_options.append(answer)
         answer = {
             "answerText": data["option_2"],
-            "isCorrect": True,
+            "isCorrect": False,
         }
         answer_options.append(answer)
         answer = {
             "answerText": data["option_3"],
-            "isCorrect": True,
+            "isCorrect": False,
         }
         answer_options.append(answer)
         data["answerOptions"] = answer_options

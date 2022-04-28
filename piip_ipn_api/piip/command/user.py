@@ -1,4 +1,4 @@
-from sqlalchemy import null
+from decimal import Decimal
 from piip.services.database.setup import session
 from datetime import date
 from piip.models import User,UserAdministrator
@@ -12,19 +12,18 @@ from piip.query.user import (
     get_user_template_section_by_id,
     get_user_template_activity_by_id,
 )
-from piip.command.constants import ACTIVITY_TYPES
+from piip.command.constants import ACTIVITY_TYPES, DEFAULT_QUESTIONNAIRE_ID
 
 def insertUser(_firstname, _lastname, _email, _school_id, _password):
     # Check if user already exits
     user = session.query(User).filter_by(email=_email).first()
     if user:
-        return 0
+        return -1
     new_user = User(email=_email, password=_password, dob=date.today(), first_name=_firstname, last_name=_lastname, school_id=_school_id)
     session.add(new_user)
     session.commit()
-    print(new_user.id)
     insertUserAdministrator(new_user)
-    return 1
+    return new_user.id
 
 def insertUserAdministrator(user):
     user_administrator = UserAdministrator(user_id=user.id)
@@ -57,6 +56,13 @@ def create_user_problem(user_id, external_reference):
     session.add(user_problem)
     session.commit()
 
+
+def get_user_id_starting_questionnaire(user_id):
+    return session.query(UserQuestionnaire).filter(
+        UserQuestionnaire.is_active == True,
+        UserQuestionnaire.status_id == 4,
+        UserQuestionnaire.user_id == user_id,
+    ).first()
 
 def create_user_programming_topic(user_id, external_reference):
     user_programming_topic = UserProgrammingTopic(user_id=user_id, programming_topic_id=external_reference)
@@ -184,3 +190,36 @@ def disable_user_template_activity_by_id(user_template_activity_id):
     session.add(template_activity)
     session.commit()
     return template_activity
+
+
+def register_user_questionnaire(user_id, questionnaire_id, correct_answers):
+    user_questionnaire = session.query(UserQuestionnaire).filter(
+        UserQuestionnaire.is_active == True,
+        UserQuestionnaire.user_id == user_id,
+        UserQuestionnaire.questionnaire_id == questionnaire_id
+    ).first()
+    if not user_questionnaire:
+        return None
+    user_questionnaire.correct_answers = correct_answers
+    user_questionnaire.status_id = 4
+    user_questionnaire.percentage_score = float(correct_answers)/float(user_questionnaire.questionnaire.total_questions) * 100
+    session.add(user_questionnaire)
+    session.commit()
+    percentage = user_questionnaire.percentage_score
+    if percentage < 33.34:
+        assign_template_to_user_id(user_id, [1])
+    elif percentage < 66.67:
+        assign_template_to_user_id(user_id, [2])
+    else:
+        assign_template_to_user_id(user_id, [3])
+    return user_questionnaire
+
+
+def create_initial_user_questionnaire(user_id):
+    user_questionnaire = UserQuestionnaire(
+        user_id=user_id,
+        questionnaire_id=DEFAULT_QUESTIONNAIRE_ID
+    )
+    session.add(user_questionnaire)
+    session.commit()
+    return user_questionnaire
