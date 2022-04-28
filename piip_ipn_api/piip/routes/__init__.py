@@ -24,6 +24,7 @@ from piip.routes.user import (
     RemoveUserTemplateSection,
     RemoveUserTemplateActivity,
     CreateUserInterview,
+    RegisterUserQuestionnaire,
 )
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
@@ -67,5 +68,6 @@ __all__ = [
     "GetAlgorithmsTopics",
     "GetSoftSkillsTopics",
     "CreateUserInterview",
+    "RegisterUserQuestionnaire",
     "Questionnaire",
 ]

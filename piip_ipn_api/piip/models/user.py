@@ -118,13 +118,14 @@ class UserQuestionnaire(PIIPModel):
     user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
     questionnaire_id = Column(Integer, ForeignKey(f"{DATABASE}.QUESTIONNAIRE.id"))
     correct_answers = Column(Integer)
-    percentage_score = Numeric(5, 2)
+    percentage_score = Column(Numeric(5, 2))
     answers = Column(Text)
     status_id = Column(Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
     user = relationship("User", foreign_keys=[user_id])
+    questionnaire = relationship("Questionnaire", foreign_keys=[questionnaire_id])
 
 
 class UserTemplateActivity(PIIPModel):

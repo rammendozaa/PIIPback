@@ -6,3 +6,12 @@ ACTIVITY_TYPES = {
     "INTERVIEW": 5,
     "QUESTIONNAIRE": 6,
 }
+
+ACTIVITY_STATUS = {
+    "created": 1,
+    "in_progress": 2,
+    "pending": 3,
+    "finished": 4,
+}
+
+DEFAULT_QUESTIONNAIRE_ID = 7
