@@ -31,7 +31,10 @@ from piip.schema.user import (
     UserTemplateSectionSchema,
     UserTemplateActivitySchema,
 )
-from piip.query.user import get_user_template_section_by_id
+from piip.query.user import (
+    get_user_template_section_by_id,
+    update_user_template_activity_by_id,
+)
 from piip.command.constants import ACTIVITY_TYPES
 
 
@@ -177,3 +180,13 @@ class RegisterUserQuestionnaire(Resource):
         request_json = request.get_json(silent=True) or {}
         questionnaire = register_user_questionnaire(user_id, questionnaire_id, request_json["correctAnswers"])
         return {"registered": (questionnaire is not None)}
+
+
+class UpdateUserTemplateActivity(Resource):
+    def put(self, user_template_activity_id: int):
+        request_json = request.get_json(silent=True) or {}
+        return {
+            "updated": update_user_template_activity_by_id(
+                user_template_activity_id, request_json.get("statusId", 1)
+                )
+            }

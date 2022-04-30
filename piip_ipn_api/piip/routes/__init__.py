@@ -25,6 +25,7 @@ from piip.routes.user import (
     RemoveUserTemplateActivity,
     CreateUserInterview,
     RegisterUserQuestionnaire,
+    UpdateUserTemplateActivity,
 )
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
@@ -70,4 +71,5 @@ __all__ = [
     "CreateUserInterview",
     "RegisterUserQuestionnaire",
     "Questionnaire",
+    "UpdateUserTemplateActivity",
 ]
