@@ -47,3 +47,13 @@ def get_active_templates_by_user_id(user_id):
         )
         .first()
     )
+
+
+def update_user_template_activity_by_id(user_template_activity_id, status_id):
+        activity = session.query(UserTemplateActivity).get(user_template_activity_id)
+        if not activity:
+            return False
+        activity.status_id = status_id
+        session.add(activity)
+        session.commit()
+        return True
