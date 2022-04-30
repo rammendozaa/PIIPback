@@ -33,6 +33,7 @@ class UserTemplateActivitySchema(BaseSchema):
     template_activity = fields.Nested(TemplateActivitySchema)
     status_id = fields.Integer()
     position = fields.Integer()
+    finished_date = fields.String()
 
 
 class UserTemplateSectionSchema(BaseSchema):
