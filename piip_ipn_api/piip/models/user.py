@@ -58,6 +58,7 @@ class UserProblem(PIIPModel):
     language_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_LANGUAGE.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    finished_date = Column(DateTime)
 
     user = relationship("User", foreign_keys=[user_id])
     problem = relationship("Problem", foreign_keys=[problem_id])
