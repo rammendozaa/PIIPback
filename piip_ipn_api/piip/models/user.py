@@ -139,6 +139,7 @@ class UserTemplateActivity(PIIPModel):
     external_reference = Column(Integer)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    finished_date = Column(DateTime)
     position = Column(Integer)
 
     user_template_section = relationship(

@@ -17,3 +17,4 @@ class ProblemSchema(BaseSchema):
     input = fields.String(data_key="input")
     output = fields.String(data_key="ouput")
     test_cases = fields.String(data_key="test_cases")
+    finished_date = fields.String(data_key="finished_date")
