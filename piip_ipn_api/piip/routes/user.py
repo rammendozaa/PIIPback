@@ -48,7 +48,7 @@ class User(Resource):
             return {"error": "user already exists"}
         access_token = create_access_token(identity=email)
         create_initial_user_questionnaire(user_id)
-        response = {"access_token":access_token, "role": "user"}
+        response = {"access_token":access_token, "role": "user", "user_id": user_id}
         return response
 
 class GetAdministratorGivenUser(Resource):
