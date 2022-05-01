@@ -6,6 +6,9 @@ from piip.routes.problem import (
     GetProblem,
     InsertProblemToDB
 )
+from piip.routes.user_problem import (
+    GetNumberOfProblemSolvedByUser
+)
 from piip.routes.topics import (
     GetAlgorithmsTopics,
     GetSoftSkillsTopics
