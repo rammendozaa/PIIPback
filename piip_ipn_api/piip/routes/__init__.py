@@ -11,7 +11,8 @@ from piip.routes.user_problem import (
 )
 from piip.routes.topics import (
     GetAlgorithmsTopics,
-    GetSoftSkillsTopics
+    GetSoftSkillsTopics,
+    CreateNewTopic,
 )
 from piip.routes.schools import Schools
 from piip.routes.token import Token
@@ -40,6 +41,8 @@ from piip.routes.template import (
     AddSectionActivity,
 )
 from piip.routes.questionnaire import Questionnaire
+from piip.routes.soft_skills import SoftSkillQuestion
+
 
 __all__ = [
     "LogOut",
@@ -75,4 +78,7 @@ __all__ = [
     "RegisterUserQuestionnaire",
     "Questionnaire",
     "UpdateUserTemplateActivity",
+    "CreateNewTopic",
+    "GetNumberOfProblemSolvedByUser",
+    "SoftSkillQuestion",
 ]

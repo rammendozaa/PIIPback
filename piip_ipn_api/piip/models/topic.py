@@ -17,8 +17,7 @@ class ProgrammingTopic(PIIPModel):
     id = Column(Integer, primary_key=True)
     title = Column(String(100))
     description = Column(Text)
-    file_route = Column(Text)
-    information = Column(Text)
+    topic_information = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
@@ -29,7 +28,6 @@ class SoftSkillTopic(PIIPModel):
     id = Column(Integer, primary_key=True)
     title = Column(String(100))
     description = Column(Text)
-    file_route = Column(Text)
-    information = Column(Text)
+    topic_information = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)

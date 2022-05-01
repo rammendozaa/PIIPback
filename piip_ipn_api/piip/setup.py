@@ -41,6 +41,8 @@ from piip.routes import (
     Questionnaire,
     RegisterUserQuestionnaire,
     UpdateUserTemplateActivity,
+    CreateNewTopic,
+    SoftSkillQuestion,
 )
 from piip.services.database.setup import session
 from piip.constants import (
@@ -135,9 +137,11 @@ def create_application(name):
     api.add_resource(RemoveUserTemplate, "/user/template/<int:user_template_id>/delete")
     api.add_resource(RemoveUserTemplateSection, "/user/section/<int:user_template_section_id>/delete")
     api.add_resource(RemoveUserTemplateActivity, "/user/activity/<int:user_template_activity_id>/delete")
-    api.add_resource(CreateUserInterview, "/user/<int:user_id>/interview/<int:user_template_section_id>")
     api.add_resource(RegisterUserQuestionnaire, "/user/<int:user_id>/questionnaire/<int:questionnaire_id>")
     api.add_resource(UpdateUserTemplateActivity, "/user/activity/<int:user_template_activity_id>")
 
+    api.add_resource(CreateUserInterview, "/user/<int:user_id>/interview/<int:user_template_section_id>")
     api.add_resource(Questionnaire, "/questionnaire")
+    api.add_resource(SoftSkillQuestion, "/soft-skill-question")
+    api.add_resource(CreateNewTopic, "/create-topic")
     return app

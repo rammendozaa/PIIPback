@@ -1,7 +1,10 @@
+from sqlalchemy.orm import relationship
+from piip.models.constants import DATABASE
 from piip.models.database_setup import PIIPModel
 from sqlalchemy import (
     Boolean,
     Column,
+    ForeignKey,
     Integer,
     DefaultClause,
     String,
@@ -17,7 +20,8 @@ class SoftSkillQuestion(PIIPModel):
     id = Column(Integer, primary_key=True)
     title = Column(String(100))
     question = Column(Text)
-    file_route = Column(Text)
-    information = Column(Text)
+    soft_skill_topic_id = Column(Integer, ForeignKey(f"{DATABASE}.SOFT_SKILL_TOPIC.id"))
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+
+    soft_skill_topic = relationship("SoftSkillTopic", foreign_keys=[soft_skill_topic_id])

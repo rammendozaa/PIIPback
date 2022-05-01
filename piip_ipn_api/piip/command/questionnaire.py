@@ -35,3 +35,9 @@ def insert_questionnaire(create_questionnaire):
         session.add(new_question)
         session.commit()
     return questionnaire
+
+
+def create_soft_skill_question(soft_skill_question_to_add):
+    session.add(soft_skill_question_to_add)
+    session.commit()
+    return soft_skill_question_to_add
