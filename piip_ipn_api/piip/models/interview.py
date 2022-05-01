@@ -18,6 +18,7 @@ class Interview(PIIPModel):
     user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
     administrator_id = Column(Integer, ForeignKey(f"{DATABASE}.ADMINISTRATOR.id"))
     language_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_LANGUAGE.id"))
+    interview_type_id = Column(Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_INTERVIEW_TYPE.id"))
     chosen_date = Column(DateTime)
     interview_url = Column(Text)
     interview_code = Column(Text)
@@ -27,3 +28,4 @@ class Interview(PIIPModel):
     user = relationship("User", foreign_keys=[user_id])
     administrator = relationship("Administrator", foreign_keys=[administrator_id])
     language = relationship("DictLanguage", foreign_keys=[language_id])
+    interview_type = relationship("DictInterviewType", foreign_keys=[interview_type_id])

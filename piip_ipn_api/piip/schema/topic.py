@@ -12,8 +12,7 @@ class ProgrammingTopicSchema(BaseSchema):
     id = fields.Integer(dump_only=True)
     title = fields.String()
     description = fields.String()
-    file_route = fields.String(data_key="fileRoute")
-    information = fields.String()
+    topic_information = fields.String()
 
 
 class SoftSkillTopicSchema(BaseSchema):
@@ -22,5 +21,4 @@ class SoftSkillTopicSchema(BaseSchema):
     id = fields.Integer(dump_only=True)
     title = fields.String()
     description = fields.String()
-    file_route = fields.String(data_key="fileRoute")
-    information = fields.String()
+    topic_information = fields.String()
