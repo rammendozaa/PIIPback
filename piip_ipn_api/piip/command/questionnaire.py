@@ -1,7 +1,7 @@
 from piip.models.questionnaire import Questionnaire
 from piip.models.questionnaire import QuestionnaireQuestion
 from piip.services.database.setup import session
-
+from piip.models.question import SoftSkillQuestion
 
 def insert_questionnaire(create_questionnaire):
     questionnaire = Questionnaire(
@@ -41,3 +41,11 @@ def create_soft_skill_question(soft_skill_question_to_add):
     session.add(soft_skill_question_to_add)
     session.commit()
     return soft_skill_question_to_add
+
+
+def get_all_soft_skill_questions():
+    return (
+        session.query(SoftSkillQuestion)
+        .filter(SoftSkillQuestion.is_active == True)
+        .all()
+    )
