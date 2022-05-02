@@ -7,6 +7,9 @@ from piip.services.database.setup import session
 
 
 def get_template_by_id(template_id):
+    return session.query(Template).filter(Template.id == template_id, Template.is_active == True).first()
+
+    """
     return (
         session.query(Template)
         .join(TemplateSection, TemplateSection.template_id == Template.id)
@@ -19,6 +22,7 @@ def get_template_by_id(template_id):
         )
         .first()
     )
+    """
 
 
 def get_template_section_by_id(section_id):
