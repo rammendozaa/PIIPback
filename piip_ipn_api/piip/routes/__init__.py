@@ -30,6 +30,8 @@ from piip.routes.user import (
     CreateUserInterview,
     RegisterUserQuestionnaire,
     UpdateUserTemplateActivity,
+    UpdateUserQuestionnaire,
+    UpdateUserTopic,
 )
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
@@ -81,4 +83,6 @@ __all__ = [
     "CreateNewTopic",
     "GetNumberOfProblemSolvedByUser",
     "SoftSkillQuestion",
+    "UpdateUserQuestionnaire",
+    "UpdateUserTopic",
 ]

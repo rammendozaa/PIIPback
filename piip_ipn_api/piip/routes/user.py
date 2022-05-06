@@ -23,8 +23,10 @@ from piip.command.user import (
     disable_user_template_by_id,
     disable_user_template_section_by_id,
     disable_user_template_activity_by_id,
-    register_user_questionnaire,
+    register_first_user_questionnaire,
     create_initial_user_questionnaire,
+    grade_questionnaire,
+    update_user_topic,
 )
 from piip.schema.user import (
     UserTemplateSchema,
@@ -176,9 +178,9 @@ class CreateUserInterview(Resource):
 
 
 class RegisterUserQuestionnaire(Resource):
-    def post(self, user_id: int, questionnaire_id: int):
+    def put(self, user_id: int, questionnaire_id: int):
         request_json = request.get_json(silent=True) or {}
-        questionnaire = register_user_questionnaire(user_id, questionnaire_id, request_json["correctAnswers"])
+        questionnaire = register_first_user_questionnaire(user_id, questionnaire_id, request_json["correctAnswers"])
         return {"registered": (questionnaire is not None)}
 
 
@@ -190,3 +192,18 @@ class UpdateUserTemplateActivity(Resource):
                 user_template_activity_id, request_json.get("statusId", 1)
                 )
             }
+
+
+class UpdateUserQuestionnaire(Resource):
+    def put(self, user_id: int, questionnaire_id: int):
+        request_json = request.get_json(silent=True) or {}
+        questionnaire = grade_questionnaire(user_id, questionnaire_id, request_json["correctAnswers"])
+        return {"registered": (questionnaire is not None)}
+
+
+class UpdateUserTopic(Resource):
+    def put(self, user_id: int, topic_type: str, topic_id: int):
+        request_json = request.get_json(silent=True) or {}
+        return {
+            "update": update_user_topic(user_id, topic_type, topic_id, request_json.get("statusId", 1))
+        }
