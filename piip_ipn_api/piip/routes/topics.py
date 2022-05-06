@@ -7,17 +7,23 @@ from piip.command.topic import (
     get_all_softskills_topics,
     create_soft_skill_topic,
     create_algorithm_topic,
+    get_programming_topic,
+    get_softskill_topic,
 )
 
 class GetAlgorithmsTopics(Resource):
-    @jwt_required()
     def get(self):
+        topic_id = request.args.get("topicId", None)
+        if topic_id:
+            return ProgrammingTopicSchema().dump(get_programming_topic(topic_id))
         return jsonify(ProgrammingTopicSchema(many=True).dump(get_all_programming_topics()))
 
 
 class GetSoftSkillsTopics(Resource):
-    @jwt_required()
     def get(self):
+        topic_id = request.args.get("topicId", None)
+        if topic_id:
+            return SoftSkillTopicSchema().dump(get_softskill_topic(topic_id))
         return jsonify(SoftSkillTopicSchema(many=True).dump(get_all_softskills_topics()))
 
 

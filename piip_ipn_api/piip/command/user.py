@@ -196,7 +196,7 @@ def disable_user_template_activity_by_id(user_template_activity_id):
     return template_activity
 
 
-def register_user_questionnaire(user_id, questionnaire_id, correct_answers):
+def grade_questionnaire(user_id, questionnaire_id, correct_answers):
     user_questionnaire = session.query(UserQuestionnaire).filter(
         UserQuestionnaire.is_active == True,
         UserQuestionnaire.user_id == user_id,
@@ -209,6 +209,11 @@ def register_user_questionnaire(user_id, questionnaire_id, correct_answers):
     user_questionnaire.percentage_score = float(correct_answers)/float(user_questionnaire.questionnaire.total_questions) * 100
     session.add(user_questionnaire)
     session.commit()
+    return user_questionnaire
+
+
+def register_first_user_questionnaire(user_id, questionnaire_id, correct_answers):
+    user_questionnaire = grade_questionnaire(user_id, questionnaire_id, correct_answers)
     percentage = user_questionnaire.percentage_score
     if percentage < 33.34:
         assign_template_to_user_id(user_id, [1])
@@ -227,3 +232,35 @@ def create_initial_user_questionnaire(user_id):
     session.add(user_questionnaire)
     session.commit()
     return user_questionnaire
+
+
+def update_user_topic(user_id, topic_type, topic_id, status_id):
+    if topic_type == "algorithm":
+        user_programming_topic = (
+            session.query(UserProgrammingTopic)
+            .filter(
+                UserProgrammingTopic.programming_topic_id == topic_id,
+                UserProgrammingTopic.user_id == user_id,
+            )
+            .first()
+        )
+        if user_programming_topic:
+            user_programming_topic.status_id = status_id
+            session.add(user_programming_topic)
+            session.commit()
+            return True
+        return False
+    user_soft_skill_topic = (
+            session.query(UserSoftSkillTopic)
+            .filter(
+                UserSoftSkillTopic.soft_skill_topic_id == topic_id,
+                UserSoftSkillTopic.user_id == user_id,
+            )
+            .first()
+        )
+    if user_soft_skill_topic:
+        user_soft_skill_topic.status_id = status_id
+        session.add(user_soft_skill_topic)
+        session.commit()
+        return True
+    return False

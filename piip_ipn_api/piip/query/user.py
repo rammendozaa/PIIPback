@@ -1,3 +1,4 @@
+from datetime import datetime
 from piip.services.database.setup import session
 from piip.models.user import (
     UserTemplate,
@@ -53,6 +54,10 @@ def update_user_template_activity_by_id(user_template_activity_id, status_id):
         activity = session.query(UserTemplateActivity).get(user_template_activity_id)
         if not activity:
             return False
+        if activity.status_id == status_id:
+            return True
+        if status_id == 4:
+            activity.finished_date = datetime.now()
         activity.status_id = status_id
         session.add(activity)
         session.commit()
