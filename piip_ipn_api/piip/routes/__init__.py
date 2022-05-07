@@ -12,7 +12,7 @@ from piip.routes.user_problem import (
 from piip.routes.user_programming_topic import (
     GetNumberOfProgrammingTopicsSolvedByUser
 )
-from piip.routes.user_programming_topic import (
+from piip.routes.user_softskill_topic import (
     GetNumberOfSoftSkillTopicsSolvedByUser
 )
 
