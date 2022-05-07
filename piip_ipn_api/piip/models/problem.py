@@ -20,7 +20,7 @@ class Problem(PIIPModel):
     title = Column(Text)
     description = Column(Text)
     test_cases = Column(Text)
-    category_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_CATEGORY.id"))
+    tags = Column(Text)
     difficulty_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_DIFFICULTY.id"))
     url = Column(Text)
     time_limit = Column(Text)
@@ -33,5 +33,4 @@ class Problem(PIIPModel):
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
 
-    category = relationship("DictCategory", foreign_keys=[category_id])
     difficulty = relationship("DictDifficulty", foreign_keys=[difficulty_id])
