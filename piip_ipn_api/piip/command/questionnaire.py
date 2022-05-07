@@ -49,3 +49,9 @@ def get_all_soft_skill_questions():
         .filter(SoftSkillQuestion.is_active == True)
         .all()
     )
+
+
+def get_soft_skill_question(question_id):
+    return (
+        session.query(SoftSkillQuestion).get(question_id)
+    )
