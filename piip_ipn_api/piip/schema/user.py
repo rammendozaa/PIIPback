@@ -1,8 +1,12 @@
+from piip.services.database.setup import session
 from piip.models.user import (
     User,
     UserTemplate,
     UserTemplateSection,
     UserTemplateActivity,
+    UserSoftSkillQuestion,
+    UserProblem,
+    UserQuestionnaire,
 )
 from piip.schema.base_schema import BaseSchema
 from marshmallow import fields, post_dump
@@ -12,6 +16,7 @@ from piip.schema.template import (
     TemplateActivitySchema,
     TemplateSectionSchema,
 )
+from piip.models.user import UserProgrammingTopic, UserSoftSkillTopic
 
 class UserSchema(BaseSchema):
     __model__ = User
@@ -25,16 +30,129 @@ class UserSchema(BaseSchema):
     last_name = fields.String(data_key="last_name")
     school_id = fields.String(data_key="school_id")
 
+# ACTIVITIES
+class UserProblemSchema(BaseSchema):
+    __model__ = UserProblem
+    class Meta:
+        unknown = EXCLUDE
 
+    id = fields.Integer(data_key='id')
+    user_id = fields.String(data_key='user_id')
+    problem_id = fields.String(data_key="problem_id")
+    status_id = fields.String(data_key="status_id")
+    finished_date = fields.String(data_key="finished_date")
+    code = fields.String()
+
+class UserProgrammingTopicSchema(BaseSchema):
+    __model__ = UserProgrammingTopic
+    class Meta:
+        unknown = EXCLUDE
+    
+    id = fields.Integer()
+    status_id = fields.Integer()
+
+
+class UserSoftSkillQuestionSchema(BaseSchema):
+    __model__ = UserSoftSkillQuestion
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.Integer()
+    answer = fields.String()
+
+class UserSoftSkillTopicSchema(BaseSchema):
+    __model__ = UserSoftSkillTopic
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.Integer()
+    status_id = fields.Integer()
+
+class UserQuestionnaireSchema(BaseSchema):
+    __model__ = UserQuestionnaire
+    class Meta:
+        unknown = EXCLUDE
+    
+    id = fields.Integer()
+    status_id = fields.Integer()
+    correct_answers = fields.Integer()
+    percentage_score = fields.Float()
+
+USER_ACTIVITY_TYPE_TO_SCHEMA = {
+    1: UserProblemSchema,
+    2: UserProgrammingTopicSchema,
+    3: UserSoftSkillQuestionSchema,
+    4: UserSoftSkillTopicSchema,
+    6: UserQuestionnaireSchema,
+}
+
+# TEMPLATES
 class UserTemplateActivitySchema(BaseSchema):
     __model__ = UserTemplateActivity
 
     id = fields.Integer()
+    user_id = fields.Integer()
     template_activity = fields.Nested(TemplateActivitySchema)
     status_id = fields.Integer()
     position = fields.Integer()
     finished_date = fields.String()
+    external_reference = fields.Integer()
 
+    @post_dump
+    def after_serialize(self, data, many, **kwargs):
+        activity_type = data["template_activity"]["activityType"]
+        external_reference = data["external_reference"]
+        activity = None
+        activity_schema = USER_ACTIVITY_TYPE_TO_SCHEMA.get(activity_type, None)
+        if activity_type == 1:
+            activity = (
+                session.query(UserProblem)
+                .filter(
+                    UserProblem.user_id == data["user_id"],
+                    UserProblem.problem_id == external_reference
+                )
+                .first()
+            )
+        elif activity_type == 2:
+            activity = (
+                session.query(UserProgrammingTopic)
+                .filter(
+                    UserProgrammingTopic.user_id == data["user_id"],
+                    UserProgrammingTopic.programming_topic_id == external_reference
+                )
+                .first()
+            )
+        elif activity_type == 3:
+            activity = (
+                session.query(UserSoftSkillQuestion)
+                .filter(
+                    UserSoftSkillQuestion.user_id == data["user_id"],
+                    UserSoftSkillQuestion.question_id == external_reference
+                )
+                .first()
+            )
+        elif activity_type == 4:
+            activity = (
+                session.query(UserSoftSkillTopic)
+                .filter(
+                    UserSoftSkillTopic.user_id == data["user_id"],
+                    UserSoftSkillTopic.soft_skill_topic_id == external_reference
+                )
+                .first()
+            )
+        elif activity_type == 6:
+            activity = (
+                session.query(UserQuestionnaire)
+                .filter(
+                    UserQuestionnaire.user_id == data["user_id"],
+                    UserQuestionnaire.questionnaire_id == external_reference
+                )
+                .first()
+            )
+        
+        if activity and activity_schema:
+            data["activity_progress"] = activity_schema().dump(activity)
+        return data
 
 class UserTemplateSectionSchema(BaseSchema):
     __model__ = UserTemplateSection

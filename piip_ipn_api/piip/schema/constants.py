@@ -14,6 +14,13 @@ from piip.schema.topic import (
 from piip.schema.question import SoftSkillQuestionSchema
 from piip.schema.interview import InterviewSchema
 from piip.schema.questionnaire import QuestionnaireSchema
+from piip.models.user import (
+    UserProblem,
+    UserProgrammingTopic,
+    UserQuestionnaire,
+    UserSoftSkillQuestion,
+    UserSoftSkillTopic,
+)
 
 ACTIVITY_TYPE_TO_SCHEMA = {
     1: ProblemSchema,
@@ -31,4 +38,13 @@ ACTIVITY_TYPE_TO_MODEL = {
     4: SoftSkillTopic,
     5: Interview,
     6: Questionnaire,
+}
+
+USER_ACTIVITY_TYPE_TO_MODEL = {
+    1: UserProblem,
+    2: UserProgrammingTopic,
+    3: UserSoftSkillQuestion,
+    4: UserSoftSkillTopic,
+    5: Interview,
+    6: UserQuestionnaire,
 }
