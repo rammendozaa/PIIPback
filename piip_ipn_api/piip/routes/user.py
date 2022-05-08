@@ -27,6 +27,7 @@ from piip.command.user import (
     create_initial_user_questionnaire,
     grade_questionnaire,
     update_user_topic,
+    update_user_soft_skill_question,
 )
 from piip.schema.user import (
     UserTemplateSchema,
@@ -205,5 +206,18 @@ class UpdateUserTopic(Resource):
     def put(self, user_id: int, topic_type: str, topic_id: int):
         request_json = request.get_json(silent=True) or {}
         return {
-            "update": update_user_topic(user_id, topic_type, topic_id, request_json.get("statusId", 1))
+            "updated": update_user_topic(user_id, topic_type, topic_id, request_json.get("statusId", 1))
+        }
+
+
+class UpdateUserSoftSkillQuestion(Resource):
+    def put(self, user_id:int, question_id:int):
+        request_json = request.get_json(silent=True) or {}
+        return {
+            "updated": update_user_soft_skill_question(
+                user_id,
+                question_id,
+                request_json.get("answer", ""),
+                request_json.get("statusId", 1),
+            )
         }
