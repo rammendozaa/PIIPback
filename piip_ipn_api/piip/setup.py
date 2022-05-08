@@ -22,6 +22,8 @@ from piip.routes import (
     GetProblem,
     InsertProblemToDB,
     GetNumberOfProblemSolvedByUser,
+    GetNumberOfProgrammingTopicsSolvedByUser,
+    GetNumberOfSoftSkillTopicsSolvedByUser,
     GetUser,
     Template,
     AddTemplate,
@@ -109,6 +111,8 @@ def create_application(name):
     api.add_resource(InsertProblemToDB,"/insertProblemsToDB")
 
     api.add_resource(GetNumberOfProblemSolvedByUser,"/getNumberOfProblemsSolvedByUser")
+    api.add_resource(GetNumberOfProgrammingTopicsSolvedByUser,"/getNumberOfProgrammingTopicsSolvedByUser")
+    api.add_resource(GetNumberOfSoftSkillTopicsSolvedByUser,"/getNumberOfSoftSkillTopicsSolvedByUser")
 
     api.add_resource(GetAlgorithmsTopics,"/algorithmTopics")
     api.add_resource(GetSoftSkillsTopics,"/softSkillsTopics")

@@ -8,7 +8,7 @@ from piip.schema.user import UserProblemSchema
 class GetNumberOfProblemSolvedByUser(Resource):
     @jwt_required()
     def post(self):
-        numberOfProblems = request.form.get("user_id", default='',type=str)
+        numberOfProblems = getNumberOfProblemsSolved(request.form.get("user_id", default='',type=str))
         return {"numberOfProblems": numberOfProblems}
         """
             [
