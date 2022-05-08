@@ -2,7 +2,7 @@ from piip.models import ProgrammingTopic, SoftSkillTopic
 from piip.services.database.setup import session
 
 def get_all_programming_topics():
-    return session.query(ProgrammingTopic).all()
+    return session.query(ProgrammingTopic).filter(ProgrammingTopic.is_active == True).all()
 
 
 def get_programming_topic(topic_id):
@@ -10,7 +10,7 @@ def get_programming_topic(topic_id):
 
 
 def get_all_softskills_topics():
-    return session.query(SoftSkillTopic).all()
+    return session.query(SoftSkillTopic).filter(SoftSkillTopic.is_active == True).all()
 
 
 def get_softskill_topic(topic_id):
