@@ -6,4 +6,4 @@ class HealthCheck(Resource):
     def get(self):
         print("hola")
         user = prueba()
-        return {"is_all_good": f"YES. School: {user.first_name}"}
+        return {"is_all_good": f"YES. School: {user.description}"}

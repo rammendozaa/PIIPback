@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from piip.command.user_problem import getNumberOfProblemsSolved
-from piip.schema.user_problem import UserProblemSchema
+from piip.schema.user import UserProblemSchema
 
 
 class GetNumberOfProblemSolvedByUser(Resource):
