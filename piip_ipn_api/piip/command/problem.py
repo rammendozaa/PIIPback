@@ -39,7 +39,6 @@ def add_problem_to_database(response, url):
         title = title,
         description = description,
         test_cases = sampleInput,
-        category_id = 1,
         difficulty_id = 1,
         url = url,
         time_limit = timelimit,
