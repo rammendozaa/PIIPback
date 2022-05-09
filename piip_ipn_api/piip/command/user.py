@@ -1,3 +1,4 @@
+from piip.models.template import TemplateActivity
 from decimal import Decimal
 from piip.services.database.setup import session
 from datetime import date
@@ -261,6 +262,25 @@ def update_user_topic(user_id, topic_type, topic_id, status_id):
     if user_soft_skill_topic:
         user_soft_skill_topic.status_id = status_id
         session.add(user_soft_skill_topic)
+        session.commit()
+        return True
+    return False
+
+
+def update_user_soft_skill_question(user_id, question_id, answer, status_id):
+    soft_skill_question = (
+        session.query(UserSoftSkillQuestion)
+        .filter(
+            UserSoftSkillQuestion.user_id == user_id,
+            UserSoftSkillQuestion.question_id == question_id
+        )
+        .order_by(UserSoftSkillQuestion.created_date.desc())
+        .first()
+    )
+    if soft_skill_question:
+        soft_skill_question.answer = answer
+        soft_skill_question.status_id = status_id
+        session.add(soft_skill_question)
         session.commit()
         return True
     return False

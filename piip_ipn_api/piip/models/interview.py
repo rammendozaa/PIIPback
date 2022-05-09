@@ -23,6 +23,8 @@ class Interview(PIIPModel):
     interview_url = Column(Text)
     interview_code = Column(Text)
     feedback = Column(Text)
+    is_confirmed = Column(Boolean, DefaultClause("1"), nullable=False)
+    comment = Column(Text)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
     user = relationship("User", foreign_keys=[user_id])

@@ -39,7 +39,9 @@ from piip.routes.user import (
     UpdateUserTemplateActivity,
     UpdateUserQuestionnaire,
     UpdateUserTopic,
+    UpdateUserSoftSkillQuestion,
 )
+from piip.routes.interview import Interview
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
     Template,
@@ -94,4 +96,6 @@ __all__ = [
     "SoftSkillQuestion",
     "UpdateUserQuestionnaire",
     "UpdateUserTopic",
+    "UpdateUserSoftSkillQuestion",
+    "Interview",
 ]

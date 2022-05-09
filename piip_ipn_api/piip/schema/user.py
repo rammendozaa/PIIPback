@@ -152,6 +152,8 @@ class UserTemplateActivitySchema(BaseSchema):
         
         if activity and activity_schema:
             data["activity_progress"] = activity_schema().dump(activity)
+        else:
+            data["activity_progress"] = None
         return data
 
 class UserTemplateSectionSchema(BaseSchema):
