@@ -18,6 +18,9 @@ class Token(Resource):
             return response
         if admin and admin.password == _password:
             access_token = create_access_token(identity=_email)
-            response = {"access_token":access_token, "role": "mentor", "user_id": admin.id}
+            if admin.is_super == 1:
+                response = {"access_token":access_token, "role": "super", "user_id": admin.id}
+            else:
+                response = {"access_token":access_token, "role": "mentor", "user_id": admin.id}
             return response
         return {"error": "Wrong email or password"}, 401
