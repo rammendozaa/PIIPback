@@ -18,6 +18,7 @@ class ProblemSchema(BaseSchema):
     output = fields.String(data_key="ouput")
     test_cases = fields.String(data_key="test_cases")
     finished_date = fields.String(data_key="finished_date")
+    solution = fields.String(data_key= "solution")
 
     @post_dump
     def after_serialize(self, data, many, **kwargs):
