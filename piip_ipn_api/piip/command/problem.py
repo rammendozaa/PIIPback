@@ -1,3 +1,5 @@
+from operator import le
+from random import random
 from sqlalchemy import null
 from piip.models import Problem
 from piip.services.database.setup import session
@@ -34,7 +36,7 @@ def add_problem_to_database(response, url):
     sampleInput += getValue("<div class=\"sample-test\">([\\s\\S]*?)</div>\\s*</div>\\s*</div>", response.text)
     hint = getValue("<div class=\"section-title\">\\s*Note\\s*</div>([\\s\\S]*?)</div></div></div></div>", response.text)
     source = getValue("(<a[^<>]+/contest/\\d+\">.+?</a>)",response.text)
-
+    tags,difficulty = getTags(response.text)
     problem = Problem(
         title = title,
         description = description,
@@ -47,11 +49,41 @@ def add_problem_to_database(response, url):
         output = output,
         notes = hint,
         source = source,
-        solution = "There is no solution"
+        solution = difficulty,
+        tags = tags
     )
     session.add(problem)
     session.commit()
 
+def getTags(text):
+    tags = ""
+    difficulty = ""
+    match = '<span class="tag-box"'
+    for i in range(0,len(text)-len(match)):
+        isMatch = True
+        for j in range(0,len(match)-1):
+            if text[j+i] != match[j]:
+                isMatch = False
+        if isMatch == True:
+            currentTag = ""
+            foundOpen = False
+            for j in range (i+1,len(text)-1):
+                if text[j] == '<':
+                    break
+                if text[j] == '>':
+                    foundOpen = True
+                    continue
+                if foundOpen == True and text[j] != '\n' and text[j] != '\t' and text[j] != '\r':
+                    currentTag += text[j]
+            limpia = currentTag.strip()
+            if limpia.find('*') != -1:
+                difficulty = limpia
+            else:
+                if len(tags) != 0:
+                    tags += '_'
+                tags += limpia
+
+    return (tags, difficulty)
 
 def get_all_problems():
     return session.query(Problem).all()
