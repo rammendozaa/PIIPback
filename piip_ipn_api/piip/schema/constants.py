@@ -12,7 +12,7 @@ from piip.schema.topic import (
     SoftSkillTopicSchema,
 )
 from piip.schema.question import SoftSkillQuestionSchema
-from piip.schema.interview import InterviewSchema
+from piip.schema.interviews import InterviewSchema
 from piip.schema.questionnaire import QuestionnaireSchema
 from piip.models.user import (
     UserProblem,

@@ -1,3 +1,4 @@
+from datetime import datetime
 from piip.models.template import TemplateActivity
 from decimal import Decimal
 from piip.services.database.setup import session
@@ -56,7 +57,21 @@ def getUser(_email):
     return user
 
 
-def create_user_problem(user_id, external_reference):
+def create_user_problem(user_template_activity, external_reference):
+    user_id = user_template_activity.user_id
+    user_problem_exists = (
+        session.query(UserProblem)
+        .filter(
+            UserProblem.user_id==user_id,
+            UserProblem.problem_id==external_reference
+        )
+        .first()
+    )
+    if user_problem_exists is not None:
+        user_template_activity.status_id = user_problem_exists.status_id
+        session.add(user_template_activity)
+        session.commit()
+        return
     user_problem = UserProblem(user_id=user_id,problem_id=external_reference)
     session.add(user_problem)
     session.commit()
@@ -69,35 +84,92 @@ def get_user_id_starting_questionnaire(user_id):
         UserQuestionnaire.user_id == user_id,
     ).first()
 
-def create_user_programming_topic(user_id, external_reference):
+def create_user_programming_topic(user_template_activity, external_reference):
+    user_id = user_template_activity.user_id
+    user_programming_topic_exists = (
+        session.query(UserProgrammingTopic)
+        .filter(
+            UserProgrammingTopic.user_id==user_id,
+            UserProgrammingTopic.programming_topic_id==external_reference
+        )
+        .first()
+    )
+    if user_programming_topic_exists is not None:
+        user_template_activity.status_id = user_programming_topic_exists.status_id
+        session.add(user_template_activity)
+        session.commit()
+        return
     user_programming_topic = UserProgrammingTopic(user_id=user_id, programming_topic_id=external_reference)
     session.add(user_programming_topic)
     session.commit()
 
 
-def create_user_soft_skill_question(user_id, external_reference):
+def create_user_soft_skill_question(user_template_activity, external_reference):
+    user_id = user_template_activity.user_id
+    user_soft_skill_topic_exists = (
+        session.query(UserSoftSkillQuestion)
+        .filter(
+            UserSoftSkillQuestion.user_id==user_id,
+            UserSoftSkillQuestion.question_id==external_reference
+        )
+        .first()
+    )
+    if user_soft_skill_topic_exists is not None:
+        user_template_activity.status_id = user_soft_skill_topic_exists.status_id
+        session.add(user_template_activity)
+        session.commit()
+        return
     user_soft_skill_question = UserSoftSkillQuestion(user_id=user_id, question_id=external_reference)
     session.add(user_soft_skill_question)
     session.commit()
 
 
-def create_user_soft_skill_topic(user_id, external_reference):
+def create_user_soft_skill_topic(user_template_activity, external_reference):
+    user_id = user_template_activity.user_id
+    user_soft_skill_topic_exists = (
+        session.query(UserSoftSkillTopic)
+        .filter(
+            UserSoftSkillTopic.user_id==user_id,
+            UserSoftSkillTopic.soft_skill_topic_id==external_reference
+        )
+        .first()
+    )
+    if user_soft_skill_topic_exists is not None:
+        user_template_activity.status_id = user_soft_skill_topic_exists.status_id
+        session.add(user_template_activity)
+        session.commit()
+        return
     user_soft_skill_topic = UserSoftSkillTopic(user_id=user_id, soft_skill_topic_id=external_reference)
     session.add(user_soft_skill_topic)
     session.commit()
 
 
-def create_user_interview(user_id, user_admin_id):
+def create_user_interview(user_id, user_admin_id, interview_type_id):
     user_interview = Interview(
         user_id=user_id,
         administrator_id=user_admin_id,
+        interview_type_id=interview_type_id,
     )
     session.add(user_interview)
     session.commit()
     return user_interview
 
 
-def create_user_questionnaire(user_id, external_reference):
+def create_user_questionnaire(user_template_activity, external_reference):
+    user_id = user_template_activity.user_id
+    user_questionnaire_exists = (
+        session.query(UserQuestionnaire)
+        .filter(
+            UserQuestionnaire.user_id==user_id,
+            UserQuestionnaire.questionnaire_id==external_reference
+        )
+        .first()
+    )
+    if user_questionnaire_exists is not None:
+        user_template_activity.status_id = user_questionnaire_exists.status_id
+        session.add(user_template_activity)
+        session.commit()
+        return
     user_questionnaire = UserQuestionnaire(user_id=user_id, questionnaire_id=external_reference)
     session.add(user_questionnaire)
     session.commit()
@@ -115,15 +187,15 @@ def assign_template_activity_to_user_id(user_id, activity, user_template_section
     session.add(user_template_activity)
     session.commit()
     if activity_type == ACTIVITY_TYPES["PROBLEM"]:
-        create_user_problem(user_id, activity.external_reference)
+        create_user_problem(user_template_activity, activity.external_reference)
     if activity_type == ACTIVITY_TYPES["PROGRAMMING_TOPIC"]:
-        create_user_programming_topic(user_id, activity.external_reference)
+        create_user_programming_topic(user_template_activity, activity.external_reference)
     if activity_type == ACTIVITY_TYPES["SOFT_SKILL_QUESTION"]:
-        create_user_soft_skill_question(user_id, activity.external_reference)
+        create_user_soft_skill_question(user_template_activity, activity.external_reference)
     if activity_type == ACTIVITY_TYPES["SOFT_SKILL_TOPIC"]:
-        create_user_soft_skill_topic(user_id, activity.external_reference)
+        create_user_soft_skill_topic(user_template_activity, activity.external_reference)
     if activity_type == ACTIVITY_TYPES["QUESTIONNAIRE"]:
-        create_user_questionnaire(user_id, activity.external_reference)
+        create_user_questionnaire(user_template_activity, activity.external_reference)
 
     return user_template_activity
 
@@ -207,6 +279,7 @@ def grade_questionnaire(user_id, questionnaire_id, correct_answers):
         return None
     user_questionnaire.correct_answers = correct_answers
     user_questionnaire.status_id = ACTIVITY_STATUS["finished"]
+    user_questionnaire.finished_date = datetime.now()
     user_questionnaire.percentage_score = float(correct_answers)/float(user_questionnaire.questionnaire.total_questions) * 100
     session.add(user_questionnaire)
     session.commit()
@@ -247,6 +320,8 @@ def update_user_topic(user_id, topic_type, topic_id, status_id):
         )
         if user_programming_topic:
             user_programming_topic.status_id = status_id
+            if status_id == 4:
+                user_programming_topic.finished_date = datetime.now()
             session.add(user_programming_topic)
             session.commit()
             return True
@@ -261,6 +336,8 @@ def update_user_topic(user_id, topic_type, topic_id, status_id):
         )
     if user_soft_skill_topic:
         user_soft_skill_topic.status_id = status_id
+        if status_id == 4:
+            user_programming_topic.finished_date = datetime.now()
         session.add(user_soft_skill_topic)
         session.commit()
         return True
@@ -280,6 +357,8 @@ def update_user_soft_skill_question(user_id, question_id, answer, status_id):
     if soft_skill_question:
         soft_skill_question.answer = answer
         soft_skill_question.status_id = status_id
+        if status_id == 4:
+            soft_skill_question.finished_date = datetime.now()
         session.add(soft_skill_question)
         session.commit()
         return True

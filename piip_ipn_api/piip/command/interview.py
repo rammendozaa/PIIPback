@@ -52,7 +52,7 @@ def get_interviews(admin_id=None, interview_id=None):
         return (
             session.query(Interview)
             .filter(
-                Interview.admin_id == admin_id,
+                Interview.administrator_id == admin_id,
                 Interview.is_active == True,
             )
             .order_by(

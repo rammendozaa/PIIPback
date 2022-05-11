@@ -159,9 +159,12 @@ class RemoveUserTemplateActivity(Resource):
 class CreateUserInterview(Resource):
     def post(self, user_id: int, user_template_section_id: int):
         request_json = request.get_json(silent=True) or {}
-        user_interview = create_user_interview(user_id, request_json.get("userAdminId"))
+        user_interview = create_user_interview(user_id, request_json.get("userAdminId"), request_json.get("interviewType", 1))
         request_json["externalReference"] = user_interview.id
         del request_json["userAdminId"]
+        interview_type = request_json.get("interviewType", None)
+        if interview_type:
+            del request_json["interviewType"]
         create_activity = TemplateActivitySchema().load(
             request_json
         )

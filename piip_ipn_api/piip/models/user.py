@@ -75,6 +75,7 @@ class UserProgrammingTopic(PIIPModel):
     status_id = Column(Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    finished_date = Column(DateTime)
 
     user = relationship("User", foreign_keys=[user_id])
     programming_topic = relationship("ProgrammingTopic", foreign_keys=[programming_topic_id])
@@ -91,6 +92,7 @@ class UserSoftSkillQuestion(PIIPModel):
     answer = Column(Text)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    finished_date = Column(DateTime)
 
     question = relationship("SoftSkillQuestion", foreign_keys=[question_id])
     user = relationship("User", foreign_keys=[user_id])
@@ -106,6 +108,7 @@ class UserSoftSkillTopic(PIIPModel):
     status_id = Column(Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    finished_date = Column(DateTime)
 
     soft_skill_topic = relationship("SoftSkillTopic", foreign_keys=[soft_skill_topic_id])
     user = relationship("User", foreign_keys=[user_id])
@@ -124,10 +127,11 @@ class UserQuestionnaire(PIIPModel):
     status_id = Column(Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_ACTIVITY_STATUS.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
     created_date = Column(DateTime, DefaultClause(func.now()))
+    finished_date = Column(DateTime)
 
     user = relationship("User", foreign_keys=[user_id])
     questionnaire = relationship("Questionnaire", foreign_keys=[questionnaire_id])
-
+ 
 
 class UserTemplateActivity(PIIPModel):
     __tablename__ = "USER_TEMPLATE_ACTIVITY"

@@ -1,5 +1,5 @@
 import time
-from piip.schema.interview import InterviewSchema
+from piip.schema.interviews import InterviewSchema
 from flask_restful import Resource
 from flask import request,jsonify
 from piip.command.interview import (
@@ -32,7 +32,7 @@ class Interview(Resource):
     def get(self):
         interview_id = request.args.get("interview_id", None)
         if interview_id:
-            return InterviewSchema(many=True).dump(get_interviews(interview_id=interview_id))
+            return InterviewSchema().dump(get_interviews(interview_id=interview_id))
         admin_id = request.args.get("admin_id", None)
         if admin_id:
             return InterviewSchema(many=True).dump(get_interviews(admin_id=admin_id))
