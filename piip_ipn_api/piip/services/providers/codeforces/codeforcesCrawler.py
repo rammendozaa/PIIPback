@@ -6,15 +6,14 @@ import requests
 class CodeforcesSpider():
     name = "codeforces"
     def start(self):
-        urls = self.getUrls(10)
+        urls = self.getUrls(20)
         for url in urls:
             session = requests.session()
             response = session.get(url)
             add_problem_to_database(response,url)
-            '''
             with open('hola.html','wb') as f:
                 f.write(response.text.encode())
-            '''
+            
     def getUrls(self, noProblems):
         r = requests.get('https://codeforces.com/api/problemset.problems')
         problems = r.json()["result"]["problems"]
