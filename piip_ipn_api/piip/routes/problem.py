@@ -1,3 +1,4 @@
+from email.policy import default
 from piip.services.providers.codeforces.codeforces import Codeforces
 from flask_restful import Resource
 from flask import request, jsonify
@@ -40,7 +41,6 @@ class SubmitProblem(Resource):
                 return {"submissionUrl": res["msg"]}
         else:
             return {"error": "failed to submit code"}
-
 class Submission(Resource):
     @jwt_required()
     def post(self):
