@@ -1,5 +1,7 @@
+from sqlalchemy.sql import func
+from sqlalchemy.orm.relationships import RelationshipProperty
 from piip.models.database_setup import PIIPModel
-
+from typing import List
 from sqlalchemy import (
     Column,
     Integer,
@@ -12,6 +14,21 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 from piip.models.constants import DATABASE
 
+class CompanyTrackingLinks(PIIPModel):
+    __tablename__ = "COMPANY_TRACKING_LINKS"
+
+    id = Column(Integer, primary_key=True)
+    company_tracking_id = Column(Integer, ForeignKey(f"{DATABASE}.COMPANY_TRACKING.id"), nullable=False)
+    description = Column(String(255), nullable=False)
+    url = Column(String(1000), nullable=False)
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+
+    company_tracking = relationship(
+        "CompanyTracking",
+        foreign_keys=[company_tracking_id],
+        back_populates="tracking_links",
+    )
+
 
 class CompanyTracking(PIIPModel):
     __tablename__ = "COMPANY_TRACKING"
@@ -23,19 +40,12 @@ class CompanyTracking(PIIPModel):
     application_url = Column(String(255))
     interview_date = Column(DateTime)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_date = Column(DateTime, DefaultClause(func.now()))
 
     user = relationship("User", foreign_keys=[user_id])
     company = relationship("DictCompany", foreign_keys=[company_id])
     status = relationship("DictTrackingStatus", foreign_keys=[status_id])
 
-
-class CompanyTrackingLinks(PIIPModel):
-    __tablename__ = "COMPANY_TRACKING_LINKS"
-
-    id = Column(Integer, primary_key=True)
-    company_tracking_id = Column(Integer, ForeignKey(f"{DATABASE}.COMPANY_TRACKING.id"), nullable=False)
-    description = Column(String(255), nullable=False)
-    url = Column(String(1000), nullable=False)
-    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
-
-    company_tracking = relationship("CompanyTracking", foreign_keys=[company_tracking_id])
+    tracking_links: "RelationshipProperty[List[CompanyTrackingLinks]]" = relationship(
+        "CompanyTrackingLinks", back_populates="company_tracking", lazy="dynamic"
+    )

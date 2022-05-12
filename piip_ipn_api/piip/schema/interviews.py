@@ -21,6 +21,7 @@ class InterviewSchema(BaseSchema):
     interview_type_id = fields.Integer(required=False,allow_none=True)
     is_active = fields.Boolean(dump_only=True, data_key="isActive")
 
+
     @post_dump
     def after_serialize(self, data, many, **kwargs):
         from piip.schema.user import UserSchema

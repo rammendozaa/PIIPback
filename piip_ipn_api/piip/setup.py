@@ -51,6 +51,8 @@ from piip.routes import (
     UpdateUserTopic,
     UpdateUserSoftSkillQuestion,
     Interview,
+    UserCompanyTracking,
+    CompanyTrackingLink,
 )
 from piip.services.database.setup import session
 from piip.constants import (
@@ -162,4 +164,6 @@ def create_application(name):
     api.add_resource(UpdateUserSoftSkillQuestion, "/user/<int:user_id>/soft-skill-question/<int:question_id>")
     api.add_resource(Interview, "/interview")
 
+    api.add_resource(UserCompanyTracking, "/user/<int:user_id>/tracking")
+    api.add_resource(CompanyTrackingLink, "/user/tracking/<int:company_tracking_id>/link")
     return app

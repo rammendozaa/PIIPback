@@ -34,9 +34,6 @@ class TemplateActivitySchema(BaseSchema):
 class TemplateSectionSchema(BaseSchema):
     __model__ = TemplateSection
 
-    class Meta:
-        unknown = EXCLUDE
-
     id = fields.Integer()
     name = fields.String()
     description = fields.String()
@@ -47,10 +44,7 @@ class TemplateSectionSchema(BaseSchema):
 
 class TemplateSchema(BaseSchema):
     __model__ = Template
-    
-    class Meta:
-        unknown = EXCLUDE
-    
+        
     id = fields.Integer()
     name = fields.String()
     description = fields.String()

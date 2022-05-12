@@ -1,3 +1,4 @@
+from sqlalchemy.sql import func
 from piip.models.database_setup import PIIPModel
 from sqlalchemy import (
     Boolean,
@@ -26,6 +27,7 @@ class Interview(PIIPModel):
     is_confirmed = Column(Boolean, DefaultClause("1"), nullable=False)
     comment = Column(Text)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_date = Column(DateTime, DefaultClause(func.now()))
 
     user = relationship("User", foreign_keys=[user_id])
     administrator = relationship("Administrator", foreign_keys=[administrator_id])
