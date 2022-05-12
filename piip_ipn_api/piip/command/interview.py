@@ -42,6 +42,9 @@ def update_interview(user_id, interview_id, interview_changes, role):
     session.commit()
     return True
 
+def getNumberOfInterviews(_user_id):
+    number = session.query(Interview).filter_by(user_id=_user_id,is_confirmed = 1).count()
+    return number
 
 def get_interviews(admin_id=None, interview_id=None):
     if interview_id is not None:

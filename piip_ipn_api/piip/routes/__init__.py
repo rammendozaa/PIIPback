@@ -16,7 +16,10 @@ from piip.routes.user_programming_topic import (
 from piip.routes.user_softskill_topic import (
     GetNumberOfSoftSkillTopicsSolvedByUser
 )
-
+from piip.routes.interview import (
+    Interview,
+    GetNumberOfInterviews
+)
 from piip.routes.topics import (
     GetAlgorithmsTopics,
     GetSoftSkillsTopics,
@@ -42,7 +45,6 @@ from piip.routes.user import (
     UpdateUserTopic,
     UpdateUserSoftSkillQuestion,
 )
-from piip.routes.interview import Interview
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
     Template,
@@ -95,6 +97,7 @@ __all__ = [
     "GetNumberOfProblemSolvedByUser",
     "GetNumberOfProgrammingTopicsSolvedByUser",
     "GetNumberOfSoftSkillTopicsSolvedByUser",
+    "GetNumberOfInterviews",
     "SoftSkillQuestion",
     "UpdateUserQuestionnaire",
     "UpdateUserTopic",
