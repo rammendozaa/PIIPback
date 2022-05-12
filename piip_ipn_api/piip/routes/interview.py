@@ -1,3 +1,4 @@
+import resource
 import time
 from piip.schema.interviews import InterviewSchema
 from flask_restful import Resource
@@ -5,6 +6,7 @@ from flask import request,jsonify
 from piip.command.interview import (
     update_interview,
     get_interviews,
+    getNumberOfInterviews,
 )
 from datetime import datetime
 from dateutil import tz
@@ -37,3 +39,9 @@ class Interview(Resource):
         if admin_id:
             return InterviewSchema(many=True).dump(get_interviews(admin_id=admin_id))
         return InterviewSchema(many=True).dump(get_interviews())
+
+class GetNumberOfInterviews(Resource):
+    def post(self):
+        numberOfProblems = getNumberOfInterviews(request.form.get("user_id", default='',type=str))
+        return {"numberOfInterviews": numberOfProblems}
+
