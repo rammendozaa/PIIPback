@@ -2,7 +2,7 @@ import resource
 import time
 from piip.schema.interviews import InterviewSchema
 from flask_restful import Resource
-from flask import request,jsonify
+from flask import request
 from piip.command.interview import (
     update_interview,
     get_interviews,

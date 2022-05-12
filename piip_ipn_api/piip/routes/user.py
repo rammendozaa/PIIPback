@@ -7,6 +7,12 @@ from piip.command.template import (
     add_template_section,
     add_section_activity,
 )
+from piip.command.company_tracking import (
+    get_company_tracking_for_user,
+    create_company_tracking_for_user,
+    create_company_tracking_link,
+    delete_company_tracking_link,
+)
 from piip.command.user import create_user_interview
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_restful import Resource
@@ -39,7 +45,10 @@ from piip.query.user import (
     update_user_template_activity_by_id,
 )
 from piip.command.constants import ACTIVITY_TYPES
-
+from piip.schema.company_tracking import (
+    CompanyTrackingSchema,
+    CompanyTrackingLinksSchema,
+)
 
 class User(Resource):
     def post(self):
@@ -224,3 +233,31 @@ class UpdateUserSoftSkillQuestion(Resource):
                 request_json.get("statusId", 1),
             )
         }
+
+
+class UserCompanyTracking(Resource):
+    def get(self, user_id: int):
+        return CompanyTrackingSchema(many=True).dump(
+            get_company_tracking_for_user(user_id)
+        )
+
+    def post(self, user_id: int):
+        request_json = request.get_json(silent=True) or {}
+        request_json["userId"] = user_id
+        company_tracking = CompanyTrackingSchema().load(request_json)
+        return CompanyTrackingSchema().dump(
+            create_company_tracking_for_user(user_id, company_tracking)
+        )
+
+
+class CompanyTrackingLink(Resource):
+    def post(self, company_tracking_id: int):
+        request_json = request.get_json(silent=True) or {}
+        request_json["companyTrackingId"] = company_tracking_id
+        company_tracking_link = CompanyTrackingLinksSchema().load(request_json)
+        return CompanyTrackingLinksSchema().dump(
+            create_company_tracking_link(company_tracking_link)
+        )
+    
+    def delete(self, company_tracking_id: int):
+        return {"deleted": delete_company_tracking_link(company_tracking_id)}

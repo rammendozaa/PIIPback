@@ -1,6 +1,4 @@
 from datetime import datetime
-from piip.models.template import TemplateActivity
-from decimal import Decimal
 from piip.services.database.setup import session
 from datetime import date
 from piip.models import User,UserAdministrator

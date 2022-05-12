@@ -21,9 +21,6 @@ from piip.models.user import UserProgrammingTopic, UserSoftSkillTopic
 class UserSchema(BaseSchema):
     __model__ = User
 
-    class Meta:
-        unknown = EXCLUDE
-
     id = fields.String(data_key="id") 
     email = fields.String(data_key="email")
     first_name = fields.String(data_key="first_name")
@@ -33,8 +30,6 @@ class UserSchema(BaseSchema):
 # ACTIVITIES
 class UserProblemSchema(BaseSchema):
     __model__ = UserProblem
-    class Meta:
-        unknown = EXCLUDE
 
     id = fields.Integer(data_key='id')
     user_id = fields.String(data_key='user_id')
@@ -45,8 +40,6 @@ class UserProblemSchema(BaseSchema):
 
 class UserProgrammingTopicSchema(BaseSchema):
     __model__ = UserProgrammingTopic
-    class Meta:
-        unknown = EXCLUDE
     
     id = fields.Integer()
     status_id = fields.Integer()
@@ -54,24 +47,20 @@ class UserProgrammingTopicSchema(BaseSchema):
 
 class UserSoftSkillQuestionSchema(BaseSchema):
     __model__ = UserSoftSkillQuestion
-    class Meta:
-        unknown = EXCLUDE
 
     id = fields.Integer()
     answer = fields.String()
 
+
 class UserSoftSkillTopicSchema(BaseSchema):
     __model__ = UserSoftSkillTopic
-    class Meta:
-        unknown = EXCLUDE
 
     id = fields.Integer()
     status_id = fields.Integer()
 
+
 class UserQuestionnaireSchema(BaseSchema):
     __model__ = UserQuestionnaire
-    class Meta:
-        unknown = EXCLUDE
     
     id = fields.Integer()
     status_id = fields.Integer()
@@ -155,6 +144,7 @@ class UserTemplateActivitySchema(BaseSchema):
         else:
             data["activity_progress"] = None
         return data
+
 
 class UserTemplateSectionSchema(BaseSchema):
     __model__ = UserTemplateSection
