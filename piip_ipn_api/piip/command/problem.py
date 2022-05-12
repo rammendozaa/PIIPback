@@ -6,7 +6,6 @@ from piip.services.database.setup import session
 from piip.query.problem import get_problem_by_url
 import re
 
-
 def is_valid_problem(parse_response):
     problem = get_problem_by_url(parse_response.url)
     return (

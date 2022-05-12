@@ -4,10 +4,11 @@ from piip.routes.problem import (
     Submission,
     SubmitProblem,
     GetProblem,
-    InsertProblemToDB
+    InsertProblemToDB,
 )
 from piip.routes.user_problem import (
-    GetNumberOfProblemSolvedByUser
+    GetNumberOfProblemSolvedByUser,
+    UpdateProblemStatus
 )
 from piip.routes.user_programming_topic import (
     GetNumberOfProgrammingTopicsSolvedByUser
@@ -70,6 +71,7 @@ __all__ = [
     "MyStudents",
     "GetProblem",
     "InsertProblemToDB",
+    "UpdateProblemStatus",
     "GetUser",
     "Template",
     "AddTemplate",

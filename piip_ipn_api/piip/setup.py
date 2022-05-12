@@ -21,6 +21,7 @@ from piip.routes import (
     MyStudents,
     GetProblem,
     InsertProblemToDB,
+    UpdateProblemStatus,
     GetNumberOfProblemSolvedByUser,
     GetNumberOfProgrammingTopicsSolvedByUser,
     GetNumberOfSoftSkillTopicsSolvedByUser,
@@ -111,6 +112,7 @@ def create_application(name):
     api.add_resource(SubmitProblem, "/problem/submit")    
     api.add_resource(Submission, "/submission")
     api.add_resource(InsertProblemToDB,"/insertProblemsToDB")
+    api.add_resource(UpdateProblemStatus, "/updateProblemStatus") 
 
     api.add_resource(GetNumberOfProblemSolvedByUser,"/getNumberOfProblemsSolvedByUser")
     api.add_resource(GetNumberOfProgrammingTopicsSolvedByUser,"/getNumberOfProgrammingTopicsSolvedByUser")
