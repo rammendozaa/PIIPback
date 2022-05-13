@@ -20,15 +20,6 @@ def get_company_tracking_for_user(user_id):
 
 
 def create_company_tracking_for_user(company_tracking):
-    if company_tracking.interview_date:
-        from_zone = tz.tzutc()
-        to_zone = tz.tzlocal()
-        d = time.strptime(company_tracking.interview_date[:-1], "%Y-%m-%dT%H:%M:%S.%f")
-        utc_str = time.strftime("%Y-%m-%d %H:%M:%S", d)
-        utc = datetime.strptime(utc_str, '%Y-%m-%d %H:%M:%S')
-        utc = utc.replace(tzinfo=from_zone)
-        central = utc.astimezone(to_zone)
-        company_tracking.interview_date = central.strftime("%Y-%m-%d %H:%M:%S")
     session.add(company_tracking)
     session.commit()
 
@@ -82,15 +73,7 @@ def update_company_tracking(company_tracking_id, new_company_tracking):
         return False
     company_tracking.status_id = new_company_tracking.status_id or company_tracking.status_id
     company_tracking.application_url = new_company_tracking.application_url or company_tracking.application_url
-    if new_company_tracking.interview_date:
-        from_zone = tz.tzutc()
-        to_zone = tz.tzlocal()
-        d = time.strptime(company_tracking.interview_date[:-1], "%Y-%m-%dT%H:%M:%S.%f")
-        utc_str = time.strftime("%Y-%m-%d %H:%M:%S", d)
-        utc = datetime.strptime(utc_str, '%Y-%m-%d %H:%M:%S')
-        utc = utc.replace(tzinfo=from_zone)
-        central = utc.astimezone(to_zone)
-        company_tracking.interview_date = central.strftime("%Y-%m-%d %H:%M:%S")
+    company_tracking.interview_date = new_company_tracking.interview_date or company_tracking.interview_date
     session.add(company_tracking)    
     session.commit()
     return True
