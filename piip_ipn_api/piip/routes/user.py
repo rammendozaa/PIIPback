@@ -264,7 +264,7 @@ class UserCompanyTracking(Resource):
             request_json["interviewDate"] = get_local_date(interview_date)
         company_tracking = CompanyTrackingSchema().load(request_json)
         return CompanyTrackingSchema().dump(
-            create_company_tracking_for_user(user_id, company_tracking)
+            create_company_tracking_for_user(company_tracking)
         )
 
 

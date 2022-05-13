@@ -26,10 +26,14 @@ class CompanyTrackingSchema(BaseSchema):
     interview_date = fields.String(data_key="interviewDate", allow_none=True)
     
     tracking_links = fields.List(fields.Nested(CompanyTrackingLinksSchema), data_key="trackingLinks")
+    
     @post_dump
     def after_serialize(self, data, many, **kwargs):
-        links = data["trackingLinks"]
-        data["trackingLinks"] = list(filter(lambda x: x["is_active"] == True, links))
+        links = data.get("trackingLinks", None)
+        if links:
+            data["trackingLinks"] = list(filter(lambda x: x["is_active"] == True, links))
+        else:
+            data["trackingLinks"] = []
         company = session.query(DictCompany).get(data["companyId"])
         if company:
             data["companyName"] = company.name
