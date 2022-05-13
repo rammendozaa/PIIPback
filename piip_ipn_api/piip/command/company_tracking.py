@@ -22,12 +22,14 @@ def get_company_tracking_for_user(user_id):
 def create_company_tracking_for_user(company_tracking):
     session.add(company_tracking)
     session.commit()
+    return company_tracking
 
 
 def create_company_tracking_link(company_tracking_link):
     session.add(company_tracking_link)
     session.commit()
     return company_tracking_link
+
 
 def delete_company_tracking_link(company_tracking_link_id):
     company_tracking_link = (
@@ -51,6 +53,7 @@ def update_company_tracking_link(company_tracking_link_id, new_company_tracking_
     company_tracking_link.url = new_company_tracking_link.url or company_tracking_link.url
     session.add(company_tracking_link)
     session.commit()
+    return True
 
 
 def delete_company_tracking(company_tracking_id):
