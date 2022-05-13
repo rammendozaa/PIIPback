@@ -1,3 +1,6 @@
+import time
+from datetime import datetime
+from dateutil import tz
 from calendar import c
 from piip.schema.template import (
     TemplateSectionSchema,
@@ -12,6 +15,9 @@ from piip.command.company_tracking import (
     create_company_tracking_for_user,
     create_company_tracking_link,
     delete_company_tracking_link,
+    delete_company_tracking,
+    update_company_tracking_link,
+    update_company_tracking,
 )
 from piip.command.user import create_user_interview
 from flask_jwt_extended import jwt_required,get_jwt_identity
@@ -234,6 +240,15 @@ class UpdateUserSoftSkillQuestion(Resource):
             )
         }
 
+def get_local_date(utc_date):
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+    d = time.strptime(utc_date[:-1], "%Y-%m-%dT%H:%M:%S.%f")
+    utc_str = time.strftime("%Y-%m-%d %H:%M:%S", d)
+    utc = datetime.strptime(utc_str, '%Y-%m-%d %H:%M:%S')
+    utc = utc.replace(tzinfo=from_zone)
+    central = utc.astimezone(to_zone)
+    return central.strftime("%Y-%m-%d %H:%M:%S")
 
 class UserCompanyTracking(Resource):
     def get(self, user_id: int):
@@ -244,6 +259,9 @@ class UserCompanyTracking(Resource):
     def post(self, user_id: int):
         request_json = request.get_json(silent=True) or {}
         request_json["userId"] = user_id
+        interview_date = request_json.get("interviewDate", None)
+        if interview_date:
+            request_json["interviewDate"] = get_local_date(interview_date)
         company_tracking = CompanyTrackingSchema().load(request_json)
         return CompanyTrackingSchema().dump(
             create_company_tracking_for_user(user_id, company_tracking)
@@ -251,6 +269,16 @@ class UserCompanyTracking(Resource):
 
 
 class CompanyTrackingLink(Resource):
+    def delete(self, company_tracking_link_id: int):
+        return {"deleted": delete_company_tracking_link(company_tracking_link_id)}
+
+    def put(self, company_tracking_link_id: int):
+        request_json = request.get_json(silent=True) or {}
+        company_tracking_link = CompanyTrackingLinksSchema().load(request_json)
+        return {"updated": update_company_tracking_link(company_tracking_link_id, company_tracking_link)}
+
+
+class CompanyTracking(Resource):
     def post(self, company_tracking_id: int):
         request_json = request.get_json(silent=True) or {}
         request_json["companyTrackingId"] = company_tracking_id
@@ -260,4 +288,12 @@ class CompanyTrackingLink(Resource):
         )
     
     def delete(self, company_tracking_id: int):
-        return {"deleted": delete_company_tracking_link(company_tracking_id)}
+        return {"deleted": delete_company_tracking(company_tracking_id)}
+
+    def put(self, company_tracking_id: int):
+        request_json = request.get_json(silent=True) or {}
+        interview_date = request_json.get("interviewDate", None)
+        if interview_date:
+            request_json["interviewDate"] = get_local_date(interview_date)
+        company_tracking = CompanyTrackingSchema().load(request_json)
+        return {"updated": update_company_tracking(company_tracking_id, company_tracking)}

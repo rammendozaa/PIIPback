@@ -46,6 +46,7 @@ from piip.routes.user import (
     UpdateUserSoftSkillQuestion,
     UserCompanyTracking,
     CompanyTrackingLink,
+    CompanyTracking,
 )
 from piip.routes.administrator import AssignStudent
 from piip.routes.template import (
@@ -107,4 +108,5 @@ __all__ = [
     "Interview",
     "UserCompanyTracking",
     "CompanyTrackingLink",
+    "CompanyTracking",
 ]
