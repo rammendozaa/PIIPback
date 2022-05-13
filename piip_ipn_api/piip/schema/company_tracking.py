@@ -1,3 +1,5 @@
+from piip.services.database.setup import session
+from piip.models.dictionary import DictCompany
 from marshmallow import fields, post_dump
 from piip.schema.base_schema import BaseSchema
 from piip.models.company_tracking import CompanyTracking, CompanyTrackingLinks
@@ -7,10 +9,10 @@ class CompanyTrackingLinksSchema(BaseSchema):
     __model__ = CompanyTrackingLinks
 
     id = fields.Integer(dump_only=True)
-    company_tracking_id = fields.Integer(data_key="companyTrackingId")
-    description = fields.String()
-    url = fields.String()
-    is_active = fields.Boolean()
+    company_tracking_id = fields.Integer(data_key="companyTrackingId",allow_none=True)
+    description = fields.String(allow_none=True)
+    url = fields.String(allow_none=True)
+    is_active = fields.Boolean(allow_none=True)
 
 
 class CompanyTrackingSchema(BaseSchema):
@@ -28,4 +30,9 @@ class CompanyTrackingSchema(BaseSchema):
     def after_serialize(self, data, many, **kwargs):
         links = data["trackingLinks"]
         data["trackingLinks"] = list(filter(lambda x: x["is_active"] == True, links))
+        company = session.query(DictCompany).get(data["companyId"])
+        if company:
+            data["companyName"] = company.name
+        else:
+            data["companyName"] = "Facebook"
         return data
