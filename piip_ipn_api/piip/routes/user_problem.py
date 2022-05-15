@@ -1,9 +1,21 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
-from piip.command.user_problem import getNumberOfProblemsSolved, updateProblemStatus
+from piip.command.user_problem import getNumberOfProblemsSolved, updateProblemStatus, getNumberOfProblemsSolvedByTag, getNumberOfProblemsSolvedByDay
 from piip.schema.user import UserProblemSchema
+import json
 
+class GetNumberOfProblemsByDay(Resource):
+    @jwt_required()
+    def post(self):
+        numberOfProblems = getNumberOfProblemsSolvedByDay(request.form.get("user_id", default='',type=str))
+        return jsonify(numberOfProblems)
+
+class GetNumberOfProblemsByTag(Resource):
+    @jwt_required()
+    def post(self):
+        numberOfProblems = getNumberOfProblemsSolvedByTag(request.form.get("user_id", default='',type=str))
+        return jsonify(numberOfProblems)
 
 class GetNumberOfProblemSolvedByUser(Resource):
     @jwt_required()
