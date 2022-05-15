@@ -43,5 +43,5 @@ class Interview(Resource):
 class GetNumberOfInterviews(Resource):
     def post(self):
         numberOfProblems = getNumberOfInterviews(request.form.get("user_id", default='',type=str))
-        return {"numberOfInterviews": numberOfProblems}
+        return {"ASD": 5}
 

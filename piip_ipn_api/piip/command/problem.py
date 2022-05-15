@@ -84,6 +84,9 @@ def getTags(text):
 
     return (tags, difficulty)
 
+def getRecommendations():
+    return session.query(Problem).limit(6)
+
 def get_all_problems():
     return session.query(Problem).all()
 

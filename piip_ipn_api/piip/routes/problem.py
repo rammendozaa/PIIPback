@@ -3,13 +3,17 @@ from piip.services.providers.codeforces.codeforces import Codeforces
 from flask_restful import Resource
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
-from piip.command.problem import get_all_problems, getProblem, getProblemCode
+from piip.command.problem import get_all_problems, getProblem, getProblemCode, getRecommendations
 from piip.schema.problem import ProblemSchema
 from piip.services.providers.codeforces.codeforcesCrawler import CodeforcesSpider
 
 
 CF_USERNAME = "piip_ipn"
 CF_PASSWORD = "*&WcgpYU4-.{mt.-"
+
+class GetRecommendations(Resource):
+    def post(self):
+        return jsonify(ProblemSchema(many=True).dump(getRecommendations()))
 
 class Problems(Resource):
     @jwt_required()
