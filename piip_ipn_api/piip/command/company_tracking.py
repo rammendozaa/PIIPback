@@ -6,6 +6,12 @@ from piip.models.company_tracking import (
     CompanyTrackingLinks,
     CompanyTracking,
 )
+
+def getInterviewData(_user_id):
+    return (
+        session.query(CompanyTracking).filter_by(user_id=_user_id).all()
+    )
+
 def get_company_tracking_for_user(user_id):
     return (
         session.query(CompanyTracking)

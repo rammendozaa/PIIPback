@@ -22,6 +22,11 @@ from piip.routes import (
     GetProblem,
     InsertProblemToDB,
     UpdateProblemStatus,
+    GetCurrentStudentsInterviewsData,
+    GetStudentsInterviewsData,
+    GetNumberOfActiveStudents,
+    GetNumberOfGraduatedStudents,
+    GetNumberOfLosers,
     GetNumberOfProblemSolvedByUser,
     GetNumberOfProblemsByTag,
     GetNumberOfProblemsByDay,
@@ -120,6 +125,12 @@ def create_application(name):
     api.add_resource(Submission, "/submission")
     api.add_resource(InsertProblemToDB,"/insertProblemsToDB")
     api.add_resource(UpdateProblemStatus, "/updateProblemStatus")
+
+    api.add_resource(GetNumberOfActiveStudents, "/getNumberOfActiveStudents")
+    api.add_resource(GetNumberOfGraduatedStudents, "/getNumberOfGraduatedStudents")
+    api.add_resource(GetNumberOfLosers, "/getNumberOfLosers")
+    api.add_resource(GetStudentsInterviewsData, "/getStudentsInterviewsData")
+    api.add_resource(GetCurrentStudentsInterviewsData, "/getCurrentStudentsInterviewsData")
 
     api.add_resource(GetNumberOfProblemSolvedByUser,"/getNumberOfProblemsSolvedByUser")
     api.add_resource(GetRecommendations,"/getRecommendations")
