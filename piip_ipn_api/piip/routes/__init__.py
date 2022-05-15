@@ -7,6 +7,13 @@ from piip.routes.problem import (
     InsertProblemToDB,
     GetRecommendations
 )
+from piip.routes.user_administrator import (
+    GetNumberOfActiveStudents,
+    GetNumberOfGraduatedStudents,
+    GetNumberOfLosers,
+    GetStudentsInterviewsData,
+    GetCurrentStudentsInterviewsData
+)
 from piip.routes.user_problem import (
     GetNumberOfProblemSolvedByUser,
     GetNumberOfProblemsByTag,
@@ -100,6 +107,11 @@ __all__ = [
     "Questionnaire",
     "UpdateUserTemplateActivity",
     "CreateNewTopic",
+    "GetCurrentStudentsInterviewsData",
+    "GetStudentsInterviewsData",
+    "GetNumberOfActiveStudents",
+    "GetNumberOfGraduatedStudents",
+    "GetNumberOfLosers",
     "GetRecommendations",
     "GetNumberOfProblemsByDay",
     "GetNumberOfProblemsByTag",
