@@ -142,11 +142,12 @@ def create_user_soft_skill_topic(user_template_activity, external_reference):
     session.commit()
 
 
-def create_user_interview(user_id, user_admin_id, interview_type_id):
+def create_user_interview(user_id, user_admin_id, interview_type_id, comment):
     user_interview = Interview(
         user_id=user_id,
         administrator_id=user_admin_id,
         interview_type_id=interview_type_id,
+        comment=comment,
     )
     session.add(user_interview)
     session.commit()
