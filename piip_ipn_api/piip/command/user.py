@@ -353,7 +353,7 @@ def update_user_soft_skill_question(user_id, question_id, answer, status_id):
         .first()
     )
     if soft_skill_question:
-        soft_skill_question.answer = answer
+        soft_skill_question.answer = answer or soft_skill_question.answer
         soft_skill_question.status_id = status_id
         if status_id == 4:
             soft_skill_question.finished_date = datetime.now()
