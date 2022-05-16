@@ -318,7 +318,8 @@ def update_user_topic(user_id, topic_type, topic_id, status_id):
             .first()
         )
         if user_programming_topic:
-            user_programming_topic.status_id = status_id
+            if user_programming_topic.status_id != 4:
+                user_programming_topic.status_id = status_id
             if status_id == 4:
                 user_programming_topic.finished_date = datetime.now()
             session.add(user_programming_topic)
@@ -334,9 +335,10 @@ def update_user_topic(user_id, topic_type, topic_id, status_id):
             .first()
         )
     if user_soft_skill_topic:
-        user_soft_skill_topic.status_id = status_id
+        if user_soft_skill_topic.status_id != 4:
+            user_soft_skill_topic.status_id = status_id
         if status_id == 4:
-            user_programming_topic.finished_date = datetime.now()
+            user_soft_skill_topic.finished_date = datetime.now()
         session.add(user_soft_skill_topic)
         session.commit()
         return True

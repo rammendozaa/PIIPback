@@ -34,7 +34,7 @@ class UserProblemSchema(BaseSchema):
     id = fields.Integer(data_key='id')
     user_id = fields.String(data_key='user_id')
     problem_id = fields.String(data_key="problem_id")
-    status_id = fields.String(data_key="status_id")
+    status_id = fields.Integer(data_key="status_id")
     finished_date = fields.String(data_key="finished_date")
     code = fields.String()
 

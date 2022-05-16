@@ -9,4 +9,4 @@ class UserProgrammingTopicSchema(BaseSchema):
     id = fields.Integer(data_key='id')
     user_id = fields.String(data_key='user_id')
     programming_topic_id = fields.String(data_key="programming_topic_id")
-    status_id = fields.String(data_key="status_id")
+    status_id = fields.Integer(data_key="status_id")
