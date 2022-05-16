@@ -155,7 +155,7 @@ def create_application(name):
 
     api.add_resource(Schools, "/schools")
 
-    api.add_resource(Template, "/template/<int:template_id>")
+    api.add_resource(Template, "/template")
     api.add_resource(TemplateSection, "/template/section/<int:section_id>")
     api.add_resource(SectionActivity, "/template/section/activity/<int:activity_id>")
 

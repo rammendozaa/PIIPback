@@ -14,15 +14,20 @@ from piip.query.template import (
     get_template_by_id,
     get_template_activity_by_id,
     get_template_section_by_id,
+    get_active_templates,
 )
 from piip.schema.template import TemplateActivitySchema
 
 
 class Template(Resource):
-    def get(self, template_id: int):
-        return TemplateSchema().dump(get_template_by_id(template_id))
-    
-    def delete(self, template_id: int):
+    def get(self):
+        template_id = request.args.get("template_id", None)
+        if template_id:
+            return TemplateSchema().dump(get_template_by_id(template_id))
+        return TemplateSchema(many=True).dump(get_active_templates())
+
+    def delete(self):
+        template_id = request.args.get("template_id", None)
         return TemplateSchema().dump(disable_template_by_id(template_id))
 
 
