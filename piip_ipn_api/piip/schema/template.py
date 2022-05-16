@@ -18,6 +18,7 @@ class TemplateActivitySchema(BaseSchema):
     position = fields.Integer()
     activity_type_id = fields.Integer(data_key="activityType")
     external_reference = fields.Integer(data_key="externalReference")
+    is_active = fields.Boolean()
 
     @post_dump
     def after_serialize(self, data, many, **kwargs):
@@ -38,8 +39,16 @@ class TemplateSectionSchema(BaseSchema):
     name = fields.String()
     description = fields.String()
     position = fields.Integer()
+    is_active = fields.Boolean()
 
     activities = fields.List(fields.Nested(TemplateActivitySchema))
+
+    @post_dump
+    def after_serialize(self, data, many, **kwargs):
+        activities = data["activities"]
+        if activities:
+            data["activities"] = list(filter(lambda x: x["is_active"] == True, activities))
+        return data
 
 
 class TemplateSchema(BaseSchema):
@@ -49,5 +58,13 @@ class TemplateSchema(BaseSchema):
     name = fields.String()
     description = fields.String()
     position = fields.Integer()
+    is_active = fields.Boolean()
 
     sections = fields.List(fields.Nested(TemplateSectionSchema))
+
+    @post_dump
+    def after_serialize(self, data, many, **kwargs):
+        sections = data["sections"]
+        if sections:
+            data["sections"] = list(filter(lambda x: x["is_active"] == True, sections))
+        return data

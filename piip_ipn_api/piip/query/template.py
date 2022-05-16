@@ -47,3 +47,6 @@ def get_template_activity_by_id(activity_id):
         )
         .first()
     )
+
+def get_active_templates():
+    return session.query(Template).filter(Template.is_active == True).all()
