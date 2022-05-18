@@ -15,9 +15,7 @@ def getInterviewData(_user_id):
 def get_company_tracking_for_user(user_id):
     return (
         session.query(CompanyTracking)
-        .join(CompanyTrackingLinks, CompanyTrackingLinks.company_tracking_id == CompanyTracking.id)
         .filter(
-            CompanyTrackingLinks.is_active == True,
             CompanyTracking.user_id == user_id,
             CompanyTracking.is_active == True,
         )
@@ -26,6 +24,8 @@ def get_company_tracking_for_user(user_id):
 
 
 def create_company_tracking_for_user(company_tracking):
+    if company_tracking.status_id is None:
+        company_tracking.status_id = 1
     session.add(company_tracking)
     session.commit()
     return company_tracking
@@ -81,7 +81,6 @@ def update_company_tracking(company_tracking_id, new_company_tracking):
     if not company_tracking:
         return False
     company_tracking.status_id = new_company_tracking.status_id or company_tracking.status_id
-    company_tracking.application_url = new_company_tracking.application_url or company_tracking.application_url
     company_tracking.interview_date = new_company_tracking.interview_date or company_tracking.interview_date
     session.add(company_tracking)    
     session.commit()
