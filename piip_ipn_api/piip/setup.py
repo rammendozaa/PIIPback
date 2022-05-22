@@ -46,7 +46,6 @@ from piip.routes import (
     AddActivityToUserTemplateActivity,
     RemoveUserTemplate,
     RemoveUserTemplateSection,
-    RemoveUserTemplateActivity,
     GetAlgorithmsTopics,
     GetSoftSkillsTopics,
     CreateUserInterview,
@@ -166,9 +165,8 @@ def create_application(name):
     api.add_resource(UserTemplates, "/user/<int:user_id>/template")
     api.add_resource(AddSectionToUserTemplateSection, "/user/<int:user_id>/section/<int:user_template_id>")
     api.add_resource(AddActivityToUserTemplateActivity, "/user/<int:user_id>/activity/<int:user_template_section_id>")
-    api.add_resource(RemoveUserTemplate, "/user/template/<int:user_template_id>/delete")
-    api.add_resource(RemoveUserTemplateSection, "/user/section/<int:user_template_section_id>/delete")
-    api.add_resource(RemoveUserTemplateActivity, "/user/activity/<int:user_template_activity_id>/delete")
+    api.add_resource(RemoveUserTemplate, "/user/template/<int:user_template_id>")
+    api.add_resource(RemoveUserTemplateSection, "/user/section/<int:user_template_section_id>")
     api.add_resource(RegisterUserQuestionnaire, "/user/<int:user_id>/questionnaire/<int:questionnaire_id>/assign")
     api.add_resource(UpdateUserTemplateActivity, "/user/activity/<int:user_template_activity_id>")
 

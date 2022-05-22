@@ -164,13 +164,6 @@ class RemoveUserTemplateSection(Resource):
         )
 
 
-class RemoveUserTemplateActivity(Resource):
-    def delete(self, user_template_activity_id: int):
-        return UserTemplateActivitySchema().dump(
-            disable_user_template_activity_by_id(user_template_activity_id)
-        )
-
-
 class CreateUserInterview(Resource):
     def post(self, user_id: int, user_template_section_id: int):
         request_json = request.get_json(silent=True) or {}
@@ -211,6 +204,10 @@ class UpdateUserTemplateActivity(Resource):
                 user_template_activity_id, request_json.get("statusId", 1)
                 )
             }
+    def delete(self, user_template_activity_id: int):
+        return UserTemplateActivitySchema().dump(
+            disable_user_template_activity_by_id(user_template_activity_id)
+        )
 
 
 class UpdateUserQuestionnaire(Resource):
