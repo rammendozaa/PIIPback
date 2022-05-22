@@ -55,7 +55,8 @@ class QuestionnaireSchema(BaseSchema):
     title = fields.String()
     description = fields.String()
     total_questions = fields.Integer(data_key="totalQuestions")
-    
+    created_by = fields.Integer(data_key="createdBy")
+
     questions = fields.List(fields.Nested(QuestionnaireQuestionSchema))
 
 
@@ -65,3 +66,4 @@ class CreateQuestionnaireSchema(DataclassSchema):
     title = fields.String()
     description = fields.String()
     questions = fields.List(fields.Dict, data_key="questions")
+    created_by = fields.Integer(data_key="createdBy")

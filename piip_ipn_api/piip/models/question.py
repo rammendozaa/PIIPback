@@ -22,3 +22,4 @@ class SoftSkillQuestion(PIIPModel):
     question = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_by = Column(Integer)

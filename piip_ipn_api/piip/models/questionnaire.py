@@ -42,6 +42,7 @@ class Questionnaire(PIIPModel):
     total_questions = Column(Integer)
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_by = Column(Integer)
 
     questions: "RelationshipProperty[List[QuestionnaireQuestion]]" = relationship(
         "QuestionnaireQuestion", back_populates="questionnaire", lazy="dynamic"
@@ -53,3 +54,4 @@ class CreateQuestionnaire:
     title: str
     description: str
     questions: List[dict]
+    created_by: int
