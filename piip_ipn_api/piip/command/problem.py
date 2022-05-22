@@ -5,6 +5,7 @@ from piip.models import Problem
 from piip.services.database.setup import session
 from piip.query.problem import get_problem_by_url
 import re
+from piip.models.user import UserProblem
 
 def is_valid_problem(parse_response):
     problem = get_problem_by_url(parse_response.url)
@@ -86,6 +87,16 @@ def getTags(text):
 
 def getRecommendations():
     return session.query(Problem).limit(6)
+
+def get_all_unassigned_problems(user_id):
+    user_problems = (
+        session.query(UserProblem.problem_id)
+        .filter(UserProblem.user_id == user_id, UserProblem.is_active == True)
+        .all()
+    )
+    user_problems_list = [problems[0] for problems in user_problems]
+    return session.query(Problem).filter(Problem.id.notin_(user_problems_list)).all()
+
 
 def get_all_problems():
     return session.query(Problem).all()

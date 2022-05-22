@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from sqlalchemy import true
 from piip.services.database.setup import session
 from datetime import date
 from piip.models import User,UserAdministrator
@@ -17,6 +19,7 @@ from piip.command.constants import (
     DEFAULT_QUESTIONNAIRE_ID,
     ACTIVITY_STATUS
 )
+from piip.schema.constants import USER_ACTIVITY_TYPE_TO_MODEL
 
 def insertUser(_firstname, _lastname, _email, _school_id, _password):
     # Check if user already exits
@@ -66,8 +69,10 @@ def create_user_problem(user_template_activity, external_reference):
         .first()
     )
     if user_problem_exists is not None:
+        user_problem_exists.is_active = True
         user_template_activity.status_id = user_problem_exists.status_id
         session.add(user_template_activity)
+        session.add(user_problem_exists)
         session.commit()
         return
     user_problem = UserProblem(user_id=user_id,problem_id=external_reference)
@@ -93,8 +98,10 @@ def create_user_programming_topic(user_template_activity, external_reference):
         .first()
     )
     if user_programming_topic_exists is not None:
+        user_programming_topic_exists.is_active = True
         user_template_activity.status_id = user_programming_topic_exists.status_id
         session.add(user_template_activity)
+        session.add(user_programming_topic_exists)
         session.commit()
         return
     user_programming_topic = UserProgrammingTopic(user_id=user_id, programming_topic_id=external_reference)
@@ -113,8 +120,10 @@ def create_user_soft_skill_question(user_template_activity, external_reference):
         .first()
     )
     if user_soft_skill_topic_exists is not None:
+        user_soft_skill_topic_exists.is_active == True
         user_template_activity.status_id = user_soft_skill_topic_exists.status_id
         session.add(user_template_activity)
+        session.add(user_soft_skill_topic_exists)
         session.commit()
         return
     user_soft_skill_question = UserSoftSkillQuestion(user_id=user_id, question_id=external_reference)
@@ -133,8 +142,10 @@ def create_user_soft_skill_topic(user_template_activity, external_reference):
         .first()
     )
     if user_soft_skill_topic_exists is not None:
+        user_soft_skill_topic_exists.is_active == True
         user_template_activity.status_id = user_soft_skill_topic_exists.status_id
         session.add(user_template_activity)
+        session.add(user_soft_skill_topic_exists)
         session.commit()
         return
     user_soft_skill_topic = UserSoftSkillTopic(user_id=user_id, soft_skill_topic_id=external_reference)
@@ -165,8 +176,10 @@ def create_user_questionnaire(user_template_activity, external_reference):
         .first()
     )
     if user_questionnaire_exists is not None:
+        user_questionnaire_exists.is_active = True
         user_template_activity.status_id = user_questionnaire_exists.status_id
         session.add(user_template_activity)
+        session.add(user_questionnaire_exists)
         session.commit()
         return
     user_questionnaire = UserQuestionnaire(user_id=user_id, questionnaire_id=external_reference)
@@ -209,7 +222,8 @@ def assign_template_section_to_user_id(user_id, section, user_template_id):
     session.add(user_template_section)
     session.commit()
     for activity in section.activities:
-        assign_template_activity_to_user_id(user_id, activity, user_template_section.id)
+        if activity.is_active:
+            assign_template_activity_to_user_id(user_id, activity, user_template_section.id)
     return user_template_section
 
 
@@ -228,7 +242,8 @@ def assign_template_to_user_id(user_id, template_ids):
         session.commit()
         templates.append(user_template)
         for section in template.sections:
-            assign_template_section_to_user_id(user_id, section, user_template.id)
+            if section.is_active:
+                assign_template_section_to_user_id(user_id, section, user_template.id)
     return templates
 
 
@@ -250,6 +265,9 @@ def disable_user_template_section_by_id(user_template_section_id):
     template_section = get_user_template_section_by_id(user_template_section_id)
     if not template_section:
         raise "User template section not found"
+    for activity in template_section.user_activities:
+        if activity.is_active:
+            disable_user_template_activity_by_id(activity.id)
     template_section.user_template_id = None 
     template_section.is_active = False
     session.add(template_section)
@@ -265,6 +283,30 @@ def disable_user_template_activity_by_id(user_template_activity_id):
     template_activity.is_active = False
     session.add(template_activity)
     session.commit()
+    activity_type = template_activity.template_activity.activity_type_id
+    if (activity_type and activity_type != 5):
+        user_model = USER_ACTIVITY_TYPE_TO_MODEL.get(activity_type, None)
+        if (user_model):
+            filters = [user_model.user_id == template_activity.user_id,user_model.is_active == True]
+            if activity_type == 1:
+                filters.append(user_model.problem_id == template_activity.external_reference)
+            elif activity_type == 2:
+                filters.append(user_model.programming_topic_id == template_activity.external_reference)
+            elif activity_type == 3:
+                filters.append(user_model.question_id == template_activity.external_reference)
+            elif activity_type == 4:
+                filters.append(user_model.soft_skill_topic_id == template_activity.external_reference)
+            elif activity_type == 6:
+                filters.append(user_model.questionnaire_id == template_activity.external_reference)
+            user_record = (
+                session.query(user_model)
+                .filter(*filters)
+                .first()
+            )
+            if user_record:
+                user_record.is_active = False
+                session.add(user_record)
+                session.commit()
     return template_activity
 
 

@@ -9,10 +9,15 @@ from piip.command.topic import (
     create_algorithm_topic,
     get_programming_topic,
     get_softskill_topic,
+    get_all_unassigned_programming_topics,
+    get_all_unassigned_softskills_topics,
 )
 
 class GetAlgorithmsTopics(Resource):
     def get(self):
+        user_id = request.args.get("user_id", None)
+        if user_id:
+            return jsonify(ProgrammingTopicSchema(many=True).dump(get_all_unassigned_programming_topics(user_id)))
         topic_id = request.args.get("topicId", None)
         if topic_id:
             return ProgrammingTopicSchema().dump(get_programming_topic(topic_id))
@@ -21,6 +26,9 @@ class GetAlgorithmsTopics(Resource):
 
 class GetSoftSkillsTopics(Resource):
     def get(self):
+        user_id = request.args.get("user_id", None)
+        if user_id:
+            return jsonify(SoftSkillTopicSchema(many=True).dump(get_all_unassigned_softskills_topics(user_id)))
         topic_id = request.args.get("topicId", None)
         if topic_id:
             return SoftSkillTopicSchema().dump(get_softskill_topic(topic_id))
