@@ -3,7 +3,13 @@ from piip.services.providers.codeforces.codeforces import Codeforces
 from flask_restful import Resource
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
-from piip.command.problem import get_all_problems, getProblem, getProblemCode, getRecommendations
+from piip.command.problem import (
+    get_all_unassigned_problems,
+    get_all_problems,
+    getProblem,
+    getProblemCode,
+    getRecommendations,
+)
 from piip.schema.problem import ProblemSchema
 from piip.services.providers.codeforces.codeforcesCrawler import CodeforcesSpider
 
@@ -16,8 +22,10 @@ class GetRecommendations(Resource):
         return jsonify(ProblemSchema(many=True).dump(getRecommendations()))
 
 class Problems(Resource):
-    @jwt_required()
     def get(self):
+        user_id = request.args.get("user_id", None)
+        if user_id:
+            return jsonify(ProblemSchema(many=True).dump(get_all_unassigned_problems(user_id)))
         return jsonify(ProblemSchema(many=True).dump(get_all_problems()))
         """
             [

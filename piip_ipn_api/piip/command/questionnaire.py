@@ -2,6 +2,7 @@ from piip.models.questionnaire import Questionnaire
 from piip.models.questionnaire import QuestionnaireQuestion
 from piip.services.database.setup import session
 from piip.models.question import SoftSkillQuestion
+from piip.models.user import UserSoftSkillQuestion
 
 def insert_questionnaire(create_questionnaire):
     questionnaire = Questionnaire(
@@ -56,3 +57,12 @@ def get_soft_skill_question(question_id):
     return (
         session.query(SoftSkillQuestion).get(question_id)
     )
+
+def get_all_unassigned_soft_skill_questions(user_id):
+    questions = (
+        session.query(UserSoftSkillQuestion.question_id)
+        .filter(UserSoftSkillQuestion.user_id == user_id, UserSoftSkillQuestion.is_active == True)
+        .all()
+    )
+    question_list = [question[0] for question in questions]
+    return session.query(SoftSkillQuestion).filter(SoftSkillQuestion.id.notin_(question_list)).all()
