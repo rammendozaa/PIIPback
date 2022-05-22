@@ -35,15 +35,6 @@ class DictInterviewType(PIIPModel):
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
 
-class DictCategory(PIIPModel):
-    __tablename__ = "DICT_CATEGORY"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    description = Column(String(255))
-    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
-
-
 class DictCompany(PIIPModel):
     __tablename__ = "DICT_COMPANY"
 

@@ -20,8 +20,5 @@ class SoftSkillQuestion(PIIPModel):
     id = Column(Integer, primary_key=True)
     title = Column(String(100))
     question = Column(Text)
-    soft_skill_topic_id = Column(Integer, ForeignKey(f"{DATABASE}.SOFT_SKILL_TOPIC.id"))
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
-
-    soft_skill_topic = relationship("SoftSkillTopic", foreign_keys=[soft_skill_topic_id])
