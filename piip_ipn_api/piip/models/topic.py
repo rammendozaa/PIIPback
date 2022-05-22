@@ -20,6 +20,7 @@ class ProgrammingTopic(PIIPModel):
     topic_information = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_by = Column(Integer)
 
 
 class SoftSkillTopic(PIIPModel):
@@ -31,3 +32,4 @@ class SoftSkillTopic(PIIPModel):
     topic_information = Column(Text)
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+    created_by = Column(Integer)

@@ -12,7 +12,8 @@ class ProgrammingTopicSchema(BaseSchema):
     id = fields.Integer(dump_only=True)
     title = fields.String()
     description = fields.String()
-    topic_information = fields.String()
+    topic_information = fields.String(data_key="topicInformation")
+    created_by = fields.Integer(data_key="createdBy")
 
 
 class SoftSkillTopicSchema(BaseSchema):
@@ -21,4 +22,5 @@ class SoftSkillTopicSchema(BaseSchema):
     id = fields.Integer(dump_only=True)
     title = fields.String()
     description = fields.String()
-    topic_information = fields.String()
+    topic_information = fields.String(data_key="topicInformation")
+    created_by = fields.Integer(data_key="createdBy")

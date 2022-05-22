@@ -8,3 +8,4 @@ class SoftSkillQuestionSchema(BaseSchema):
     id = fields.Integer(dump_only=True)
     title = fields.String()
     question = fields.String()
+    created_by = fields.Integer(data_key="createdBy")

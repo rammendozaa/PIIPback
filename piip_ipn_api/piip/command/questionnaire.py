@@ -8,6 +8,7 @@ def insert_questionnaire(create_questionnaire):
         title=create_questionnaire.title,
         description=create_questionnaire.description,
         total_questions=len(create_questionnaire.questions),
+        created_by=create_questionnaire.created_by,
     )
     session.add(questionnaire)
     session.commit()
