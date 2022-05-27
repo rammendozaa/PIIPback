@@ -39,7 +39,7 @@ from piip.routes.schools import Schools
 from piip.routes.token import Token
 from piip.routes.logout import LogOut
 from piip.routes.user import (
-    User,GetAdministratorGivenUser,
+    User,GetAdministratorGivenUser,ConfirmEmail,
     GetUnassignedUsers,MyStudents,
     GetUser,
     UserTemplates,
@@ -79,6 +79,7 @@ __all__ = [
     "SubmitProblem",
     "Schools",
     "User",
+    "ConfirmEmail",
     "GetAdministratorGivenUser",
     "AssignStudent",
     "GetUnassignedUsers",

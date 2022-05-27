@@ -40,6 +40,10 @@ from piip.command.user import (
     grade_questionnaire,
     update_user_topic,
     update_user_soft_skill_question,
+    generate_confirmation_token,
+    confirm_token,
+    send_email,
+    updateConfirmedMail
 )
 from piip.schema.user import (
     UserTemplateSchema,
@@ -56,6 +60,15 @@ from piip.schema.company_tracking import (
     CompanyTrackingLinksSchema,
 )
 
+class ConfirmEmail(Resource):
+    def post(self):
+        token = request.form.get("email_token", default='',type=str)
+        try:
+            email = confirm_token(token)
+        except:
+            return {"msg": "invalid"}
+        return updateConfirmedMail(email)
+
 class User(Resource):
     def post(self):
         firstname = request.form.get("firstname", default='',type=str)
@@ -63,12 +76,13 @@ class User(Resource):
         email = request.form.get("email", default='',type=str)
         school_id = request.form.get("school_id", default='',type=str)
         password = request.form.get("password", default='',type=str)
-                
         user_id = insertUser(firstname,lastname, email,school_id, password)
         if user_id == -1:
             return {"error": "user already exists"}
+        email_token = generate_confirmation_token(email)
         access_token = create_access_token(identity=email)
         create_initial_user_questionnaire(user_id)
+        send_email("","","")
         response = {"access_token":access_token, "role": "user", "user_id": user_id}
         return response
 

@@ -1,4 +1,5 @@
 from ast import Assign
+from flask_mail import Mail
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 from flask import Flask
 from flask import Response
@@ -15,6 +16,7 @@ from piip.routes import (
     Submission,
     Schools,
     User,
+    ConfirmEmail,
     GetAdministratorGivenUser,
     AssignStudent,
     GetUnassignedUsers,
@@ -88,7 +90,6 @@ def create_application(name):
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
     jwt = JWTManager(app)
-
     app.config['JSON_SORT_KEYS'] = False
 
     database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
@@ -145,6 +146,7 @@ def create_application(name):
     api.add_resource(Token, "/token")
     api.add_resource(LogOut, "/logout")
     api.add_resource(User, "/sign-up")
+    api.add_resource(ConfirmEmail, "/confirm")
     api.add_resource(GetUser, "/user")
     api.add_resource(GetAdministratorGivenUser,"/get-admin")
     api.add_resource(GetUnassignedUsers,"/pendingStudents")
