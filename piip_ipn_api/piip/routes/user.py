@@ -63,8 +63,8 @@ from piip.schema.company_tracking import (
 )
 
 class ConfirmEmail(Resource):
-    def get(self):
-        token = request.args.get("token", default='',type=str)
+    def post(self):
+        token = request.form.get("token", default='',type=str)
         try:
             email = confirm_token(token)
         except:
@@ -82,7 +82,7 @@ class User(Resource):
         if user_id == -1:
             return {"error": "user already exists"}
         email_token = generate_confirmation_token(email)
-        confirm_url = "http://localhost:3000/my-course?token="+email_token
+        confirm_url = "http://localhost:3000/verify?token="+email_token
         #confirm_url = url_for('confirmemail', token=email_token, _external=True)
         access_token = create_access_token(identity=email)
         html = render_template_string(""\
