@@ -26,6 +26,7 @@ class UserSchema(BaseSchema):
     first_name = fields.String(data_key="first_name")
     last_name = fields.String(data_key="last_name")
     school_id = fields.String(data_key="school_id")
+    is_active = fields.Integer(data_key="is_active")
 
 # ACTIVITIES
 class UserProblemSchema(BaseSchema):
