@@ -42,7 +42,6 @@ from piip.command.user import (
     update_user_soft_skill_question,
     generate_confirmation_token,
     confirm_token,
-    send_email,
     updateConfirmedMail
 )
 from piip.schema.user import (
@@ -82,7 +81,7 @@ class User(Resource):
         email_token = generate_confirmation_token(email)
         access_token = create_access_token(identity=email)
         create_initial_user_questionnaire(user_id)
-        send_email("","","")
+        #send_email("","","")
         response = {"access_token":access_token, "role": "user", "user_id": user_id}
         return response
 

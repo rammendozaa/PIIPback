@@ -27,8 +27,8 @@ from piip.constants import (
     SECURITY_PASSWORD_SALT,
     MAIL_DEFAULT_SENDER
 )
-from piip.setup import mail
-
+#from piip.setup import mail
+"""
 def send_email(to,subject,template):
     msg = Message(
         subject,
@@ -37,7 +37,7 @@ def send_email(to,subject,template):
         sender=MAIL_DEFAULT_SENDER
     )
     mail.send(msg)
-
+"""
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     return serializer.dumps(email, salt=SECURITY_PASSWORD_SALT)
