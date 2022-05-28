@@ -1,5 +1,7 @@
+import string
 import time
 from datetime import datetime
+from tokenize import String
 from dateutil import tz
 from calendar import c
 from piip.schema.template import (
@@ -22,7 +24,7 @@ from piip.command.company_tracking import (
 from piip.command.user import create_user_interview
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_restful import Resource
-from flask import request,jsonify
+from flask import request,jsonify, url_for, render_template_string
 from piip.command.user import getMyStudents, insertUser, getAdministratorGivenUser, getUnassignedUsers, getUser
 from piip.command.administrator import getAdministrator
 from flask_jwt_extended import create_access_token
@@ -42,7 +44,8 @@ from piip.command.user import (
     update_user_soft_skill_question,
     generate_confirmation_token,
     confirm_token,
-    updateConfirmedMail
+    updateConfirmedMail,
+    send_email
 )
 from piip.schema.user import (
     UserTemplateSchema,
@@ -60,8 +63,8 @@ from piip.schema.company_tracking import (
 )
 
 class ConfirmEmail(Resource):
-    def post(self):
-        token = request.form.get("email_token", default='',type=str)
+    def get(self):
+        token = request.args.get("token", default='',type=str)
         try:
             email = confirm_token(token)
         except:
@@ -79,9 +82,17 @@ class User(Resource):
         if user_id == -1:
             return {"error": "user already exists"}
         email_token = generate_confirmation_token(email)
+        confirm_url = "http://localhost:3000/my-course?token="+email_token
+        #confirm_url = url_for('confirmemail', token=email_token, _external=True)
         access_token = create_access_token(identity=email)
+        html = render_template_string(""\
+            "<p>Welcome! Thanks for signing up. Please follow this link to activate your account:</p>"\
+            "<p><a href='{{ confirm_url }}'>{{ confirm_url }}</a></p>"\
+            "<br>"\
+            "<p>Cheers!</p>",confirm_url=confirm_url
+        )
         create_initial_user_questionnaire(user_id)
-        #send_email("","","")
+        send_email(email,"Please confirm your email",html)
         response = {"access_token":access_token, "role": "user", "user_id": user_id}
         return response
 

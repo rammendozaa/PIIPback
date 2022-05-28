@@ -27,17 +27,19 @@ from piip.constants import (
     SECURITY_PASSWORD_SALT,
     MAIL_DEFAULT_SENDER
 )
-#from piip.setup import mail
-"""
+from flask_mail import Message
+from flask import current_app as app
+
 def send_email(to,subject,template):
     msg = Message(
         subject,
         recipients=[to],
         html=template,
-        sender=MAIL_DEFAULT_SENDER
+        sender=app.config['MAIL_DEFAULT_SENDER']
     )
+    mail = app.config['MAIL_THING']
     mail.send(msg)
-"""
+
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     return serializer.dumps(email, salt=SECURITY_PASSWORD_SALT)
