@@ -1,5 +1,7 @@
+from flask_mail import Message
 from datetime import datetime
-
+from itsdangerous import URLSafeTimedSerializer
+from matplotlib import use
 from sqlalchemy import true
 from piip.services.database.setup import session
 from datetime import date
@@ -20,13 +22,55 @@ from piip.command.constants import (
     ACTIVITY_STATUS
 )
 from piip.schema.constants import USER_ACTIVITY_TYPE_TO_MODEL
+from piip.constants import (
+    SECRET_KEY,
+    SECURITY_PASSWORD_SALT,
+    MAIL_DEFAULT_SENDER
+)
+from flask_mail import Message
+from flask import current_app as app
+
+def send_email(to,subject,template):
+    msg = Message(
+        subject,
+        recipients=[to],
+        html=template,
+        sender=app.config['MAIL_DEFAULT_SENDER']
+    )
+    mail = app.config['MAIL_THING']
+    mail.send(msg)
+
+def generate_confirmation_token(email):
+    serializer = URLSafeTimedSerializer(SECRET_KEY)
+    return serializer.dumps(email, salt=SECURITY_PASSWORD_SALT)
+
+def confirm_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(SECRET_KEY)
+    try:
+        email = serializer.loads(
+            token,
+            salt=SECURITY_PASSWORD_SALT,
+            max_age=expiration
+        )
+    except:
+        return False
+    return email
+
+def updateConfirmedMail(_email):
+    user = session.query(User).filter_by(email=_email).first()
+    if user.is_active == 1:
+        return {"msg":"confirmed"}
+    user.is_active = 1
+    session.add(user)
+    session.commit()
+    return {"msg":"success"}
 
 def insertUser(_firstname, _lastname, _email, _school_id, _password):
     # Check if user already exits
     user = session.query(User).filter_by(email=_email).first()
     if user:
         return -1
-    new_user = User(email=_email, password=_password, dob=date.today(), first_name=_firstname, last_name=_lastname, school_id=_school_id)
+    new_user = User(email=_email, password=_password, dob=date.today(), first_name=_firstname, last_name=_lastname, school_id=_school_id, is_active=2)
     session.add(new_user)
     session.commit()
     insertUserAdministrator(new_user)

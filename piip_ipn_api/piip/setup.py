@@ -1,4 +1,5 @@
 from ast import Assign
+from flask_mail import Mail, Message
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 from flask import Flask
 from flask import Response
@@ -15,6 +16,7 @@ from piip.routes import (
     Submission,
     Schools,
     User,
+    ConfirmEmail,
     GetAdministratorGivenUser,
     AssignStudent,
     GetUnassignedUsers,
@@ -87,8 +89,20 @@ def create_application(name):
     app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
+    app.config['DEBUG'] = True
+    app.config['TESTING'] = False
+    app.config['MAIL_DEFAULT_SENDER'] = "piip.ipn.noreply@gmail.com"
+    app.config['MAIL_MAX_EMAILS'] = None
+    app.config['MAIL_ASCII_ATTACHMENTS'] = False 
+    app.config['MAIL_SERVER']='smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USERNAME'] = 'piip.ipn.noreply@gmail.com'
+    app.config['MAIL_PASSWORD'] = '*&WcgpYU4-.{mt.-'
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
     jwt = JWTManager(app)
-
+    mail = Mail(app)
+    app.config['MAIL_THING'] = mail
     app.config['JSON_SORT_KEYS'] = False
 
     database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
@@ -145,6 +159,7 @@ def create_application(name):
     api.add_resource(Token, "/token")
     api.add_resource(LogOut, "/logout")
     api.add_resource(User, "/sign-up")
+    api.add_resource(ConfirmEmail, "/confirm")
     api.add_resource(GetUser, "/user")
     api.add_resource(GetAdministratorGivenUser,"/get-admin")
     api.add_resource(GetUnassignedUsers,"/pendingStudents")
