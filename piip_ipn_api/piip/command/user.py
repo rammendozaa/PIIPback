@@ -30,6 +30,8 @@ from piip.constants import (
 from flask_mail import Message
 from flask import current_app as app
 
+from piip.query.template import get_user_template_by_user_id_and_template_id
+
 def send_email(to,subject,template):
     msg = Message(
         subject,
@@ -374,12 +376,20 @@ def grade_questionnaire(user_id, questionnaire_id, correct_answers):
 def register_first_user_questionnaire(user_id, questionnaire_id, correct_answers):
     user_questionnaire = grade_questionnaire(user_id, questionnaire_id, correct_answers)
     percentage = user_questionnaire.percentage_score
-    if percentage < 33.34:
-        assign_template_to_user_id(user_id, [1])
-    elif percentage < 66.67:
-        assign_template_to_user_id(user_id, [2])
-    else:
-        assign_template_to_user_id(user_id, [3])
+    assign_template_to_user_id(user_id, [1,2,3])
+    if percentage >= 33.34 and percentage < 66.67:
+        user_template = get_user_template_by_user_id_and_template_id(user_id, 1)
+        user_template.status_id = 4
+        session.add(user_template)
+        session.commit()
+    elif percentage >= 66.67:
+        user_template = get_user_template_by_user_id_and_template_id(user_id, 1)
+        user_template_1 = get_user_template_by_user_id_and_template_id(user_id, 2)
+        user_template.status_id = 4
+        user_template_1.status_id = 4
+        session.add(user_template)
+        session.add(user_template_1)
+        session.commit()
     return user_questionnaire
 
 

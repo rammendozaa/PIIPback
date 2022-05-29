@@ -4,6 +4,7 @@ from piip.models import (
     TemplateSection,
 )
 from piip.services.database.setup import session
+from piip.models.user import UserTemplate
 
 
 def get_template_by_id(template_id):
@@ -50,3 +51,14 @@ def get_template_activity_by_id(activity_id):
 
 def get_active_templates():
     return session.query(Template).filter(Template.is_active == True).all()
+
+
+def get_user_template_by_user_id_and_template_id(user_id, template_id):
+    return (
+        session.query(UserTemplate)
+        .filter(
+            UserTemplate.user_id == user_id,
+            UserTemplate.template_id == template_id
+        )
+        .first()
+    )
