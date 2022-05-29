@@ -60,10 +60,16 @@ def verify_template_completion(user_template):
         session.commit()
 
 
+def mark_user_template_section_in_progress(user_template_section):
+    user_template_section.status_id = 2
+    user_template_section.user_template.status_id = 2
+    session.commit()
+
 def verify_section_completion(user_template_section):
     if user_template_section:
         for activity in user_template_section.user_activities:
             if activity.status_id != 4:
+                mark_user_template_section_in_progress(user_template_section)
                 return
         user_template_section.status_id = 4
         session.add(user_template_section)
@@ -81,6 +87,8 @@ def update_user_template_activity_by_id(user_template_activity_id, status_id):
             activity.finished_date = datetime.now()
         if activity.status_id != 4:
             activity.status_id = status_id
+        if (status_id == 2 or status_id == 3):
+            mark_user_template_section_in_progress(activity.user_template_section)
         if (status_id == 4):
             verify_section_completion(activity.user_template_section)
         session.add(activity)
