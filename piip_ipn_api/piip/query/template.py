@@ -26,16 +26,16 @@ def get_template_by_id(template_id):
 
 
 def get_template_section_by_id(section_id):
-    return (
-        session.query(TemplateSection)
-        .join(TemplateActivity, TemplateActivity.template_section_id == TemplateSection.id)
-        .filter(
-            TemplateSection.id == section_id,
-            TemplateSection.is_active == True,
-            TemplateActivity.is_active == True
-        )
-        .first() 
+    return session.query(TemplateSection).get(section_id)
+    """
+    .join(TemplateActivity, TemplateActivity.template_section_id == TemplateSection.id)
+    .filter(
+        TemplateSection.id == section_id,
+        TemplateSection.is_active == True,
+        TemplateActivity.is_active == True
     )
+    .first() 
+    """
 
 
 def get_template_activity_by_id(activity_id):
