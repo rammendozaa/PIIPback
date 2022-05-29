@@ -34,6 +34,7 @@ from piip.routes.topics import (
     GetAlgorithmsTopics,
     GetSoftSkillsTopics,
     CreateNewTopic,
+    UpdateTopic,
 )
 from piip.routes.schools import Schools
 from piip.routes.token import Token
@@ -106,6 +107,7 @@ __all__ = [
     "Questionnaire",
     "UpdateUserTemplateActivity",
     "CreateNewTopic",
+    "UpdateTopic",
     "GetCurrentStudentsInterviewsData",
     "GetStudentsInterviewsData",
     "GetNumberOfActiveStudents",
