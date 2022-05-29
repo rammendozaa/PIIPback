@@ -55,6 +55,7 @@ from piip.routes import (
     RegisterUserQuestionnaire,
     UpdateUserTemplateActivity,
     CreateNewTopic,
+    UpdateTopic,
     SoftSkillQuestion,
     UpdateUserQuestionnaire,
     UpdateUserTopic,
@@ -189,6 +190,7 @@ def create_application(name):
     api.add_resource(Questionnaire, "/questionnaire")
     api.add_resource(SoftSkillQuestion, "/soft-skill-question")
     api.add_resource(CreateNewTopic, "/create-topic")
+    api.add_resource(UpdateTopic, "/update-topic")
 
     api.add_resource(UpdateUserQuestionnaire, "/user/<int:user_id>/questionnaire/<int:questionnaire_id>")
     api.add_resource(UpdateUserTopic, "/user/<int:user_id>/topic/<string:topic_type>/<int:topic_id>")

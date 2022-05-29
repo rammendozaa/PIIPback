@@ -21,6 +21,24 @@ def get_softskill_topic(topic_id):
     return session.query(SoftSkillTopic).get(topic_id)
 
 
+def update_soft_skill_topic(request_json):
+    topic = session.query(SoftSkillTopic).filter_by(id=request_json['id']).first()
+    topic.title = request_json['title']
+    topic.description = request_json['description']
+    topic.topic_information = request_json['topicInformation']
+    session.add(topic)
+    session.commit()
+    return {"msg": "success"}
+
+def update_algorithm_topic(request_json):
+    topic = session.query(ProgrammingTopic).filter_by(id=request_json['id']).first()
+    topic.title = request_json['title']
+    topic.description = request_json['description']
+    topic.topic_information = request_json['topicInformation']
+    session.add(topic)
+    session.commit()
+    return {"msg": "success"}
+    
 def create_soft_skill_topic(soft_skill_topic_to_add):
     session.add(soft_skill_topic_to_add)
     session.commit()
