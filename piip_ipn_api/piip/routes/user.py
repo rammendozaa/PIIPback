@@ -92,7 +92,7 @@ class User(Resource):
             "<p>Cheers!</p>",confirm_url=confirm_url
         )
         create_initial_user_questionnaire(user_id)
-        send_email(email,"Please confirm your email",html)
+        #send_email(email,"Please confirm your email",html)
         response = {"access_token":access_token, "role": "user", "user_id": user_id}
         return response
 
