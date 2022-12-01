@@ -5,7 +5,6 @@ from flask import current_app
 
 class HealthCheck(Resource):
     def get(self):
-        print("hola")
         """
         msg = Message("FROM PIIP",
                   recipients=["vomab30234@nifect.com"])
@@ -13,6 +12,5 @@ class HealthCheck(Resource):
         mail = current_app.config["MAIL_THING"]
         mail.send(msg)
         """
-        print("mail sent?")
         user = prueba()
         return {"is_all_good": f"YES. School: {user.description}"}

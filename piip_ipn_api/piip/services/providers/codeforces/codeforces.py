@@ -35,10 +35,8 @@ class Codeforces:
         url = 'https://codeforces.com'
         result = self.session.get(url, headers=self.headers)
         if self.username in result.text:
-            print('Success!')
             return True
         
-        print('Login failed!')
         return False
 
     def submit(self, problem, code):
