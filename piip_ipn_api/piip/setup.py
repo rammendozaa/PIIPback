@@ -64,6 +64,7 @@ from piip.routes import (
     UserCompanyTracking,
     CompanyTracking,
     CompanyTrackingLink,
+    AddAdministrator,
 )
 from piip.services.database.setup import session
 from piip.constants import (
@@ -167,6 +168,7 @@ def create_application(name):
     api.add_resource(MyStudents,"/myStudents")
 
     api.add_resource(AssignStudent,"/assign-student")
+    api.add_resource(AddAdministrator, "/admin")
 
     api.add_resource(Schools, "/schools")
 

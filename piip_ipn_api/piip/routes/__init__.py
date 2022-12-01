@@ -58,7 +58,7 @@ from piip.routes.user import (
     CompanyTrackingLink,
     CompanyTracking,
 )
-from piip.routes.administrator import AssignStudent
+from piip.routes.administrator import AssignStudent, AddAdministrator
 from piip.routes.template import (
     Template,
     AddTemplate,
@@ -128,4 +128,5 @@ __all__ = [
     "UserCompanyTracking",
     "CompanyTrackingLink",
     "CompanyTracking",
+    "AddAdministrator",
 ]
