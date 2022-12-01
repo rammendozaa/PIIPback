@@ -14,12 +14,10 @@ def getNumberOfProblemsSolvedByDay(_user_id):
         if day is None:
             continue
         formattedDay = day.strftime("%B %d, %Y")
-        print(formattedDay)
         if formattedDay in cntByDay:
             cntByDay[formattedDay] += 1
         else: 
             cntByDay[formattedDay] = 1
-    print("Result: ", cntByDay)
     return cntByDay
 
 def getNumberOfProblemsSolvedByTag(_user_id):

@@ -41,8 +41,6 @@ class SubmitProblem(Resource):
         problem_url = request.form.get("problem_url", default='',type=str)
         code = request.form.get("code", default='',type=str)
         problem_code = getProblemCode(problem_url)
-        print(problem_url)
-        print(problem_code)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
@@ -57,7 +55,6 @@ class Submission(Resource):
     @jwt_required()
     def post(self):
         submissionUrl = request.form.get('submissionUrl',default='',type=str)
-        print(submissionUrl)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
@@ -70,7 +67,6 @@ class GetProblem(Resource):
     def post(self):
         problem_id = request.form.get("problem_id", default='',type=str)
         problem = getProblem(problem_id)
-        print(problem_id)
         return jsonify(ProblemSchema().dump(problem))
 
 class InsertProblemToDB(Resource):
