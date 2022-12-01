@@ -11,6 +11,7 @@ from sqlalchemy import (
     String,
     Text,
     Numeric,
+    BLOB,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -22,8 +23,9 @@ class User(PIIPModel):
 
     id = Column(Integer, primary_key=True)
     email = Column(String(255))
-    password = Column(String(128))
     dob = Column(DateTime)
+    salt = Column(BLOB)
+    hash = Column(BLOB)
     first_name = Column(String(255))
     last_name = Column(String(255))
     school_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_SCHOOL.id"))

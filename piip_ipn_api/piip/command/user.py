@@ -5,6 +5,7 @@ from matplotlib import use
 from sqlalchemy import true
 from piip.services.database.setup import session
 from datetime import date
+from piip.validate_password import hash_new_password
 from piip.models import User,UserAdministrator
 from piip.models.user import UserTemplateSection, UserTemplate, UserTemplateActivity
 from piip.models.user import UserProblem, UserProgrammingTopic, UserQuestionnaire, UserSoftSkillQuestion, UserSoftSkillTopic
@@ -67,21 +68,23 @@ def updateConfirmedMail(_email):
     session.commit()
     return {"msg":"success"}
 
+def insertUserAdministrator(user):
+    user_administrator = UserAdministrator(user_id=user.id)
+    session.add(user_administrator)
+    session.commit()
+
+
 def insertUser(_firstname, _lastname, _email, _school_id, _password):
     # Check if user already exits
     user = session.query(User).filter_by(email=_email).first()
     if user:
         return -1
-    new_user = User(email=_email, password=_password, dob=date.today(), first_name=_firstname, last_name=_lastname, school_id=_school_id, is_active=2)
+    salt, pw_hash = hash_new_password(_password)
+    new_user = User(salt=salt, hash=pw_hash, email=_email, dob=date.today(), first_name=_firstname, last_name=_lastname, school_id=_school_id, is_active=2)
     session.add(new_user)
     session.commit()
     insertUserAdministrator(new_user)
     return new_user.id
-
-def insertUserAdministrator(user):
-    user_administrator = UserAdministrator(user_id=user.id)
-    session.add(user_administrator)
-    session.commit()
 
 def getAdministratorGivenUser(_email):
     user = session.query(User).filter_by(email=_email).first()
