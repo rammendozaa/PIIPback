@@ -1,10 +1,8 @@
-from piip.models import TemplateActivity, TemplateSection, Template
+from piip.models import Template, TemplateActivity, TemplateSection
+from piip.query.template import (get_template_activity_by_id,
+                                 get_template_by_id,
+                                 get_template_section_by_id)
 from piip.services.database.setup import session
-from piip.query.template import (
-    get_template_activity_by_id,
-    get_template_section_by_id,
-    get_template_by_id,
-)
 
 
 def disable_template_by_id(template_id):
@@ -67,8 +65,7 @@ def add_template_section(template_id, section_to_add):
 
 def add_template(template_to_add):
     template = Template(
-        name=template_to_add.name,
-        description=template_to_add.description
+        name=template_to_add.name, description=template_to_add.description
     )
     session.add(template)
     session.commit()

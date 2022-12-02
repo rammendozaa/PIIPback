@@ -1,14 +1,14 @@
-from piip.models import (
-    Template,
-    TemplateActivity,
-    TemplateSection,
-)
-from piip.services.database.setup import session
+from piip.models import Template, TemplateActivity, TemplateSection
 from piip.models.user import UserTemplate
+from piip.services.database.setup import session
 
 
 def get_template_by_id(template_id):
-    return session.query(Template).filter(Template.id == template_id, Template.is_active == True).first()
+    return (
+        session.query(Template)
+        .filter(Template.id == template_id, Template.is_active == True)
+        .first()
+    )
 
     """
     return (
@@ -42,12 +42,10 @@ def get_template_section_by_id(section_id):
 def get_template_activity_by_id(activity_id):
     return (
         session.query(TemplateActivity)
-        .filter(
-            TemplateActivity.is_active == True,
-            TemplateActivity.id == activity_id
-        )
+        .filter(TemplateActivity.is_active == True, TemplateActivity.id == activity_id)
         .first()
     )
+
 
 def get_active_templates():
     return session.query(Template).filter(Template.is_active == True).all()
@@ -57,8 +55,7 @@ def get_user_template_by_user_id_and_template_id(user_id, template_id):
     return (
         session.query(UserTemplate)
         .filter(
-            UserTemplate.user_id == user_id,
-            UserTemplate.template_id == template_id
+            UserTemplate.user_id == user_id, UserTemplate.template_id == template_id
         )
         .first()
     )

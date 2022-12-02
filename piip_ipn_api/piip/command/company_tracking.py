@@ -1,16 +1,12 @@
-import time
-from datetime import datetime
-from dateutil import tz
+
+
+from piip.models.company_tracking import CompanyTracking, CompanyTrackingLinks
 from piip.services.database.setup import session
-from piip.models.company_tracking import (
-    CompanyTrackingLinks,
-    CompanyTracking,
-)
+
 
 def getInterviewData(_user_id):
-    return (
-        session.query(CompanyTracking).filter_by(user_id=_user_id).all()
-    )
+    return session.query(CompanyTracking).filter_by(user_id=_user_id).all()
+
 
 def get_company_tracking_for_user(user_id):
     return (
@@ -38,8 +34,8 @@ def create_company_tracking_link(company_tracking_link):
 
 
 def delete_company_tracking_link(company_tracking_link_id):
-    company_tracking_link = (
-        session.query(CompanyTrackingLinks).get(company_tracking_link_id)
+    company_tracking_link = session.query(CompanyTrackingLinks).get(
+        company_tracking_link_id
     )
     if not company_tracking_link:
         return False
@@ -50,22 +46,24 @@ def delete_company_tracking_link(company_tracking_link_id):
 
 
 def update_company_tracking_link(company_tracking_link_id, new_company_tracking_link):
-    company_tracking_link = (
-        session.query(CompanyTrackingLinks).get(company_tracking_link_id)
+    company_tracking_link = session.query(CompanyTrackingLinks).get(
+        company_tracking_link_id
     )
     if not company_tracking_link:
         return False
-    company_tracking_link.description = new_company_tracking_link.description or company_tracking_link.description
-    company_tracking_link.url = new_company_tracking_link.url or company_tracking_link.url
+    company_tracking_link.description = (
+        new_company_tracking_link.description or company_tracking_link.description
+    )
+    company_tracking_link.url = (
+        new_company_tracking_link.url or company_tracking_link.url
+    )
     session.add(company_tracking_link)
     session.commit()
     return True
 
 
 def delete_company_tracking(company_tracking_id):
-    company_tracking = (
-        session.query(CompanyTracking).get(company_tracking_id)
-    )
+    company_tracking = session.query(CompanyTracking).get(company_tracking_id)
     if not company_tracking:
         return False
     company_tracking.is_active = False
@@ -75,13 +73,15 @@ def delete_company_tracking(company_tracking_id):
 
 
 def update_company_tracking(company_tracking_id, new_company_tracking):
-    company_tracking = (
-        session.query(CompanyTracking).get(company_tracking_id)
-    )
+    company_tracking = session.query(CompanyTracking).get(company_tracking_id)
     if not company_tracking:
         return False
-    company_tracking.status_id = new_company_tracking.status_id or company_tracking.status_id
-    company_tracking.interview_date = new_company_tracking.interview_date or company_tracking.interview_date
-    session.add(company_tracking)    
+    company_tracking.status_id = (
+        new_company_tracking.status_id or company_tracking.status_id
+    )
+    company_tracking.interview_date = (
+        new_company_tracking.interview_date or company_tracking.interview_date
+    )
+    session.add(company_tracking)
     session.commit()
     return True

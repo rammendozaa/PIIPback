@@ -1,15 +1,13 @@
-import resource
 import time
-from piip.schema.interviews import InterviewSchema
-from flask_restful import Resource
-from flask import request
-from piip.command.interview import (
-    update_interview,
-    get_interviews,
-    getNumberOfInterviews,
-)
 from datetime import datetime
+
 from dateutil import tz
+from flask import request
+from flask_restful import Resource
+
+from piip.command.interview import (get_interviews, getNumberOfInterviews,
+                                    update_interview)
+from piip.schema.interviews import InterviewSchema
 
 
 class Interview(Resource):
@@ -19,7 +17,7 @@ class Interview(Resource):
         to_zone = tz.tzlocal()
         d = time.strptime(request_json["chosenDate"][:-1], "%Y-%m-%dT%H:%M:%S.%f")
         utc_str = time.strftime("%Y-%m-%d %H:%M:%S", d)
-        utc = datetime.strptime(utc_str, '%Y-%m-%d %H:%M:%S')
+        utc = datetime.strptime(utc_str, "%Y-%m-%d %H:%M:%S")
         utc = utc.replace(tzinfo=from_zone)
         central = utc.astimezone(to_zone)
         request_json["chosenDate"] = central.strftime("%Y-%m-%d %H:%M:%S")
@@ -40,8 +38,10 @@ class Interview(Resource):
             return InterviewSchema(many=True).dump(get_interviews(admin_id=admin_id))
         return InterviewSchema(many=True).dump(get_interviews())
 
+
 class GetNumberOfInterviews(Resource):
     def post(self):
-        numberOfProblems = getNumberOfInterviews(request.form.get("user_id", default='',type=str))
+        numberOfProblems = getNumberOfInterviews(
+            request.form.get("user_id", default="", type=str)
+        )
         return {"ASD": 5}
-

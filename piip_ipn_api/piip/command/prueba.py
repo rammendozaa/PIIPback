@@ -1,6 +1,6 @@
+
+from piip.models import DictSchool
 from piip.services.database.setup import session
-from datetime import date
-from piip.models import DictSchool, User
 
 
 def prueba():

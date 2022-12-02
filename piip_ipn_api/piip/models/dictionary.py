@@ -1,12 +1,7 @@
+from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
+
 from piip.models.database_setup import PIIPModel
 
-from sqlalchemy import (
-    Boolean,
-    Column,
-    DefaultClause,
-    Integer,
-    String,
-)
 
 class DictActivityStatus(PIIPModel):
     __tablename__ = "DICT_ACTIVITY_STATUS"

@@ -1,47 +1,41 @@
-from piip.services.database.setup import session
-from piip.models.user import (
-    User,
-    UserTemplate,
-    UserTemplateSection,
-    UserTemplateActivity,
-    UserSoftSkillQuestion,
-    UserProblem,
-    UserQuestionnaire,
-)
-from piip.schema.base_schema import BaseSchema
 from marshmallow import fields, post_dump
-from marshmallow.utils import EXCLUDE
-from piip.schema.template import (
-    TemplateSchema,
-    TemplateActivitySchema,
-    TemplateSectionSchema,
-)
-from piip.models.user import UserProgrammingTopic, UserSoftSkillTopic
+
+from piip.models.user import (User, UserProblem, UserProgrammingTopic,
+                              UserQuestionnaire, UserSoftSkillQuestion,
+                              UserSoftSkillTopic, UserTemplate,
+                              UserTemplateActivity, UserTemplateSection)
+from piip.schema.base_schema import BaseSchema
+from piip.schema.template import (TemplateActivitySchema, TemplateSchema,
+                                  TemplateSectionSchema)
+from piip.services.database.setup import session
+
 
 class UserSchema(BaseSchema):
     __model__ = User
 
-    id = fields.String(data_key="id") 
+    id = fields.String(data_key="id")
     email = fields.String(data_key="email")
     first_name = fields.String(data_key="first_name")
     last_name = fields.String(data_key="last_name")
     school_id = fields.String(data_key="school_id")
     is_active = fields.Integer(data_key="is_active")
 
+
 # ACTIVITIES
 class UserProblemSchema(BaseSchema):
     __model__ = UserProblem
 
-    id = fields.Integer(data_key='id')
-    user_id = fields.String(data_key='user_id')
+    id = fields.Integer(data_key="id")
+    user_id = fields.String(data_key="user_id")
     problem_id = fields.String(data_key="problem_id")
     status_id = fields.Integer(data_key="status_id")
     finished_date = fields.String(data_key="finished_date")
     code = fields.String()
 
+
 class UserProgrammingTopicSchema(BaseSchema):
     __model__ = UserProgrammingTopic
-    
+
     id = fields.Integer()
     status_id = fields.Integer()
 
@@ -62,11 +56,12 @@ class UserSoftSkillTopicSchema(BaseSchema):
 
 class UserQuestionnaireSchema(BaseSchema):
     __model__ = UserQuestionnaire
-    
+
     id = fields.Integer()
     status_id = fields.Integer()
     correct_answers = fields.Integer()
     percentage_score = fields.Float()
+
 
 USER_ACTIVITY_TYPE_TO_SCHEMA = {
     1: UserProblemSchema,
@@ -99,7 +94,7 @@ class UserTemplateActivitySchema(BaseSchema):
                 session.query(UserProblem)
                 .filter(
                     UserProblem.user_id == data["user_id"],
-                    UserProblem.problem_id == external_reference
+                    UserProblem.problem_id == external_reference,
                 )
                 .first()
             )
@@ -108,7 +103,7 @@ class UserTemplateActivitySchema(BaseSchema):
                 session.query(UserProgrammingTopic)
                 .filter(
                     UserProgrammingTopic.user_id == data["user_id"],
-                    UserProgrammingTopic.programming_topic_id == external_reference
+                    UserProgrammingTopic.programming_topic_id == external_reference,
                 )
                 .first()
             )
@@ -117,7 +112,7 @@ class UserTemplateActivitySchema(BaseSchema):
                 session.query(UserSoftSkillQuestion)
                 .filter(
                     UserSoftSkillQuestion.user_id == data["user_id"],
-                    UserSoftSkillQuestion.question_id == external_reference
+                    UserSoftSkillQuestion.question_id == external_reference,
                 )
                 .first()
             )
@@ -126,7 +121,7 @@ class UserTemplateActivitySchema(BaseSchema):
                 session.query(UserSoftSkillTopic)
                 .filter(
                     UserSoftSkillTopic.user_id == data["user_id"],
-                    UserSoftSkillTopic.soft_skill_topic_id == external_reference
+                    UserSoftSkillTopic.soft_skill_topic_id == external_reference,
                 )
                 .first()
             )
@@ -135,11 +130,11 @@ class UserTemplateActivitySchema(BaseSchema):
                 session.query(UserQuestionnaire)
                 .filter(
                     UserQuestionnaire.user_id == data["user_id"],
-                    UserQuestionnaire.questionnaire_id == external_reference
+                    UserQuestionnaire.questionnaire_id == external_reference,
                 )
                 .first()
             )
-        
+
         if activity and activity_schema:
             data["activity_progress"] = activity_schema().dump(activity)
         else:
@@ -155,13 +150,12 @@ class UserTemplateSectionSchema(BaseSchema):
     status_id = fields.Integer()
     position = fields.Integer()
 
-    user_activities = fields.List(fields.Nested(
-        UserTemplateActivitySchema
-    ))
+    user_activities = fields.List(fields.Nested(UserTemplateActivitySchema))
+
     @post_dump
     def after_serialize(self, data, many, **kwargs):
         template_section = data.get("template_section", None)
-        if (template_section):
+        if template_section:
             del data["template_section"]["activities"]
         return data
 
@@ -174,12 +168,11 @@ class UserTemplateSchema(BaseSchema):
     status_id = fields.Integer()
     position = fields.Integer()
 
-    user_sections = fields.List(fields.Nested(
-        UserTemplateSectionSchema
-    ))
+    user_sections = fields.List(fields.Nested(UserTemplateSectionSchema))
+
     @post_dump
     def after_serialize(self, data, many, **kwargs):
         template = data.get("template", None)
-        if (template):
+        if template:
             del data["template"]["sections"]
         return data

@@ -1,20 +1,14 @@
 from dataclasses import dataclass
 from typing import List
-from piip.models.database_setup import PIIPModel
-from sqlalchemy import (
-    Column,
-    Boolean,
-    Integer,
-    DefaultClause,
-    DateTime,
-    Text,
-    String,
-    ForeignKey,
-)
-from sqlalchemy.orm.relationships import RelationshipProperty
+
+from sqlalchemy import (Boolean, Column, DateTime, DefaultClause, ForeignKey,
+                        Integer, String, Text)
 from sqlalchemy.orm import relationship
-from piip.models.constants import DATABASE
+from sqlalchemy.orm.relationships import RelationshipProperty
 from sqlalchemy.sql import func
+
+from piip.models.constants import DATABASE
+from piip.models.database_setup import PIIPModel
 
 
 class QuestionnaireQuestion(PIIPModel):
@@ -30,7 +24,9 @@ class QuestionnaireQuestion(PIIPModel):
     created_date = Column(DateTime, DefaultClause(func.now()))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
-    questionnaire = relationship("Questionnaire", foreign_keys=[questionnaire_id], back_populates="questions")
+    questionnaire = relationship(
+        "Questionnaire", foreign_keys=[questionnaire_id], back_populates="questions"
+    )
 
 
 class Questionnaire(PIIPModel):

@@ -1,9 +1,7 @@
-from piip.schema.base_schema import BaseSchema
 from marshmallow import fields
-from piip.models import (
-    ProgrammingTopic,
-    SoftSkillTopic,
-)
+
+from piip.models import ProgrammingTopic, SoftSkillTopic
+from piip.schema.base_schema import BaseSchema
 
 
 class ProgrammingTopicSchema(BaseSchema):

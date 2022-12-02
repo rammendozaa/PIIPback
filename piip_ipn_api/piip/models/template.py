@@ -1,18 +1,13 @@
 from typing import List
+
+from sqlalchemy import (Boolean, Column, DefaultClause, ForeignKey, Integer,
+                        String, Text)
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm.relationships import RelationshipProperty
+
+from piip.models.constants import DATABASE
 from piip.models.database_setup import PIIPModel
 
-from sqlalchemy import (
-    Boolean,
-    DefaultClause,
-    Column, 
-    Text, 
-    ForeignKey, 
-    Integer, 
-    String
-)
-from sqlalchemy.orm import relationship
-from piip.models.constants import DATABASE
 
 class TemplateActivity(PIIPModel):
     __tablename__ = "TEMPLATE_ACTIVITY"
@@ -26,7 +21,11 @@ class TemplateActivity(PIIPModel):
     external_reference = Column(Integer)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
-    template_section = relationship("TemplateSection", foreign_keys=[template_section_id], back_populates="activities")
+    template_section = relationship(
+        "TemplateSection",
+        foreign_keys=[template_section_id],
+        back_populates="activities",
+    )
     activity = relationship("DictActivityType", foreign_keys=[activity_type_id])
 
 
@@ -40,10 +39,12 @@ class TemplateSection(PIIPModel):
     template_id = Column(Integer, ForeignKey(f"{DATABASE}.TEMPLATE.id"))
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
-    template = relationship("Template", foreign_keys=[template_id], back_populates="sections")
+    template = relationship(
+        "Template", foreign_keys=[template_id], back_populates="sections"
+    )
     activities: "RelationshipProperty[List[TemplateActivity]]" = relationship(
         "TemplateActivity", back_populates="template_section", lazy="dynamic"
-    ) 
+    )
 
 
 class Template(PIIPModel):
@@ -55,6 +56,6 @@ class Template(PIIPModel):
     position = Column(Integer)
     is_active = Column(Boolean, DefaultClause("1"), nullable=False)
 
-    sections : "RelationshipProperty[List[TemplateSection]]" = relationship(
+    sections: "RelationshipProperty[List[TemplateSection]]" = relationship(
         "TemplateSection", back_populates="template", lazy="dynamic"
-    ) 
+    )

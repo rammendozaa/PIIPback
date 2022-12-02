@@ -1,31 +1,32 @@
-from email.policy import default
-from piip.services.providers.codeforces.codeforces import Codeforces
-from flask_restful import Resource
-from flask import request, jsonify
-from flask_jwt_extended import jwt_required
-from piip.command.problem import (
-    get_all_unassigned_problems,
-    get_all_problems,
-    getProblem,
-    getProblemCode,
-    getRecommendations,
-)
-from piip.schema.problem import ProblemSchema
-from piip.services.providers.codeforces.codeforcesCrawler import CodeforcesSpider
 
+from flask import jsonify, request
+from flask_jwt_extended import jwt_required
+from flask_restful import Resource
+
+from piip.command.problem import (get_all_problems,
+                                  get_all_unassigned_problems, getProblem,
+                                  getProblemCode, getRecommendations)
+from piip.schema.problem import ProblemSchema
+from piip.services.providers.codeforces.codeforces import Codeforces
+from piip.services.providers.codeforces.codeforcesCrawler import \
+    CodeforcesSpider
 
 CF_USERNAME = "piip_ipn"
 CF_PASSWORD = "*&WcgpYU4-.{mt.-"
+
 
 class GetRecommendations(Resource):
     def post(self):
         return jsonify(ProblemSchema(many=True).dump(getRecommendations()))
 
+
 class Problems(Resource):
     def get(self):
         user_id = request.args.get("user_id", None)
         if user_id:
-            return jsonify(ProblemSchema(many=True).dump(get_all_unassigned_problems(user_id)))
+            return jsonify(
+                ProblemSchema(many=True).dump(get_all_unassigned_problems(user_id))
+            )
         return jsonify(ProblemSchema(many=True).dump(get_all_problems()))
         """
             [
@@ -35,26 +36,29 @@ class Problems(Resource):
         ])
         """
 
+
 class SubmitProblem(Resource):
     @jwt_required()
     def post(self):
-        problem_url = request.form.get("problem_url", default='',type=str)
-        code = request.form.get("code", default='',type=str)
+        problem_url = request.form.get("problem_url", default="", type=str)
+        code = request.form.get("code", default="", type=str)
         problem_code = getProblemCode(problem_url)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
-            res = codeforces.submit(problem_code, code+'\n')
+            res = codeforces.submit(problem_code, code + "\n")
             if res["status"] == "error":
                 return {"error": res["msg"]}
             else:
                 return {"submissionUrl": res["msg"]}
         else:
             return {"error": "failed to submit code"}
+
+
 class Submission(Resource):
     @jwt_required()
     def post(self):
-        submissionUrl = request.form.get('submissionUrl',default='',type=str)
+        submissionUrl = request.form.get("submissionUrl", default="", type=str)
         codeforces = Codeforces()
         codeforces.login(CF_USERNAME, CF_PASSWORD)
         if codeforces.check_login():
@@ -63,11 +67,13 @@ class Submission(Resource):
         else:
             return {"status": "failed to login"}
 
+
 class GetProblem(Resource):
     def post(self):
-        problem_id = request.form.get("problem_id", default='',type=str)
+        problem_id = request.form.get("problem_id", default="", type=str)
         problem = getProblem(problem_id)
         return jsonify(ProblemSchema().dump(problem))
+
 
 class InsertProblemToDB(Resource):
     def get(self):

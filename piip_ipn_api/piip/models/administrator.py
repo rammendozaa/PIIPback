@@ -1,14 +1,8 @@
-from piip.models.database_setup import PIIPModel
-from sqlalchemy import (
-    Boolean,
-    Column,
-    Integer,
-    DefaultClause,
-    String,
-    DateTime,
-    BLOB,
-)
+from sqlalchemy import (BLOB, Boolean, Column, DateTime, DefaultClause,
+                        Integer, String)
 from sqlalchemy.sql import func
+
+from piip.models.database_setup import PIIPModel
 
 
 class Administrator(PIIPModel):

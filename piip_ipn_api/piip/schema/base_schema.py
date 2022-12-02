@@ -2,6 +2,7 @@ from marshmallow import Schema, post_load
 
 from piip.models.database_setup import PIIPModel
 
+
 class BaseSchema(Schema):
     __model__ = PIIPModel
 

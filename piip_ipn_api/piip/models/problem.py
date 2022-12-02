@@ -1,16 +1,10 @@
-from sqlalchemy import ForeignKey
-from piip.models.database_setup import PIIPModel
-from sqlalchemy import (
-    Boolean,
-    Column,
-    Integer,
-    DefaultClause,
-    DateTime,
-    Text,
-)
-from sqlalchemy.sql import func
+from sqlalchemy import (Boolean, Column, DateTime, DefaultClause, ForeignKey,
+                        Integer, Text)
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+
 from piip.models.constants import DATABASE
+from piip.models.database_setup import PIIPModel
 
 
 class Problem(PIIPModel):
