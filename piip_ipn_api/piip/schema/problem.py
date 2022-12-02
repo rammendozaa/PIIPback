@@ -1,12 +1,13 @@
+from marshmallow import fields, post_dump
+
 from piip.models import Problem
 from piip.schema.base_schema import BaseSchema
-from marshmallow import fields, post_dump
-from marshmallow.utils import EXCLUDE
+
 
 class ProblemSchema(BaseSchema):
     __model__ = Problem
 
-    id = fields.Integer(data_key='id')
+    id = fields.Integer(data_key="id")
     title = fields.String()
     description = fields.String(data_key="description")
     time_limit = fields.String(data_key="time_limit")
@@ -18,11 +19,11 @@ class ProblemSchema(BaseSchema):
     output = fields.String(data_key="ouput")
     test_cases = fields.String(data_key="test_cases")
     finished_date = fields.String(data_key="finished_date")
-    solution = fields.String(data_key= "solution")
+    solution = fields.String(data_key="solution")
 
     @post_dump
     def after_serialize(self, data, many, **kwargs):
         process_tags = data["tags"]
-        tag_array = process_tags.split('_')
+        tag_array = process_tags.split("_")
         data["tags"] = tag_array
         return data

@@ -1,26 +1,13 @@
-from piip.models import (
-    Problem,
-    ProgrammingTopic,
-    SoftSkillQuestion,
-    SoftSkillTopic,
-    Interview,
-    Questionnaire,
-)
-from piip.schema.problem import ProblemSchema
-from piip.schema.topic import (
-    ProgrammingTopicSchema,
-    SoftSkillTopicSchema,
-)
-from piip.schema.question import SoftSkillQuestionSchema
+from piip.models import (Interview, Problem, ProgrammingTopic, Questionnaire,
+                         SoftSkillQuestion, SoftSkillTopic)
+from piip.models.user import (UserProblem, UserProgrammingTopic,
+                              UserQuestionnaire, UserSoftSkillQuestion,
+                              UserSoftSkillTopic)
 from piip.schema.interviews import InterviewSchema
+from piip.schema.problem import ProblemSchema
+from piip.schema.question import SoftSkillQuestionSchema
 from piip.schema.questionnaire import QuestionnaireSchema
-from piip.models.user import (
-    UserProblem,
-    UserProgrammingTopic,
-    UserQuestionnaire,
-    UserSoftSkillQuestion,
-    UserSoftSkillTopic,
-)
+from piip.schema.topic import ProgrammingTopicSchema, SoftSkillTopicSchema
 
 ACTIVITY_TYPE_TO_SCHEMA = {
     1: ProblemSchema,

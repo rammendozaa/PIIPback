@@ -1,24 +1,13 @@
-from piip.schema.template import (
-    TemplateActivitySchema,
-    TemplateSectionSchema,
-    TemplateSchema,
-)
-from piip.schema.problem import ProblemSchema
-from piip.schema.school import SchoolSchema
-from piip.schema.user import UserSchema
-from piip.schema.questionnaire import QuestionnaireSchema
 from piip.schema.interviews import InterviewSchema
+from piip.schema.problem import ProblemSchema
 from piip.schema.question import SoftSkillQuestionSchema
-from piip.schema.topic import (
-    ProgrammingTopicSchema,
-    SoftSkillTopicSchema,
-)
-from piip.schema.user import (
-    UserTemplateSchema,
-    UserTemplateSectionSchema,
-    UserTemplateActivitySchema,
-)
-
+from piip.schema.questionnaire import QuestionnaireSchema
+from piip.schema.school import SchoolSchema
+from piip.schema.template import (TemplateActivitySchema, TemplateSchema,
+                                  TemplateSectionSchema)
+from piip.schema.topic import ProgrammingTopicSchema, SoftSkillTopicSchema
+from piip.schema.user import (UserSchema, UserTemplateActivitySchema,
+                              UserTemplateSchema, UserTemplateSectionSchema)
 
 __all__ = [
     "TemplateActivitySchema",

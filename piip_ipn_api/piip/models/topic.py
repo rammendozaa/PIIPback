@@ -1,14 +1,8 @@
-from piip.models.database_setup import PIIPModel
-from sqlalchemy import (
-    Boolean,
-    Column,
-    Integer,
-    DefaultClause,
-    String,
-    DateTime,
-    Text,
-)
+from sqlalchemy import (Boolean, Column, DateTime, DefaultClause, Integer,
+                        String, Text)
 from sqlalchemy.sql import func
+
+from piip.models.database_setup import PIIPModel
 
 
 class ProgrammingTopic(PIIPModel):

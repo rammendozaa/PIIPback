@@ -1,16 +1,11 @@
-from sqlalchemy.sql import func
-from piip.models.database_setup import PIIPModel
-from sqlalchemy import (
-    Boolean,
-    DefaultClause,
-    Column, 
-    DateTime, 
-    ForeignKey, 
-    Integer, 
-    Text,
-)
+from sqlalchemy import (Boolean, Column, DateTime, DefaultClause, ForeignKey,
+                        Integer, Text)
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+
 from piip.models.constants import DATABASE
+from piip.models.database_setup import PIIPModel
+
 
 class Interview(PIIPModel):
     __tablename__ = "INTERVIEW"
@@ -19,7 +14,9 @@ class Interview(PIIPModel):
     user_id = Column(Integer, ForeignKey(f"{DATABASE}.USER.id"))
     administrator_id = Column(Integer, ForeignKey(f"{DATABASE}.ADMINISTRATOR.id"))
     language_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_LANGUAGE.id"))
-    interview_type_id = Column(Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_INTERVIEW_TYPE.id"))
+    interview_type_id = Column(
+        Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_INTERVIEW_TYPE.id")
+    )
     chosen_date = Column(DateTime)
     interview_url = Column(Text)
     interview_code = Column(Text)

@@ -1,10 +1,8 @@
-from piip.schema.base_schema import BaseSchema, DataclassSchema
 from marshmallow import fields, post_dump
-from piip.models.questionnaire import (
-    Questionnaire,
-    QuestionnaireQuestion,
-    CreateQuestionnaire,
-)
+
+from piip.models.questionnaire import (CreateQuestionnaire, Questionnaire,
+                                       QuestionnaireQuestion)
+from piip.schema.base_schema import BaseSchema, DataclassSchema
 
 
 class QuestionnaireQuestionSchema(BaseSchema):

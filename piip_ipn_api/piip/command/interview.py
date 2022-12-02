@@ -1,17 +1,12 @@
-from piip.services.database.setup import session
-from piip.models.template import TemplateActivity
-from piip.query.user import (
-    update_user_template_activity_by_id,
-)
 from piip.models.interview import Interview
+from piip.models.template import TemplateActivity
 from piip.models.user import UserTemplateActivity
+from piip.query.user import update_user_template_activity_by_id
+from piip.services.database.setup import session
 
 
 def update_interview(user_id, interview_id, interview_changes, role):
-    interview = (
-        session.query(Interview)
-        .get(interview_id)
-    )
+    interview = session.query(Interview).get(interview_id)
     if not interview:
         return False
     interview.chosen_date = interview_changes.chosen_date
@@ -25,8 +20,8 @@ def update_interview(user_id, interview_id, interview_changes, role):
             user_activity = (
                 session.query(UserTemplateActivity)
                 .join(
-                    TemplateActivity, 
-                    TemplateActivity.id == UserTemplateActivity.template_activity_id
+                    TemplateActivity,
+                    TemplateActivity.id == UserTemplateActivity.template_activity_id,
                 )
                 .filter(
                     UserTemplateActivity.user_id == user_id,
@@ -42,15 +37,17 @@ def update_interview(user_id, interview_id, interview_changes, role):
     session.commit()
     return True
 
+
 def getNumberOfInterviews(_user_id):
-    number = session.query(Interview).filter_by(user_id=_user_id,is_confirmed = 1).count()
+    number = (
+        session.query(Interview).filter_by(user_id=_user_id, is_confirmed=1).count()
+    )
     return number
+
 
 def get_interviews(admin_id=None, interview_id=None):
     if interview_id is not None:
-        return (
-            session.query(Interview).get(interview_id)
-        )
+        return session.query(Interview).get(interview_id)
     if admin_id is not None:
         return (
             session.query(Interview)
@@ -58,9 +55,7 @@ def get_interviews(admin_id=None, interview_id=None):
                 Interview.administrator_id == admin_id,
                 Interview.is_active == True,
             )
-            .order_by(
-                Interview.chosen_date.desc()
-            )
+            .order_by(Interview.chosen_date.desc())
             .all()
         )
     return session.query(Interview).all()

@@ -1,17 +1,8 @@
-from sqlalchemy.orm import relationship
-from piip.models.constants import DATABASE
-from piip.models.database_setup import PIIPModel
-from sqlalchemy import (
-    Boolean,
-    Column,
-    ForeignKey,
-    Integer,
-    DefaultClause,
-    String,
-    DateTime,
-    Text,
-)
+from sqlalchemy import (Boolean, Column, DateTime, DefaultClause, Integer,
+                        String, Text)
 from sqlalchemy.sql import func
+
+from piip.models.database_setup import PIIPModel
 
 
 class SoftSkillQuestion(PIIPModel):

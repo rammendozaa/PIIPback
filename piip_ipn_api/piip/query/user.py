@@ -1,10 +1,9 @@
 from datetime import datetime
+
+from piip.models.user import (UserTemplate, UserTemplateActivity,
+                              UserTemplateSection)
 from piip.services.database.setup import session
-from piip.models.user import (
-    UserTemplate,
-    UserTemplateSection,
-    UserTemplateActivity,
-)
+
 
 def get_user_template_by_id(user_template_id):
     return (
@@ -16,6 +15,7 @@ def get_user_template_by_id(user_template_id):
         .first()
     )
 
+
 def get_user_template_section_by_id(user_template_section_id):
     return (
         session.query(UserTemplateSection)
@@ -25,6 +25,7 @@ def get_user_template_section_by_id(user_template_section_id):
         )
         .first()
     )
+
 
 def get_user_template_activity_by_id(user_template_activity_id):
     return (
@@ -36,8 +37,10 @@ def get_user_template_activity_by_id(user_template_activity_id):
         .first()
     )
 
+
 def get_active_templates_by_user_id(user_id):
-    return (session.query(UserTemplate)
+    return (
+        session.query(UserTemplate)
         .filter(
             UserTemplate.is_active == True,
             UserTemplate.user_id == user_id,
@@ -51,7 +54,7 @@ def get_active_templates_by_user_id(user_id):
 
 
 def verify_template_completion(user_template):
-    if (user_template):
+    if user_template:
         for section in user_template.user_sections:
             if section.status_id != 4:
                 return
@@ -64,6 +67,7 @@ def mark_user_template_section_in_progress(user_template_section):
     user_template_section.status_id = 2
     user_template_section.user_template.status_id = 2
     session.commit()
+
 
 def verify_section_completion(user_template_section):
     if user_template_section:
@@ -78,19 +82,19 @@ def verify_section_completion(user_template_section):
 
 
 def update_user_template_activity_by_id(user_template_activity_id, status_id):
-        activity = session.query(UserTemplateActivity).get(user_template_activity_id)
-        if not activity:
-            return False
-        if activity.status_id == status_id:
-            return True
-        if status_id == 4:
-            activity.finished_date = datetime.now()
-        if activity.status_id != 4:
-            activity.status_id = status_id
-        if (status_id == 2 or status_id == 3):
-            mark_user_template_section_in_progress(activity.user_template_section)
-        if (status_id == 4):
-            verify_section_completion(activity.user_template_section)
-        session.add(activity)
-        session.commit()
+    activity = session.query(UserTemplateActivity).get(user_template_activity_id)
+    if not activity:
+        return False
+    if activity.status_id == status_id:
         return True
+    if status_id == 4:
+        activity.finished_date = datetime.now()
+    if activity.status_id != 4:
+        activity.status_id = status_id
+    if status_id == 2 or status_id == 3:
+        mark_user_template_section_in_progress(activity.user_template_section)
+    if status_id == 4:
+        verify_section_completion(activity.user_template_section)
+    session.add(activity)
+    session.commit()
+    return True

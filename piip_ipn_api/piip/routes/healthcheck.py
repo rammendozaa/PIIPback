@@ -1,7 +1,7 @@
 from flask_restful import Resource
+
 from piip.command.prueba import prueba
-from flask_mail import Message
-from flask import current_app
+
 
 class HealthCheck(Resource):
     def get(self):
