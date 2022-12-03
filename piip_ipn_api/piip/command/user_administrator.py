@@ -1,4 +1,3 @@
-
 from piip.command.company_tracking import getInterviewData
 from piip.models import UserAdministrator
 from piip.services.database.setup import session

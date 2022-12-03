@@ -1,5 +1,3 @@
-
-
 from piip.models.company_tracking import CompanyTracking, CompanyTrackingLinks
 from piip.services.database.setup import session
 
