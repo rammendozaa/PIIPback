@@ -1,4 +1,3 @@
-
 from piip.models import DictSchool
 from piip.services.database.setup import session
 
