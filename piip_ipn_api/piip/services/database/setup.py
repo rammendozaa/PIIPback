@@ -3,7 +3,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from piip.constants import DATABASE, HOST, PASSWORD, USERNAME
 
-database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
+database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}:3306/{DATABASE}"
 
 engine = create_engine(
     database_route,

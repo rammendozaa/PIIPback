@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta, timezone
+from piip.command.prueba import trying
 
 from flask import Flask
 from flask_jwt_extended import (JWTManager, create_access_token, get_jwt,
@@ -74,10 +75,12 @@ def create_application(name):
     mail = Mail(app)
     app.config["MAIL_THING"] = mail
     app.config["JSON_SORT_KEYS"] = False
-
-    database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}"
+    database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}:3306/{DATABASE}"
+    app.config['MYSQL_DATABASE_USER'] = USERNAME
+    app.config['MYSQL_DATABASE_PASSWORD'] = PASSWORD
+    app.config['MYSQL_DATABASE_DB'] = DATABASE
+    app.config['MYSQL_DATABASE_HOST'] = HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = database_route
-
     @app.after_request
     def refresh_expiring_jwts(response):
         try:
@@ -206,4 +209,6 @@ def create_application(name):
     api.add_resource(
         CompanyTrackingLink, "/user/tracking/link/<int:company_tracking_link_id>"
     )
+    user = trying()
+    print(f"this should have something: {user.description}")
     return app
