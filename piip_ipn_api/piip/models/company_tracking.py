@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm.relationships import RelationshipProperty
 from sqlalchemy.sql import func
 
-from piip.models.constants import DATABASE
+from piip.constants import DATABASE
 from piip.models.database_setup import PIIPModel
 
 
