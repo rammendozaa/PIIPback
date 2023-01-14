@@ -62,13 +62,13 @@ def create_application(name):
 
     app.config["DEBUG"] = True
     app.config["TESTING"] = False
-    app.config["MAIL_DEFAULT_SENDER"] = "piip.ipn.noreply@gmail.com"
+    app.config["MAIL_DEFAULT_SENDER"] = "piip.ipn.noreply.secure@gmail.com"
     app.config["MAIL_MAX_EMAILS"] = None
     app.config["MAIL_ASCII_ATTACHMENTS"] = False
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 465
-    app.config["MAIL_USERNAME"] = "piip.ipn.noreply@gmail.com"
-    app.config["MAIL_PASSWORD"] = "*&WcgpYU4-.{mt.-"
+    app.config["MAIL_USERNAME"] = "piip.ipn.noreply.secure@gmail.com"
+    app.config["MAIL_PASSWORD"] = "mbkkqzcvcwqtvorp"
     app.config["MAIL_USE_TLS"] = False
     app.config["MAIL_USE_SSL"] = True
     jwt = JWTManager(app)

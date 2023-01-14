@@ -79,7 +79,7 @@ def insertUser(_firstname, _lastname, _email, _school_id, _password):
         first_name=_firstname,
         last_name=_lastname,
         school_id=_school_id,
-        is_active=1, #this should be 2, dont change until email verification works again
+        is_active=2,
     )
     session.add(new_user)
     session.commit()
