@@ -12,4 +12,4 @@ HOST = "127.0.0.1"
 
 SECRET_KEY = "hola"
 SECURITY_PASSWORD_SALT = "mundo"
-MAIL_DEFAULT_SENDER = "piip_ipn@gmail.com"
+MAIL_DEFAULT_SENDER = "piip.ipn.noreply.secure@gmail.com"
