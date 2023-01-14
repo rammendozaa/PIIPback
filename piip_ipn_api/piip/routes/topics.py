@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 from piip.command.topic import (create_algorithm_topic,
@@ -14,6 +15,7 @@ from piip.schema.topic import ProgrammingTopicSchema, SoftSkillTopicSchema
 
 
 class GetAlgorithmsTopics(Resource):
+    @jwt_required()
     def get(self):
         user_id = request.args.get("user_id", None)
         if user_id:
@@ -31,6 +33,7 @@ class GetAlgorithmsTopics(Resource):
 
 
 class GetSoftSkillsTopics(Resource):
+    @jwt_required()
     def get(self):
         user_id = request.args.get("user_id", None)
         if user_id:
@@ -48,6 +51,7 @@ class GetSoftSkillsTopics(Resource):
 
 
 class UpdateTopic(Resource):
+    @jwt_required()
     def post(self):
         request_json = request.get_json(silent=True) or {}
         topic_type = request_json.get("topicType", None)
@@ -60,6 +64,7 @@ class UpdateTopic(Resource):
 
 
 class CreateNewTopic(Resource):
+    @jwt_required()
     def post(self):
         request_json = request.get_json(silent=True) or {}
         topic_type = request_json.get("topicType", None)

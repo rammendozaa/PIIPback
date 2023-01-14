@@ -122,17 +122,20 @@ class GetUser(Resource):
 
 
 class UserTemplates(Resource):
+    @jwt_required()
     def post(self, user_id: int):
         template_dict = request.get_json() or {}
         template_ids = template_dict["templateIds"]
         assign_template_to_user_id(user_id, template_ids)
         return UserTemplateSchema().dump(get_active_user_templates(user_id))
 
+    @jwt_required()
     def get(self, user_id: int):
         return UserTemplateSchema().dump(get_active_user_templates(user_id))
 
 
 class AddSectionToUserTemplateSection(Resource):
+    @jwt_required()
     def post(self, user_id: int, user_template_id: int):
         create_section = TemplateSectionSchema().load(
             request.get_json(silent=True) or {}
@@ -146,6 +149,7 @@ class AddSectionToUserTemplateSection(Resource):
 
 
 class AddActivityToUserTemplateActivity(Resource):
+    @jwt_required()
     def post(self, user_id: int, user_template_section_id: int):
         request_json = request.get_json(silent=True) or {}
         create_activity = TemplateActivitySchema().load(request_json)
@@ -168,11 +172,13 @@ class AddActivityToUserTemplateActivity(Resource):
 
 
 class RemoveUserTemplate(Resource):
+    @jwt_required()
     def delete(self, user_template_id: int):
         return UserTemplateSchema().dump(disable_user_template_by_id(user_template_id))
 
 
 class RemoveUserTemplateSection(Resource):
+    @jwt_required()
     def delete(self, user_template_section_id: int):
         return UserTemplateSectionSchema().dump(
             disable_user_template_section_by_id(user_template_section_id)
@@ -180,6 +186,7 @@ class RemoveUserTemplateSection(Resource):
 
 
 class CreateUserInterview(Resource):
+    @jwt_required()
     def post(self, user_id: int, user_template_section_id: int):
         request_json = request.get_json(silent=True) or {}
         user_interview = create_user_interview(
@@ -210,6 +217,7 @@ class CreateUserInterview(Resource):
 
 
 class RegisterUserQuestionnaire(Resource):
+    @jwt_required()
     def put(self, user_id: int, questionnaire_id: int):
         request_json = request.get_json(silent=True) or {}
         questionnaire = register_first_user_questionnaire(
@@ -219,6 +227,7 @@ class RegisterUserQuestionnaire(Resource):
 
 
 class UpdateUserTemplateActivity(Resource):
+    @jwt_required()
     def put(self, user_template_activity_id: int):
         request_json = request.get_json(silent=True) or {}
         return {
@@ -227,6 +236,7 @@ class UpdateUserTemplateActivity(Resource):
             )
         }
 
+    @jwt_required()
     def delete(self, user_template_activity_id: int):
         return UserTemplateActivitySchema().dump(
             disable_user_template_activity_by_id(user_template_activity_id)
@@ -234,6 +244,7 @@ class UpdateUserTemplateActivity(Resource):
 
 
 class UpdateUserQuestionnaire(Resource):
+    @jwt_required()
     def put(self, user_id: int, questionnaire_id: int):
         request_json = request.get_json(silent=True) or {}
         questionnaire = grade_questionnaire(
@@ -243,6 +254,7 @@ class UpdateUserQuestionnaire(Resource):
 
 
 class UpdateUserTopic(Resource):
+    @jwt_required()
     def put(self, user_id: int, topic_type: str, topic_id: int):
         request_json = request.get_json(silent=True) or {}
         return {
@@ -253,6 +265,7 @@ class UpdateUserTopic(Resource):
 
 
 class UpdateUserSoftSkillQuestion(Resource):
+    @jwt_required()
     def put(self, user_id: int, question_id: int):
         request_json = request.get_json(silent=True) or {}
         return {
@@ -277,11 +290,13 @@ def get_local_date(utc_date):
 
 
 class UserCompanyTracking(Resource):
+    @jwt_required()
     def get(self, user_id: int):
         return CompanyTrackingSchema(many=True).dump(
             get_company_tracking_for_user(user_id)
         )
 
+    @jwt_required()
     def post(self, user_id: int):
         request_json = request.get_json(silent=True) or {}
         request_json["userId"] = user_id
@@ -295,9 +310,11 @@ class UserCompanyTracking(Resource):
 
 
 class CompanyTrackingLink(Resource):
+    @jwt_required()
     def delete(self, company_tracking_link_id: int):
         return {"deleted": delete_company_tracking_link(company_tracking_link_id)}
 
+    @jwt_required()
     def put(self, company_tracking_link_id: int):
         request_json = request.get_json(silent=True) or {}
         company_tracking_link = CompanyTrackingLinksSchema().load(request_json)
@@ -309,6 +326,7 @@ class CompanyTrackingLink(Resource):
 
 
 class CompanyTracking(Resource):
+    @jwt_required()
     def post(self, company_tracking_id: int):
         request_json = request.get_json(silent=True) or {}
         request_json["companyTrackingId"] = company_tracking_id
@@ -317,9 +335,11 @@ class CompanyTracking(Resource):
             create_company_tracking_link(company_tracking_link)
         )
 
+    @jwt_required()
     def delete(self, company_tracking_id: int):
         return {"deleted": delete_company_tracking(company_tracking_id)}
 
+    @jwt_required()
     def put(self, company_tracking_id: int):
         request_json = request.get_json(silent=True) or {}
         interview_date = request_json.get("interviewDate", None)

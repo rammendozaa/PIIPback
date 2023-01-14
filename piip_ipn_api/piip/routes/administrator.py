@@ -17,6 +17,7 @@ class AssignStudent(Resource):
 
 
 class AddAdministrator(Resource):
+    @jwt_required()
     def post(self):
         request_json = request.get_json(silent=True) or {}
         return insertAdministrator(
