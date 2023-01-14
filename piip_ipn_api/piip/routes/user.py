@@ -32,7 +32,7 @@ from piip.command.user import (assign_template_activity_to_user_id,
                                grade_questionnaire, insertUser,
                                register_first_user_questionnaire,
                                update_user_soft_skill_question,
-                               update_user_topic, updateConfirmedMail)
+                               update_user_topic, updateConfirmedMail, send_email)
 from piip.query.user import (get_user_template_section_by_id,
                              update_user_template_activity_by_id)
 from piip.schema.company_tracking import (CompanyTrackingLinksSchema,
@@ -63,19 +63,25 @@ class User(Resource):
         if user_id == -1:
             return {"error": "user already exists"}
         email_token = generate_confirmation_token(email)
+        # TODO: change URL when we have server running
         confirm_url = "http://localhost:3000/verify?token=" + email_token
-        # confirm_url = url_for('confirmemail', token=email_token, _external=True)
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         access_token = create_access_token(identity=email)
         html = render_template_string(
             ""
+            "<h5>This email was automatically sent at this time: {{ current_time }}</h5>"
+            "<br>"
             "<p>Welcome! Thanks for signing up. Please follow this link to activate your account:</p>"
             "<p><a href='{{ confirm_url }}'>{{ confirm_url }}</a></p>"
+            "<p>You only have 1 hour before this link expires!</p>"
             "<br>"
-            "<p>Cheers!</p>",
+            "<p>Cheers!</p>"
+            "<p>The PIIP team.</p>",
             confirm_url=confirm_url,
+            current_time=current_time,
         )
         create_initial_user_questionnaire(user_id)
-        # send_email(email,"Please confirm your email",html)
+        send_email(email,"PIIP IPN: Please confirm your email",html)
         response = {"access_token": access_token, "role": "user", "user_id": user_id}
         return response
 
