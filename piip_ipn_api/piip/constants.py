@@ -1,6 +1,8 @@
 USERNAME = "root"
 PASSWORD = "root"
-HOST = "db"
+HOST = "127.0.0.1"
+# UNCOMMENT WHEN USING DOCKER
+# HOST = "db"
 DATABASE = "PIIP_pruebas"
 # DATABASE = "PIIP"
 
