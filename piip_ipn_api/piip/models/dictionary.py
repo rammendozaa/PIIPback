@@ -3,6 +3,15 @@ from sqlalchemy import Boolean, Column, DefaultClause, Integer, String
 from piip.models.database_setup import PIIPModel
 
 
+class DictUserStatus(PIIPModel):
+    __tablename__ = "DICT_USER_STATUS"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    description = Column(String(255))
+    is_active = Column(Boolean, DefaultClause("1"), nullable=False)
+
+
 class DictActivityStatus(PIIPModel):
     __tablename__ = "DICT_ACTIVITY_STATUS"
 

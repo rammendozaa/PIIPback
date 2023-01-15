@@ -21,10 +21,13 @@ class User(PIIPModel):
     first_name = Column(String(255))
     last_name = Column(String(255))
     school_id = Column(Integer, ForeignKey(f"{DATABASE}.DICT_SCHOOL.id"))
-    is_active = Column(Integer, DefaultClause("1"), nullable=False)
+    is_active = Column(
+        Integer, DefaultClause("1"), ForeignKey(f"{DATABASE}.DICT_USER_STATUS.id")
+    )
     created_date = Column(DateTime, DefaultClause(func.now()))
 
     school = relationship("DictSchool", foreign_keys=[school_id])
+    active = relationship("DictUserStatus", foreign_keys=[is_active])
 
 
 class UserAdministrator(PIIPModel):

@@ -1,3 +1,4 @@
+from piip.command.constants import ACTIVITY_TYPES, DEFAULT_QUESTIONNAIRE_ID
 from piip.models import Template, TemplateActivity, TemplateSection
 from piip.query.template import (get_template_activity_by_id,
                                  get_template_by_id,
@@ -72,3 +73,24 @@ def add_template(template_to_add):
     for section in template_to_add.sections:
         add_template_section(template.id, section)
     return template
+
+
+def get_all_unassigned_activities_to_section(
+    section_id, activity_model, activity_type_id
+):
+    filters = [
+        TemplateActivity.activity_type_id == activity_type_id,
+        TemplateActivity.template_section_id == section_id,
+        TemplateActivity.is_active == 1,
+    ]
+    if activity_type_id == ACTIVITY_TYPES["QUESTIONNAIRE"]:
+        filters.append(TemplateActivity.external_reference != DEFAULT_QUESTIONNAIRE_ID)
+    activities = (
+        session.query(TemplateActivity.external_reference).filter(*filters).all()
+    )
+    activity_ids = [activity[0] for activity in activities]
+    return (
+        session.query(activity_model)
+        .filter(activity_model.id.notin_(activity_ids))
+        .all()
+    )

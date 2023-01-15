@@ -1,6 +1,5 @@
 import json
 from datetime import datetime, timedelta, timezone
-from piip.command.prueba import trying
 
 from flask import Flask
 from flask_jwt_extended import (JWTManager, create_access_token, get_jwt,
@@ -26,10 +25,10 @@ from piip.routes import (AddActivityToUserTemplateActivity, AddAdministrator,
                          GetRecommendations, GetSoftSkillsTopics,
                          GetStudentsInterviewsData, GetUnassignedUsers,
                          GetUser, HealthCheck, InsertProblemToDB, Interview,
-                         LogOut, MyStudents, Problems, Questionnaire,
+                         LogOut, MyStudents, Problems, QuestionnaireRoute,
                          RegisterUserQuestionnaire, RemoveUserTemplate,
                          RemoveUserTemplateSection, Schools, SectionActivity,
-                         SoftSkillQuestion, Submission, SubmitProblem,
+                         SoftSkillQuestionRoute, Submission, SubmitProblem,
                          Template, TemplateSection, Token, UpdateProblemStatus,
                          UpdateTopic, UpdateUserQuestionnaire,
                          UpdateUserSoftSkillQuestion,
@@ -53,7 +52,7 @@ def create_application(name):
             ] = "GET,HEAD,OPTIONS,POST,PUT, DELETE"
             response.headers[
                 "Access-Control-Allow-Headers"
-            ] = "Authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+            ] = "Authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, User-Type, User-Id"
             return response
 
     app = localFlask(name)
@@ -68,7 +67,7 @@ def create_application(name):
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 465
     app.config["MAIL_USERNAME"] = "piip.ipn.noreply.secure@gmail.com"
-    app.config["MAIL_PASSWORD"] = "mbkkqzcvcwqtvorp"
+    app.config["MAIL_PASSWORD"] = "aasozkgehneldjjc"
     app.config["MAIL_USE_TLS"] = False
     app.config["MAIL_USE_SSL"] = True
     jwt = JWTManager(app)
@@ -76,11 +75,12 @@ def create_application(name):
     app.config["MAIL_THING"] = mail
     app.config["JSON_SORT_KEYS"] = False
     database_route = f"mysql://{USERNAME}:{PASSWORD}@{HOST}:3306/{DATABASE}"
-    app.config['MYSQL_DATABASE_USER'] = USERNAME
-    app.config['MYSQL_DATABASE_PASSWORD'] = PASSWORD
-    app.config['MYSQL_DATABASE_DB'] = DATABASE
-    app.config['MYSQL_DATABASE_HOST'] = HOST
+    app.config["MYSQL_DATABASE_USER"] = USERNAME
+    app.config["MYSQL_DATABASE_PASSWORD"] = PASSWORD
+    app.config["MYSQL_DATABASE_DB"] = DATABASE
+    app.config["MYSQL_DATABASE_HOST"] = HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = database_route
+
     @app.after_request
     def refresh_expiring_jwts(response):
         try:
@@ -186,8 +186,8 @@ def create_application(name):
         CreateUserInterview,
         "/user/<int:user_id>/interview/<int:user_template_section_id>",
     )
-    api.add_resource(Questionnaire, "/questionnaire")
-    api.add_resource(SoftSkillQuestion, "/soft-skill-question")
+    api.add_resource(QuestionnaireRoute, "/questionnaire")
+    api.add_resource(SoftSkillQuestionRoute, "/soft-skill-question")
     api.add_resource(CreateNewTopic, "/create-topic")
     api.add_resource(UpdateTopic, "/update-topic")
 
@@ -209,6 +209,4 @@ def create_application(name):
     api.add_resource(
         CompanyTrackingLink, "/user/tracking/link/<int:company_tracking_link_id>"
     )
-    user = trying()
-    print(f"this should have something: {user.description}")
     return app

@@ -4,14 +4,14 @@ from datetime import datetime
 from dateutil import tz
 from flask import request
 from flask_jwt_extended import jwt_required
-from flask_restful import Resource
 
 from piip.command.interview import (get_interviews, getNumberOfInterviews,
                                     update_interview)
+from piip.routes.resource import PIIPResource
 from piip.schema.interviews import InterviewSchema
 
 
-class Interview(Resource):
+class Interview(PIIPResource):
     @jwt_required()
     def put(self):
         request_json = request.get_json(silent=True) or {}
@@ -42,7 +42,7 @@ class Interview(Resource):
         return InterviewSchema(many=True).dump(get_interviews())
 
 
-class GetNumberOfInterviews(Resource):
+class GetNumberOfInterviews(PIIPResource):
     @jwt_required()
     def post(self):
         numberOfProblems = getNumberOfInterviews(

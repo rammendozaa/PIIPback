@@ -1,16 +1,19 @@
 from flask import request
 from flask_jwt_extended import jwt_required
-from flask_restful import Resource
 
+from piip.command.constants import ACTIVITY_TYPES
 from piip.command.questionnaire import insert_questionnaire
+from piip.command.template import get_all_unassigned_activities_to_section
+from piip.models.questionnaire import Questionnaire
 from piip.query.questionnaire import (get_questionnaire_by_id,
                                       get_questionnaires,
                                       get_unassigned_questionnaires)
+from piip.routes.resource import PIIPResource
 from piip.schema.questionnaire import (CreateQuestionnaireSchema,
                                        QuestionnaireSchema)
 
 
-class Questionnaire(Resource):
+class QuestionnaireRoute(PIIPResource):
     @jwt_required()
     def get(self):
         user_id = request.args.get("user_id", None)
@@ -21,6 +24,13 @@ class Questionnaire(Resource):
         questionnaire_id = request.args.get("questionnaireId", None)
         if questionnaire_id:
             return QuestionnaireSchema().dump(get_questionnaire_by_id(questionnaire_id))
+        section_id = request.args.get("sectionId", None)
+        if section_id:
+            return QuestionnaireSchema(many=True).dump(
+                get_all_unassigned_activities_to_section(
+                    section_id, Questionnaire, ACTIVITY_TYPES["QUESTIONNAIRE"]
+                )
+            )
         return QuestionnaireSchema(many=True).dump(get_questionnaires())
 
     @jwt_required()

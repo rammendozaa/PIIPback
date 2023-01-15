@@ -2,10 +2,9 @@ import time
 from datetime import datetime
 
 from dateutil import tz
-from flask import jsonify, render_template_string, request
+from flask import render_template_string, request
 from flask_jwt_extended import (create_access_token, get_jwt_identity,
                                 jwt_required)
-from flask_restful import Resource
 
 from piip.command.administrator import getAdministrator
 from piip.command.company_tracking import (create_company_tracking_for_user,
@@ -16,6 +15,7 @@ from piip.command.company_tracking import (create_company_tracking_for_user,
                                            update_company_tracking,
                                            update_company_tracking_link)
 from piip.command.constants import ACTIVITY_TYPES
+from piip.command.ownership import mentor_only
 from piip.command.template import add_section_activity, add_template_section
 from piip.command.user import (assign_template_activity_to_user_id,
                                assign_template_section_to_user_id,
@@ -30,11 +30,12 @@ from piip.command.user import (assign_template_activity_to_user_id,
                                getAdministratorGivenUser, getMyStudents,
                                getUnassignedUsers, getUser,
                                grade_questionnaire, insertUser,
-                               register_first_user_questionnaire,
+                               register_first_user_questionnaire, send_email,
                                update_user_soft_skill_question,
-                               update_user_topic, updateConfirmedMail, send_email)
+                               update_user_topic, updateConfirmedMail)
 from piip.query.user import (get_user_template_section_by_id,
                              update_user_template_activity_by_id)
+from piip.routes.resource import PIIPResource
 from piip.schema.company_tracking import (CompanyTrackingLinksSchema,
                                           CompanyTrackingSchema)
 from piip.schema.template import TemplateActivitySchema, TemplateSectionSchema
@@ -42,7 +43,7 @@ from piip.schema.user import (UserSchema, UserTemplateActivitySchema,
                               UserTemplateSchema, UserTemplateSectionSchema)
 
 
-class ConfirmEmail(Resource):
+class ConfirmEmail(PIIPResource):
     def post(self):
         token = request.form.get("token", default="", type=str)
         try:
@@ -52,7 +53,7 @@ class ConfirmEmail(Resource):
         return updateConfirmedMail(email)
 
 
-class User(Resource):
+class User(PIIPResource):
     def post(self):
         firstname = request.form.get("firstname", default="", type=str)
         lastname = request.form.get("lastname", default="", type=str)
@@ -81,49 +82,52 @@ class User(Resource):
             current_time=current_time,
         )
         create_initial_user_questionnaire(user_id)
-        send_email(email,"PIIP IPN: Please confirm your email",html)
+        send_email(email, "PIIP IPN: Please confirm your email", html)
         response = {"access_token": access_token, "role": "user", "user_id": user_id}
         return response
 
 
-class GetAdministratorGivenUser(Resource):
+class GetAdministratorGivenUser(PIIPResource):
     @jwt_required()
     def get(self):
         administrator_id = getAdministratorGivenUser(get_jwt_identity())
         return {"administrator_id": administrator_id}
 
 
-class GetUnassignedUsers(Resource):
+class GetUnassignedUsers(PIIPResource):
     @jwt_required()
     def get(self):
+        mentor_only(request)
         user_ids = getUnassignedUsers()
         users = []
         for user in user_ids:
             users.append(user.user)
-        return jsonify(UserSchema(many=True).dump(users))
+        return UserSchema(many=True).dump(users)
 
 
-class MyStudents(Resource):
+class MyStudents(PIIPResource):
     @jwt_required()
     def get(self):
+        mentor_only(request)
         administrator = getAdministrator(get_jwt_identity())
         user_ids = getMyStudents(administrator.id)
         users = []
         for user in user_ids:
             users.append(user.user)
-        return jsonify(UserSchema(many=True).dump(users))
+        return UserSchema(many=True).dump(users)
 
 
-class GetUser(Resource):
+class GetUser(PIIPResource):
     @jwt_required()
     def get(self):
         user = getUser(get_jwt_identity())
-        return jsonify(UserSchema().dump(user))
+        return UserSchema().dump(user)
 
 
-class UserTemplates(Resource):
+class UserTemplates(PIIPResource):
     @jwt_required()
     def post(self, user_id: int):
+        mentor_only(request)
         template_dict = request.get_json() or {}
         template_ids = template_dict["templateIds"]
         assign_template_to_user_id(user_id, template_ids)
@@ -134,9 +138,10 @@ class UserTemplates(Resource):
         return UserTemplateSchema().dump(get_active_user_templates(user_id))
 
 
-class AddSectionToUserTemplateSection(Resource):
+class AddSectionToUserTemplateSection(PIIPResource):
     @jwt_required()
     def post(self, user_id: int, user_template_id: int):
+        mentor_only(request)
         create_section = TemplateSectionSchema().load(
             request.get_json(silent=True) or {}
         )
@@ -148,9 +153,10 @@ class AddSectionToUserTemplateSection(Resource):
         )
 
 
-class AddActivityToUserTemplateActivity(Resource):
+class AddActivityToUserTemplateActivity(PIIPResource):
     @jwt_required()
     def post(self, user_id: int, user_template_section_id: int):
+        mentor_only(request)
         request_json = request.get_json(silent=True) or {}
         create_activity = TemplateActivitySchema().load(request_json)
         user_admin_id = None
@@ -171,23 +177,26 @@ class AddActivityToUserTemplateActivity(Resource):
         )
 
 
-class RemoveUserTemplate(Resource):
+class RemoveUserTemplate(PIIPResource):
     @jwt_required()
     def delete(self, user_template_id: int):
+        mentor_only(request)
         return UserTemplateSchema().dump(disable_user_template_by_id(user_template_id))
 
 
-class RemoveUserTemplateSection(Resource):
+class RemoveUserTemplateSection(PIIPResource):
     @jwt_required()
     def delete(self, user_template_section_id: int):
+        mentor_only(request)
         return UserTemplateSectionSchema().dump(
             disable_user_template_section_by_id(user_template_section_id)
         )
 
 
-class CreateUserInterview(Resource):
+class CreateUserInterview(PIIPResource):
     @jwt_required()
     def post(self, user_id: int, user_template_section_id: int):
+        mentor_only(request)
         request_json = request.get_json(silent=True) or {}
         user_interview = create_user_interview(
             user_id,
@@ -216,7 +225,7 @@ class CreateUserInterview(Resource):
         )
 
 
-class RegisterUserQuestionnaire(Resource):
+class RegisterUserQuestionnaire(PIIPResource):
     @jwt_required()
     def put(self, user_id: int, questionnaire_id: int):
         request_json = request.get_json(silent=True) or {}
@@ -226,7 +235,7 @@ class RegisterUserQuestionnaire(Resource):
         return {"registered": (questionnaire is not None)}
 
 
-class UpdateUserTemplateActivity(Resource):
+class UpdateUserTemplateActivity(PIIPResource):
     @jwt_required()
     def put(self, user_template_activity_id: int):
         request_json = request.get_json(silent=True) or {}
@@ -238,12 +247,13 @@ class UpdateUserTemplateActivity(Resource):
 
     @jwt_required()
     def delete(self, user_template_activity_id: int):
+        mentor_only(request)
         return UserTemplateActivitySchema().dump(
             disable_user_template_activity_by_id(user_template_activity_id)
         )
 
 
-class UpdateUserQuestionnaire(Resource):
+class UpdateUserQuestionnaire(PIIPResource):
     @jwt_required()
     def put(self, user_id: int, questionnaire_id: int):
         request_json = request.get_json(silent=True) or {}
@@ -253,7 +263,7 @@ class UpdateUserQuestionnaire(Resource):
         return {"registered": (questionnaire is not None)}
 
 
-class UpdateUserTopic(Resource):
+class UpdateUserTopic(PIIPResource):
     @jwt_required()
     def put(self, user_id: int, topic_type: str, topic_id: int):
         request_json = request.get_json(silent=True) or {}
@@ -264,7 +274,7 @@ class UpdateUserTopic(Resource):
         }
 
 
-class UpdateUserSoftSkillQuestion(Resource):
+class UpdateUserSoftSkillQuestion(PIIPResource):
     @jwt_required()
     def put(self, user_id: int, question_id: int):
         request_json = request.get_json(silent=True) or {}
@@ -289,7 +299,7 @@ def get_local_date(utc_date):
     return central.strftime("%Y-%m-%d %H:%M:%S")
 
 
-class UserCompanyTracking(Resource):
+class UserCompanyTracking(PIIPResource):
     @jwt_required()
     def get(self, user_id: int):
         return CompanyTrackingSchema(many=True).dump(
@@ -309,7 +319,7 @@ class UserCompanyTracking(Resource):
         )
 
 
-class CompanyTrackingLink(Resource):
+class CompanyTrackingLink(PIIPResource):
     @jwt_required()
     def delete(self, company_tracking_link_id: int):
         return {"deleted": delete_company_tracking_link(company_tracking_link_id)}
@@ -325,7 +335,7 @@ class CompanyTrackingLink(Resource):
         }
 
 
-class CompanyTracking(Resource):
+class CompanyTracking(PIIPResource):
     @jwt_required()
     def post(self, company_tracking_id: int):
         request_json = request.get_json(silent=True) or {}

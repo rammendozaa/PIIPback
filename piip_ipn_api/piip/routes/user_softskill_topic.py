@@ -1,11 +1,11 @@
 from flask import request
 from flask_jwt_extended import jwt_required
-from flask_restful import Resource
 
 from piip.command.user_softskill_topic import getNumberOfSoftSkillTopicsSolved
+from piip.routes.resource import PIIPResource
 
 
-class GetNumberOfSoftSkillTopicsSolvedByUser(Resource):
+class GetNumberOfSoftSkillTopicsSolvedByUser(PIIPResource):
     @jwt_required()
     def post(self):
         numberOfProblems = getNumberOfSoftSkillTopicsSolved(

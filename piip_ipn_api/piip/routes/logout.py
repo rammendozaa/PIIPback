@@ -1,10 +1,12 @@
-from flask import jsonify
+from flask import Response
 from flask_jwt_extended import unset_jwt_cookies
-from flask_restful import Resource
+
+from piip.routes.resource import PIIPResource
 
 
-class LogOut(Resource):
+class LogOut(PIIPResource):
     def post(self):
-        response = jsonify({"msg": "logout successful"})
+        response_message = {"msg": "logout successful"}
+        response = Response(response_message)
         unset_jwt_cookies(response)
-        return response
+        return response_message

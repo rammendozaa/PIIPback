@@ -5,9 +5,9 @@ from piip.routes.logout import LogOut
 from piip.routes.problem import (GetProblem, GetRecommendations,
                                  InsertProblemToDB, Problems, Submission,
                                  SubmitProblem)
-from piip.routes.questionnaire import Questionnaire
+from piip.routes.questionnaire import QuestionnaireRoute
 from piip.routes.schools import Schools
-from piip.routes.soft_skills import SoftSkillQuestion
+from piip.routes.soft_skills import SoftSkillQuestionRoute
 from piip.routes.template import (AddSectionActivity, AddTemplate,
                                   AddTemplateSection, SectionActivity,
                                   Template, TemplateSection)
@@ -72,7 +72,7 @@ __all__ = [
     "GetSoftSkillsTopics",
     "CreateUserInterview",
     "RegisterUserQuestionnaire",
-    "Questionnaire",
+    "QuestionnaireRoute",
     "UpdateUserTemplateActivity",
     "CreateNewTopic",
     "UpdateTopic",
@@ -88,7 +88,7 @@ __all__ = [
     "GetNumberOfProgrammingTopicsSolvedByUser",
     "GetNumberOfSoftSkillTopicsSolvedByUser",
     "GetNumberOfInterviews",
-    "SoftSkillQuestion",
+    "SoftSkillQuestionRoute",
     "UpdateUserQuestionnaire",
     "UpdateUserTopic",
     "UpdateUserSoftSkillQuestion",
