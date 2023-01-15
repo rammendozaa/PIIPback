@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 from piip.command.questionnaire import (
@@ -8,6 +9,7 @@ from piip.schema.question import SoftSkillQuestionSchema
 
 
 class SoftSkillQuestion(Resource):
+    @jwt_required()
     def post(self):
         soft_skill_question_to_add = SoftSkillQuestionSchema().load(
             request.get_json(silent=True) or {}
@@ -16,6 +18,7 @@ class SoftSkillQuestion(Resource):
             create_soft_skill_question(soft_skill_question_to_add)
         )
 
+    @jwt_required()
     def get(self):
         user_id = request.args.get("user_id", None)
         if user_id:

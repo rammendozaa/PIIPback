@@ -15,11 +15,13 @@ CF_PASSWORD = "*&WcgpYU4-.{mt.-"
 
 
 class GetRecommendations(Resource):
+    @jwt_required()
     def post(self):
         return jsonify(ProblemSchema(many=True).dump(getRecommendations()))
 
 
 class Problems(Resource):
+    @jwt_required()
     def get(self):
         user_id = request.args.get("user_id", None)
         if user_id:
@@ -68,6 +70,7 @@ class Submission(Resource):
 
 
 class GetProblem(Resource):
+    @jwt_required()
     def post(self):
         problem_id = request.form.get("problem_id", default="", type=str)
         problem = getProblem(problem_id)
@@ -75,6 +78,7 @@ class GetProblem(Resource):
 
 
 class InsertProblemToDB(Resource):
+    @jwt_required()
     def get(self):
         codeforcesSpider = CodeforcesSpider()
         codeforcesSpider.start()

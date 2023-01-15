@@ -3,6 +3,7 @@ from datetime import datetime
 
 from dateutil import tz
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 from piip.command.interview import (get_interviews, getNumberOfInterviews,
@@ -11,6 +12,7 @@ from piip.schema.interviews import InterviewSchema
 
 
 class Interview(Resource):
+    @jwt_required()
     def put(self):
         request_json = request.get_json(silent=True) or {}
         from_zone = tz.tzutc()
@@ -29,6 +31,7 @@ class Interview(Resource):
             "updated": update_interview(user_id, interview_id, interview_changes, role)
         }
 
+    @jwt_required()
     def get(self):
         interview_id = request.args.get("interview_id", None)
         if interview_id:
@@ -40,6 +43,7 @@ class Interview(Resource):
 
 
 class GetNumberOfInterviews(Resource):
+    @jwt_required()
     def post(self):
         numberOfProblems = getNumberOfInterviews(
             request.form.get("user_id", default="", type=str)

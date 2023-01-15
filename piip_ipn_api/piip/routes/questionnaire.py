@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 from piip.command.questionnaire import insert_questionnaire
@@ -10,6 +11,7 @@ from piip.schema.questionnaire import (CreateQuestionnaireSchema,
 
 
 class Questionnaire(Resource):
+    @jwt_required()
     def get(self):
         user_id = request.args.get("user_id", None)
         if user_id:
@@ -21,6 +23,7 @@ class Questionnaire(Resource):
             return QuestionnaireSchema().dump(get_questionnaire_by_id(questionnaire_id))
         return QuestionnaireSchema(many=True).dump(get_questionnaires())
 
+    @jwt_required()
     def post(self):
         create_questionnaire = CreateQuestionnaireSchema().load(
             request.get_json(silent=True) or {}
