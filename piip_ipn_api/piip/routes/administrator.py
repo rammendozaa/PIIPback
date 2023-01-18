@@ -1,14 +1,15 @@
 from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from flask_restful import Resource
 
 from piip.command.administrator import assignStudent, insertAdministrator
+from piip.command.ownership import mentor_only, super_only
+from piip.routes.resource import PIIPResource
 
 
-class AssignStudent(Resource):
+class AssignStudent(PIIPResource):
     @jwt_required()
     def post(self):
-        # TODO Check role
+        mentor_only(request)
         user_id = request.form.get("user_id", default="", type=str)
         status = assignStudent(get_jwt_identity(), user_id)
         if status == 1:
@@ -16,9 +17,10 @@ class AssignStudent(Resource):
         return {"msg": "user is no longer available"}
 
 
-class AddAdministrator(Resource):
+class AddAdministrator(PIIPResource):
     @jwt_required()
     def post(self):
+        super_only(request)
         request_json = request.get_json(silent=True) or {}
         return insertAdministrator(
             request_json["name"],

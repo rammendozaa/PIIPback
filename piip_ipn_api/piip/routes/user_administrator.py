@@ -1,28 +1,28 @@
 from flask import request
 from flask_jwt_extended import jwt_required
-from flask_restful import Resource
 
 from piip.command.user_administrator import (getMyStudents, getMyStudents2,
                                              getNumberOfActiveUsers,
                                              getNumberOfGraduatedStudents,
                                              getNumberOfLosers)
+from piip.routes.resource import PIIPResource
 
 
-class GetCurrentStudentsInterviewsData(Resource):
+class GetCurrentStudentsInterviewsData(PIIPResource):
     @jwt_required()
     def post(self):
         data = getMyStudents2(request.form.get("user_id", default="", type=str))
         return data
 
 
-class GetStudentsInterviewsData(Resource):
+class GetStudentsInterviewsData(PIIPResource):
     @jwt_required()
     def post(self):
         data = getMyStudents(request.form.get("user_id", default="", type=str))
         return data
 
 
-class GetNumberOfLosers(Resource):
+class GetNumberOfLosers(PIIPResource):
     @jwt_required()
     def post(self):
         numberOfStudents = getNumberOfLosers(
@@ -31,7 +31,7 @@ class GetNumberOfLosers(Resource):
         return {"numberOfLosers": numberOfStudents}
 
 
-class GetNumberOfGraduatedStudents(Resource):
+class GetNumberOfGraduatedStudents(PIIPResource):
     @jwt_required()
     def post(self):
         numberOfStudents = getNumberOfGraduatedStudents(
@@ -40,7 +40,7 @@ class GetNumberOfGraduatedStudents(Resource):
         return {"numberOfGraduated": numberOfStudents}
 
 
-class GetNumberOfActiveStudents(Resource):
+class GetNumberOfActiveStudents(PIIPResource):
     @jwt_required()
     def post(self):
         numberOfStudents = getNumberOfActiveUsers(

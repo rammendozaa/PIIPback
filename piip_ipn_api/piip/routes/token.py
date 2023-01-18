@@ -1,13 +1,14 @@
 from flask import request
 from flask_jwt_extended import create_access_token
-from flask_restful import Resource
 
+from piip.command.exceptions import InvalidCredentials
 from piip.models import Administrator, User
+from piip.routes.resource import PIIPResource
 from piip.services.database.setup import session
 from piip.validate_password import is_correct_password
 
 
-class Token(Resource):
+class Token(PIIPResource):
     def post(self):
         _email = request.form.get("email", default="", type=str)
         _password = request.form.get("password", default="", type=str)
@@ -39,4 +40,4 @@ class Token(Resource):
                         "user_id": admin.id,
                     }
                 return response
-        return {"error": "Wrong email or password"}, 401
+        raise InvalidCredentials
