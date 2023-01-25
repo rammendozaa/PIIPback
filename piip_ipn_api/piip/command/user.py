@@ -40,6 +40,28 @@ def generate_confirmation_token(email):
     return serializer.dumps(email, salt=SECURITY_PASSWORD_SALT)
 
 
+def send_confirmation_email(email):
+    email_token = generate_confirmation_token(email)
+    # TODO: change URL when we have server running
+    confirm_url = "http://localhost:3000/verify?token=" + email_token
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    access_token = create_access_token(identity=email)
+    html = render_template_string(
+        ""
+        "<h5>This email was automatically sent at this time: {{ current_time }}</h5>"
+        "<br>"
+        "<p>Welcome! Thanks for signing up. Please follow this link to activate your account:</p>"
+        "<p><a href='{{ confirm_url }}'>{{ confirm_url }}</a></p>"
+        "<p>You only have 1 hour before this link expires!</p>"
+        "<br>"
+        "<p>Cheers!</p>"
+        "<p>The PIIP team.</p>",
+        confirm_url=confirm_url,
+        current_time=current_time,
+    )
+    send_email(email, "PIIP IPN: Please confirm your email", html)
+
+
 def confirm_token(token, expiration=3600):
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     try:

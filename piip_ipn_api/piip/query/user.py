@@ -98,3 +98,7 @@ def update_user_template_activity_by_id(user_template_activity_id, status_id):
     session.add(activity)
     session.commit()
     return True
+
+
+def get_user(user_id):
+    return session.query(User).get(user_id)

@@ -27,7 +27,7 @@ from piip.routes import (AddActivityToUserTemplateActivity, AddAdministrator,
                          GetUser, HealthCheck, InsertProblemToDB, Interview,
                          LogOut, MyStudents, Problems, QuestionnaireRoute,
                          RegisterUserQuestionnaire, RemoveUserTemplate,
-                         RemoveUserTemplateSection, Schools, SectionActivity,
+                         RemoveUserTemplateSection, Schools, SectionActivity, SendConfirmationEmail,
                          SoftSkillQuestionRoute, Submission, SubmitProblem,
                          Template, TemplateSection, Token, UpdateProblemStatus,
                          UpdateTopic, UpdateUserQuestionnaire,
@@ -142,6 +142,7 @@ def create_application(name):
     api.add_resource(User, "/sign-up")
     api.add_resource(ConfirmEmail, "/confirm")
     api.add_resource(GetUser, "/user")
+    api.add_resource(SendConfirmationEmail, "/sendVerificationEmail")
     api.add_resource(GetAdministratorGivenUser, "/get-admin")
     api.add_resource(GetUnassignedUsers, "/pendingStudents")
     api.add_resource(MyStudents, "/myStudents")
