@@ -30,7 +30,7 @@ from piip.command.user import (assign_template_activity_to_user_id,
                                getAdministratorGivenUser, getMyStudents,
                                getUnassignedUsers, getUser,
                                grade_questionnaire, insertUser,
-                               register_first_user_questionnaire, send_email,
+                               register_first_user_questionnaire, send_confirmation_email,
                                update_user_soft_skill_question,
                                update_user_topic, updateConfirmedMail)
 from piip.query.user import (get_user_template_section_by_id,
@@ -41,6 +41,7 @@ from piip.schema.company_tracking import (CompanyTrackingLinksSchema,
 from piip.schema.template import TemplateActivitySchema, TemplateSectionSchema
 from piip.schema.user import (UserSchema, UserTemplateActivitySchema,
                               UserTemplateSchema, UserTemplateSectionSchema)
+from piip.command.exceptions import UserNotFound
 
 
 class ConfirmEmail(PIIPResource):
@@ -63,28 +64,20 @@ class User(PIIPResource):
         user_id = insertUser(firstname, lastname, email, school_id, password)
         if user_id == -1:
             return {"error": "user already exists"}
-        email_token = generate_confirmation_token(email)
-        # TODO: change URL when we have server running
-        confirm_url = "http://localhost:3000/verify?token=" + email_token
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        access_token = create_access_token(identity=email)
-        html = render_template_string(
-            ""
-            "<h5>This email was automatically sent at this time: {{ current_time }}</h5>"
-            "<br>"
-            "<p>Welcome! Thanks for signing up. Please follow this link to activate your account:</p>"
-            "<p><a href='{{ confirm_url }}'>{{ confirm_url }}</a></p>"
-            "<p>You only have 1 hour before this link expires!</p>"
-            "<br>"
-            "<p>Cheers!</p>"
-            "<p>The PIIP team.</p>",
-            confirm_url=confirm_url,
-            current_time=current_time,
-        )
         create_initial_user_questionnaire(user_id)
-        send_email(email, "PIIP IPN: Please confirm your email", html)
+        send_confirmation_email(email)
         response = {"access_token": access_token, "role": "user", "user_id": user_id}
         return response
+
+
+class SendConfirmationEmail(PIIPResource):
+    @jwt_required()
+    def post(self):
+        user_id = request.headers.get("User-Id", None)
+        user = get_user(user_id)
+        if not user or not user.email:
+            raise UserNotFound
+        send_confirmation_email(user.email)
 
 
 class GetAdministratorGivenUser(PIIPResource):

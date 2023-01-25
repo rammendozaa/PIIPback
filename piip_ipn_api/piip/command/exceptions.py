@@ -17,12 +17,18 @@ class InvalidCredentials(Exception):
     default = "Invalid email or password"
 
 
+class UserNotFound(Exception):
+    default = "This user does not exist"
+
+
 def get_error_info(e: Exception) -> Tuple[Dict, int]:
     if isinstance(e, UnauthorizedException):
         return get_error_structure(e, 401)
     elif isinstance(e, InvalidCredentials):
         return get_error_structure(e, 401)
     elif isinstance(e, ExpiredSignatureError):
+        return get_error_structure(e, 401)
+    elif isinstance(e, UserNotFound):
         return get_error_structure(e, 401)
     else:
         return {"error": str(e)}, 500
