@@ -1,6 +1,7 @@
 from datetime import date, datetime
 
 from flask import current_app as app
+from flask import render_template_string
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 
@@ -45,7 +46,6 @@ def send_confirmation_email(email):
     # TODO: change URL when we have server running
     confirm_url = "http://localhost:3000/verify?token=" + email_token
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    access_token = create_access_token(identity=email)
     html = render_template_string(
         ""
         "<h5>This email was automatically sent at this time: {{ current_time }}</h5>"

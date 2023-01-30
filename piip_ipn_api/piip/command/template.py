@@ -89,6 +89,8 @@ def get_all_unassigned_activities_to_section(
         session.query(TemplateActivity.external_reference).filter(*filters).all()
     )
     activity_ids = [activity[0] for activity in activities]
+    if activity_type_id == ACTIVITY_TYPES["QUESTIONNAIRE"]:
+        activity_ids.append(DEFAULT_QUESTIONNAIRE_ID)
     return (
         session.query(activity_model)
         .filter(activity_model.id.notin_(activity_ids))
