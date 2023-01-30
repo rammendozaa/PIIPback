@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 
 from dateutil import tz
-from flask import render_template_string, request
+from flask import request
 from flask_jwt_extended import (create_access_token, get_jwt_identity,
                                 jwt_required)
 
@@ -15,6 +15,7 @@ from piip.command.company_tracking import (create_company_tracking_for_user,
                                            update_company_tracking,
                                            update_company_tracking_link)
 from piip.command.constants import ACTIVITY_TYPES
+from piip.command.exceptions import UserNotFound
 from piip.command.ownership import mentor_only
 from piip.command.template import add_section_activity, add_template_section
 from piip.command.user import (assign_template_activity_to_user_id,
@@ -25,15 +26,15 @@ from piip.command.user import (assign_template_activity_to_user_id,
                                disable_user_template_activity_by_id,
                                disable_user_template_by_id,
                                disable_user_template_section_by_id,
-                               generate_confirmation_token,
                                get_active_user_templates,
                                getAdministratorGivenUser, getMyStudents,
                                getUnassignedUsers, getUser,
                                grade_questionnaire, insertUser,
-                               register_first_user_questionnaire, send_confirmation_email,
+                               register_first_user_questionnaire,
+                               send_confirmation_email,
                                update_user_soft_skill_question,
                                update_user_topic, updateConfirmedMail)
-from piip.query.user import (get_user_template_section_by_id,
+from piip.query.user import (get_user, get_user_template_section_by_id,
                              update_user_template_activity_by_id)
 from piip.routes.resource import PIIPResource
 from piip.schema.company_tracking import (CompanyTrackingLinksSchema,
@@ -41,7 +42,6 @@ from piip.schema.company_tracking import (CompanyTrackingLinksSchema,
 from piip.schema.template import TemplateActivitySchema, TemplateSectionSchema
 from piip.schema.user import (UserSchema, UserTemplateActivitySchema,
                               UserTemplateSchema, UserTemplateSectionSchema)
-from piip.command.exceptions import UserNotFound
 
 
 class ConfirmEmail(PIIPResource):
@@ -64,6 +64,7 @@ class User(PIIPResource):
         user_id = insertUser(firstname, lastname, email, school_id, password)
         if user_id == -1:
             return {"error": "user already exists"}
+        access_token = create_access_token(identity=email)
         create_initial_user_questionnaire(user_id)
         send_confirmation_email(email)
         response = {"access_token": access_token, "role": "user", "user_id": user_id}
